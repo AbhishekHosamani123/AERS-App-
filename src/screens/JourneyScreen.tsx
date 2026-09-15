@@ -11,6 +11,8 @@ import {
 import { JourneyTrackSvg } from '../components/journey/JourneyTrackSvg';
 import { PodiumNode } from '../components/journey/PodiumNode';
 import { sound } from '../utils/sound';
+import journeyBgImg from '../assets/new_journey_baground.png';
+import lastBookImg from '../assets/last_book.png';
 import './JourneyScreen.css';
 
 interface ProgressState {
@@ -71,11 +73,6 @@ export function JourneyScreen() {
     sound.toggleSound(progress.soundEnabled);
   }, [progress]);
 
-  // Current level details for quick stage display
-  const currentLevelData = useMemo(() => {
-    return AERS_LEVELS.find((l) => l.id === progress.currentLevel) || AERS_LEVELS[0];
-  }, [progress.currentLevel]);
-
   // Total stars calculation
   const totalStars = useMemo(() => {
     return Object.values(progress.levelStars).reduce((acc, s) => acc + s, 0);
@@ -114,16 +111,6 @@ export function JourneyScreen() {
       clearTimeout(t2);
     };
   }, [progress.currentLevel]);
-
-  const scrollToSummit = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const scrollToStart = () => {
-    scrollToLevel(1, true);
-  };
 
   const handleLevelClick = (level: LevelData) => {
     const isCompleted = progress.completedLevels.includes(level.id);
@@ -285,43 +272,6 @@ export function JourneyScreen() {
         <div className="journey-hud__progress-track" title={`${progressPercent}% Journey Completed`}>
           <div className="journey-hud__progress-fill" style={{ width: `${progressPercent}%` }} />
         </div>
-
-        {/* Active Learning Stage Spotlight Banner */}
-        <div
-          className="journey-hud__stage-spotlight"
-          onClick={() => scrollToLevel(progress.currentLevel)}
-          title="Click to focus your active learning stage"
-        >
-          <div className="journey-hud__stage-pulse">
-            <span className="journey-hud__pulse-dot" />
-            <span className="journey-hud__stage-tag">ACTIVE STAGE</span>
-          </div>
-          <div className="journey-hud__stage-text">
-            <strong className="journey-hud__stage-name">
-              Level {currentLevelData.numberStr}: {currentLevelData.title}
-            </strong>
-            <span className="journey-hud__stage-sub">
-              {currentLevelData.moduleName} · {currentLevelData.subtitle}
-            </span>
-          </div>
-          <span className="journey-hud__stage-arrow">Focus ➔</span>
-        </div>
-
-        {/* Quick Jump Bar */}
-        <nav className="journey-quicknav" aria-label="Quick jump buttons">
-          <button className="journey-quicknav__btn" onClick={scrollToStart}>
-            ⬇️ Start (Lvl 01)
-          </button>
-          <button
-            className="journey-quicknav__btn journey-quicknav__btn--current"
-            onClick={() => scrollToLevel(progress.currentLevel)}
-          >
-            📍 Current (Lvl {progress.currentLevel})
-          </button>
-          <button className="journey-quicknav__btn journey-quicknav__btn--summit" onClick={scrollToSummit}>
-            🏆 Summit Passport
-          </button>
-        </nav>
       </header>
 
       {/* ================= DEV / DEMO MENU MODAL ================= */}
@@ -351,8 +301,20 @@ export function JourneyScreen() {
       <div className="journey-scroll" ref={scrollRef}>
         <div
           className="journey-canvas"
-          style={{ width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }}
+          style={{
+            width: `${CANVAS_WIDTH}px`,
+            height: `${CANVAS_HEIGHT}px`,
+            backgroundImage: `url(${journeyBgImg})`,
+          }}
         >
+          {/* Background Illustration Layer */}
+          <img
+            src={journeyBgImg}
+            alt="Journey Background"
+            className="journey-canvas-bg"
+            aria-hidden="true"
+          />
+
           {/* 1. Vector Map Clean Track & Minimalist Elements */}
           <JourneyTrackSvg />
 
@@ -367,7 +329,12 @@ export function JourneyScreen() {
           >
             <div className="journey-clean-summit__trophy">
               <span className="journey-clean-summit__sparkle">✨</span>
-              <span className="journey-clean-summit__cup">🏆</span>
+              <img
+                src={lastBookImg}
+                alt="Golden Sacred Passport Book"
+                className="journey-summit-book-icon"
+                draggable={false}
+              />
               <span className="journey-clean-summit__sparkle">✨</span>
             </div>
 
@@ -620,7 +587,12 @@ export function JourneyScreen() {
           <div className="journey-passport-modal" onClick={(e) => e.stopPropagation()}>
             <div className="journey-passport-gold-border">
               <header className="journey-passport__head">
-                <div className="journey-passport__crest">🏆</div>
+                <img
+                  src={lastBookImg}
+                  alt="Employability Passport Book"
+                  className="journey-passport__book-crest"
+                  draggable={false}
+                />
                 <div className="journey-passport__seal-tag">OFFICIAL CREDENTIAL</div>
                 <h2 className="journey-passport__title">EMPLOYABILITY PASSPORT</h2>
                 <p className="journey-passport__quote">“You Did It! A Brighter Future Awaits”</p>

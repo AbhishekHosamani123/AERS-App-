@@ -307,44 +307,44 @@ export const NOTIFICATIONS: AppNotification[] = [
 
 export const FAQ_ITEMS: { category: string; q: string; a: string }[] = [
   {
-    category: 'Booking',
-    q: 'How do I book a bus ticket?',
-    a: 'Enter your origin and destination on the home screen, pick a travel date, then tap Search. Compare services, pick your seats, add passenger details and pay to confirm instantly.',
+    category: 'Learning Path',
+    q: 'How do I earn my Employability Passport?',
+    a: 'Complete all 20 levels in your AERS Journey, earn 5 module badges, and submit your capstone portfolio to unlock your verified Employability Passport.',
   },
   {
-    category: 'Booking',
-    q: 'Can I book for more than one passenger?',
-    a: 'Yes. Select multiple seats on the seat-map — a passenger form appears for each selected seat.',
+    category: 'Mentorship',
+    q: 'When are the live Google Meet mentor sessions held?',
+    a: 'Live interactive mentor sessions run every weekday at 5:00 PM and on Saturdays at 11:00 AM. Direct Google Meet joining links are posted in your Notifications and Help tab.',
   },
   {
-    category: 'Payments',
-    q: 'Which payment methods are supported?',
-    a: 'This prototype simulates UPI, cards and wallet payments. No real transaction takes place.',
+    category: 'Assessments',
+    q: 'Can I retake a level quiz or coding challenge?',
+    a: 'Yes! You can retake practice questions and challenges anytime to improve your accuracy, level score, and climb up the leaderboard.',
   },
   {
-    category: 'Payments',
-    q: 'My payment failed but money was deducted. What now?',
-    a: 'Failed payments auto-refund to the source account within 5–7 business days. Your ticket is only generated on success.',
+    category: 'Placements',
+    q: 'How does AERS connect students with hiring companies?',
+    a: 'Once you cross Level 15 and complete your technical assessment, your verified Employability Passport is shared directly with top tier tech recruiters and hiring partners.',
   },
   {
-    category: 'Cancellation',
-    q: 'How do I cancel a ticket?',
-    a: 'Open MyTrips, select the booking, and tap Cancel. Refund estimates are shown before you confirm.',
+    category: 'AI Study Tutor',
+    q: 'What can AERS Study AI help me with?',
+    a: 'AERS Study AI is available 24/7 in this Help tab to answer any question in DSA, Computer Science, Engineering subjects, coding syntax, math derivations, and interview prep.',
   },
   {
-    category: 'Cancellation',
-    q: 'How is the refund calculated?',
-    a: 'Cancellation up to 24h before departure: 80% refund. 12–24h: 60%. Under 12h: 30%. Service fee is fixed at ₹30.',
+    category: 'Coding & DSA',
+    q: 'Which programming languages are supported in coding rounds?',
+    a: 'You can practice and ask questions in Python, C++, Java, JavaScript, TypeScript, and SQL with step-by-step logic and time complexity breakdowns.',
+  },
+  {
+    category: 'Certification',
+    q: 'Are AERS level badges shareable on LinkedIn?',
+    a: 'Yes, every milestone badge and your final Employability Passport comes with a verified credential ID and one-click LinkedIn badge sharing.',
   },
   {
     category: 'General',
-    q: 'What does a "ladies" seat mean?',
-    a: 'Seats marked pink are reserved for female passengers (or female-adjacent). Male passengers cannot select these.',
-  },
-  {
-    category: 'General',
-    q: 'Is live tracking available?',
-    a: 'Services marked with the live icon share their position once the trip starts.',
+    q: 'How can I schedule a 1-on-1 counseling session?',
+    a: 'Tap the "Schedule 1-on-1 Call" button at the bottom of the Help tab to book a 30-minute dedicated counseling slot with an academic mentor.',
   },
 ];
 

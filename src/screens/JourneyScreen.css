@@ -337,12 +337,31 @@
   position: relative;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  background: #ffffff;
+  background: #d4eaf7;
 }
 
 .journey-canvas {
   position: relative;
   margin: 0 auto;
+  background-image: url('/new_journey_baground.png');
+  background-size: 100% 100%;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-color: #dbeafe;
+  box-shadow: 0 0 35px rgba(15, 23, 42, 0.12);
+  overflow: visible;
+}
+
+.journey-canvas-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  z-index: 0;
+  display: block;
 }
 
 .journey-track-svg {
@@ -352,6 +371,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 2;
 }
 
 /* ================= 2. SUMMIT DESTINATION (EMPLOYABILITY PASSPORT) ================= */
@@ -380,29 +400,34 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: -6px;
+  margin-bottom: -10px;
   z-index: 5;
 }
 
-.journey-clean-summit__cup {
-  font-size: 32px;
-  filter: drop-shadow(0 4px 10px rgba(245, 158, 11, 0.5));
-  animation: trophy-wobble 3s infinite ease-in-out;
+.journey-summit-book-icon {
+  width: 72px;
+  height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 20px rgba(245, 158, 11, 0.6));
+  animation: summit-book-float 3s infinite ease-in-out;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@keyframes summit-book-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1.5deg) scale(1.05);
+  }
 }
 
 .journey-clean-summit__sparkle {
   font-size: 16px;
   color: #fbbf24;
   animation: sparkle-pulse 2s infinite ease-in-out alternate;
-}
-
-@keyframes trophy-wobble {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-4px) rotate(2deg);
-  }
 }
 
 @keyframes sparkle-pulse {
@@ -414,6 +439,15 @@
     opacity: 1;
     transform: scale(1.2);
   }
+}
+
+.journey-passport__book-crest {
+  width: 76px;
+  height: 68px;
+  object-fit: contain;
+  margin: 0 auto 8px;
+  display: block;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.35));
 }
 
 /* 3D Golden Summit Podium */
@@ -471,13 +505,15 @@
 /* Summit Card */
 .journey-summit-card {
   width: 250px;
-  background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+  background: linear-gradient(135deg, rgba(255, 251, 235, 0.96) 0%, rgba(255, 255, 255, 0.96) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1.5px solid #fde68a;
   border-radius: 16px;
   padding: 10px 12px;
   box-shadow:
-    0 8px 24px rgba(245, 158, 11, 0.18),
-    0 2px 6px rgba(0, 0, 0, 0.04);
+    0 10px 25px rgba(245, 158, 11, 0.22),
+    0 2px 6px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -540,16 +576,18 @@
   position: absolute;
   transform: translate(-50%, -50%);
   width: 320px;
-  background: linear-gradient(135deg, rgba(248, 250, 252, 0.98), rgba(255, 255, 255, 0.98));
-  border: 1.5px solid #e2e8f0;
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(255, 255, 255, 0.95));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
   border-radius: 14px;
   padding: 7px 12px;
   display: flex;
   align-items: center;
   gap: 10px;
   box-shadow:
-    0 4px 14px rgba(15, 23, 42, 0.05),
-    0 1px 3px rgba(0, 0, 0, 0.02);
+    0 6px 18px rgba(15, 23, 42, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.03);
   cursor: pointer;
   z-index: 10;
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -559,7 +597,7 @@
 .journey-module-pill-banner:hover {
   transform: translate(-50%, -50%) scale(1.02);
   border-color: #bfdbfe;
-  box-shadow: 0 6px 18px rgba(0, 102, 245, 0.12);
+  box-shadow: 0 8px 22px rgba(0, 102, 245, 0.16);
 }
 
 .journey-module-pill-banner:active {
@@ -567,7 +605,7 @@
 }
 
 .journey-module-pill-banner.is-module-done {
-  background: linear-gradient(135deg, rgba(240, 253, 244, 0.98), rgba(255, 255, 255, 0.98));
+  background: linear-gradient(135deg, rgba(240, 253, 244, 0.95), rgba(255, 255, 255, 0.95));
   border-color: #bbf7d0;
 }
 
@@ -717,9 +755,17 @@
 
 .journey-start-motto {
   font-size: 10px;
-  color: #64748b;
-  font-weight: 600;
+  color: #1e3a8a;
+  font-weight: 700;
   margin-top: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  display: inline-block;
 }
 
 /* ================= MODALS ================= */

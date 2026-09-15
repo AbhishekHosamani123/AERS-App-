@@ -1,0 +1,165 @@
+/* ============================================================
+   AERS Study AI Markdown & Code Styler
+   ============================================================ */
+
+.study-md {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.study-md__h2 {
+  font-size: 15.5px;
+  font-weight: 800;
+  margin-top: 6px;
+  margin-bottom: 2px;
+  color: #0f172a;
+}
+
+.study-md__h3 {
+  font-size: 14.5px;
+  font-weight: 700;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  color: #1e293b;
+}
+
+.study-md__h4 {
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  color: #1e293b;
+}
+
+.study-md__p {
+  margin: 0;
+  color: inherit;
+}
+
+.study-md__quote {
+  border-left: 3px solid #00c6ff;
+  padding: 4px 10px;
+  margin: 4px 0;
+  background: rgba(0, 198, 255, 0.06);
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: #334155;
+}
+
+.study-md__ul,
+.study-md__ol {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.study-md__ul li,
+.study-md__ol li {
+  line-height: 1.5;
+}
+
+.study-md__inline-code {
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 12px;
+  background: #f1f5f9;
+  color: #0284c7;
+  padding: 2px 5px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+/* ------------------------------- Code Block ------------------------------- */
+
+.study-codeblock {
+  margin: 6px 0;
+  border-radius: 8px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.study-codeblock__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1e293b;
+  padding: 5px 12px;
+  border-bottom: 1px solid #334155;
+}
+
+.study-codeblock__lang {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.study-codeblock__copy {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.study-codeblock__copy:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.study-codeblock__copy.copied {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+.study-codeblock__pre {
+  margin: 0;
+  padding: 12px;
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #e2e8f0;
+  background: #0f172a;
+}
+
+.study-codeblock__pre code {
+  font-family: inherit;
+}
+
+/* -------------------------------- Table & HR ------------------------------ */
+
+.study-md__hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 6px 0;
+}
+
+.study-md__tablerow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 6px;
+  padding: 5px 8px;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid #edf2f7;
+  font-size: 12.5px;
+}
+
+.study-md__tablecell {
+  color: #334155;
+  word-break: break-word;
+}

@@ -32,13 +32,13 @@ export function AppHeader({ unreadNotifs = 3, rightSlot, subtitle }: AppHeaderPr
         ) : (
           <>
             <button
-              className="app-header__walletpill"
+              className="app-header__passportpill"
               onClick={() => navigate('/account')}
-              aria-label="Wallet"
-              title="AERS Wallet"
+              aria-label="Passport 78%"
+              title="AERS Passport (78% Readiness)"
             >
-              <Icon name="wallet" size={15} />
-              <span>Wallet ₹202</span>
+              <Icon name="shield" size={14} strokeWidth={2.4} />
+              <span>Passport <strong>78%</strong></span>
             </button>
             <button
               className="app-header__notifbtn"

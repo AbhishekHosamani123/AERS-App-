@@ -1,4 +1,8 @@
 import type { LevelData } from '../../data/journeyData';
+import greenBookImg from '../../assets/Green_closed_book.png';
+import openBookImg from '../../assets/Open_Book.png';
+import blueBookImg from '../../assets/Blue_closed_book.png';
+import goldenBookImg from '../../assets/Golden_close_book.png';
 import './PodiumNode.css';
 
 interface PodiumNodeProps {
@@ -14,11 +18,18 @@ export function PodiumNode({ level, status, stars, onClick }: PodiumNodeProps) {
   const isCompleted = status === 'completed';
   const isMilestone = Boolean(level.isMilestone);
 
-  const getStatusIcon = () => {
-    if (isCompleted) return '✓';
-    if (isLocked) return '🔒';
-    if (isMilestone) return '👑';
-    return '⚡';
+  const getBookImage = () => {
+    if (isMilestone) return goldenBookImg;
+    if (isCompleted) return greenBookImg;
+    if (isCurrent) return openBookImg;
+    return blueBookImg; // locked
+  };
+
+  const getBookAltText = () => {
+    if (isMilestone) return `Milestone Level ${level.numberStr} (Golden Book)`;
+    if (isCompleted) return `Completed Level ${level.numberStr} (Green Book)`;
+    if (isCurrent) return `Current Active Level ${level.numberStr} (Open Book)`;
+    return `Locked Level ${level.numberStr} (Blue Book)`;
   };
 
   return (
@@ -59,31 +70,29 @@ export function PodiumNode({ level, status, stars, onClick }: PodiumNodeProps) {
         </div>
       )}
 
-      {/* 3D Floating Isometric Cylinder / Puck */}
-      <div className="podium-cylinder-wrapper">
-        {/* Floating Top Status Badge */}
-        <div className="podium-icon-badge">
-          <span className="podium-icon-glyph">{getStatusIcon()}</span>
+      {/* 3D Book Visual Container */}
+      <div className="podium-book-wrapper">
+        {/* Floating Level Number Pill Badge */}
+        <div className="podium-book-badge">
+          <span className="podium-book-num">{level.numberStr}</span>
+          {isCompleted && <span className="podium-book-badge-icon">✓</span>}
+          {isLocked && <span className="podium-book-badge-icon">🔒</span>}
+          {isMilestone && <span className="podium-book-badge-icon">👑</span>}
         </div>
 
-        {/* 3D Cylinder Disc */}
-        <div className="podium-cylinder">
-          {/* Top Face Ellipse */}
-          <div className="podium-top-face">
-            <div className="podium-top-highlight" />
-          </div>
+        {/* 3D Book Graphic */}
+        <img
+          src={getBookImage()}
+          alt={getBookAltText()}
+          className={`podium-book-img ${isCurrent ? 'is-current-book' : ''}`}
+          draggable={false}
+        />
 
-          {/* Front Face with Level Number */}
-          <div className="podium-front-body">
-            <span className="podium-number">{level.numberStr}</span>
-          </div>
-        </div>
-
-        {/* Ground Diffuse Shadow */}
+        {/* Diffuse Ground Shadow */}
         <div className="podium-ground-shadow" />
       </div>
 
-      {/* Simplified, High-Legibility Title Capsule Pill */}
+      {/* High-Legibility Title Capsule Pill */}
       <div className="podium-title-capsule">
         {isCompleted && <span className="podium-status-dot is-check">✓</span>}
         {isCurrent && <span className="podium-status-dot is-pulse" />}

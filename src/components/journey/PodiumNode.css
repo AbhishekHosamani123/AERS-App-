@@ -124,223 +124,163 @@
   }
 }
 
-/* ================= 3D CYLINDER PUCK ================= */
-.podium-cylinder-wrapper {
+/* ================= 3D BOOK VISUAL CONTAINER ================= */
+.podium-book-wrapper {
   position: relative;
-  width: 72px;
-  height: 48px;
+  width: 64px;
+  height: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 8px;
-}
-
-/* Floating Status Icon Badge on top */
-.podium-icon-badge {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 2px solid #bfdbfe;
-  box-shadow: 0 3px 8px rgba(0, 102, 245, 0.2);
-  display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 10;
-  transition: all 0.2s ease;
+  margin-top: 4px;
 }
 
-.podium-icon-glyph {
-  font-size: 12px;
-  line-height: 1;
-  font-weight: 800;
-}
-
-/* 3D Isometric Cylinder Base */
-.podium-cylinder {
-  position: relative;
-  width: 68px;
-  height: 36px;
-  border-radius: 0 0 34px 34px / 0 0 16px 16px;
-  background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 60%, #172554 100%);
-  box-shadow:
-    0 8px 16px rgba(0, 102, 245, 0.28),
-    inset 0 -3px 5px rgba(0, 0, 0, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Top Ellipse Face */
-.podium-top-face {
-  position: absolute;
-  top: -11px;
-  left: 0;
-  width: 68px;
-  height: 22px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 30%, #60a5fa 0%, #2563eb 70%, #1d4ed8 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.6);
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.7);
-}
-
-.podium-top-highlight {
-  position: absolute;
-  top: 2px;
-  left: 10px;
-  right: 10px;
-  height: 6px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, transparent 100%);
-}
-
-/* Front Face Level Number */
-.podium-front-body {
-  margin-top: 8px;
+/* 3D Book Graphic */
+.podium-book-img {
+  width: 58px;
+  height: 50px;
+  object-fit: contain;
+  display: block;
   z-index: 5;
+  filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 0.28));
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-.podium-number {
-  font-family: var(--font-brand, 'Outfit', 'Inter', system-ui, sans-serif);
-  font-size: 15px;
-  font-weight: 900;
+/* Open Book current level specific sizing and styling */
+.podium-book-img.is-current-book {
+  width: 66px;
+  height: 56px;
+  filter: drop-shadow(0 8px 18px rgba(0, 102, 245, 0.45));
+  animation: current-book-bounce 2.2s infinite ease-in-out;
+}
+
+@keyframes current-book-bounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.05);
+  }
+}
+
+/* Floating Level Number Pill Badge on Top-Right of Book */
+.podium-book-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 12;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
   color: #ffffff;
-  letter-spacing: 0.5px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  border: 1.5px solid #ffffff;
+  border-radius: 999px;
+  padding: 1.5px 6px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.podium-book-num {
+  font-family: var(--font-brand, 'Outfit', 'Inter', system-ui, sans-serif);
+  font-size: 9.5px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.podium-book-badge-icon {
+  font-size: 8px;
+  line-height: 1;
+}
+
+/* State Badge Variations */
+.podium-node.is-completed .podium-book-badge {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-color: #ecfdf5;
+  box-shadow: 0 3px 8px rgba(5, 150, 105, 0.4);
+}
+
+.podium-node.is-current .podium-book-badge {
+  background: linear-gradient(135deg, #0066f5 0%, #0284c7 100%);
+  border-color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 102, 245, 0.5);
+}
+
+.podium-node.is-milestone .podium-book-badge {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: #fef3c7;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.5);
+}
+
+.podium-node.is-locked .podium-book-badge {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  border-color: #e2e8f0;
+  color: #e2e8f0;
+}
+
+/* Milestone glow */
+.podium-node.is-milestone .podium-book-img {
+  filter: drop-shadow(0 8px 18px rgba(245, 158, 11, 0.45));
+}
+
+/* Completed glow */
+.podium-node.is-completed .podium-book-img {
+  filter: drop-shadow(0 6px 14px rgba(5, 150, 105, 0.35));
+}
+
+/* Locked frosted opacity */
+.podium-node.is-locked {
+  opacity: 0.85;
+}
+
+.podium-node.is-locked:hover {
+  opacity: 0.98;
 }
 
 /* Diffuse Ground Shadow */
 .podium-ground-shadow {
   position: absolute;
-  bottom: -5px;
+  bottom: -4px;
   left: 50%;
   transform: translateX(-50%);
-  width: 72px;
-  height: 12px;
+  width: 58px;
+  height: 10px;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.12);
+  background: rgba(15, 23, 42, 0.22);
   filter: blur(4px);
   pointer-events: none;
+  z-index: 1;
 }
 
-/* ================= 1. COMPLETED NODE STATE (Emerald Teal) ================= */
-.podium-node.is-completed .podium-cylinder {
-  background: linear-gradient(180deg, #059669 0%, #047857 60%, #064e3b 100%);
-  box-shadow:
-    0 8px 16px rgba(5, 150, 105, 0.3),
-    inset 0 -3px 5px rgba(0, 0, 0, 0.35);
+/* Hover and active dynamics */
+.podium-node:hover .podium-book-img {
+  transform: scale(1.1) translateY(-2px);
 }
 
-.podium-node.is-completed .podium-top-face {
-  background: radial-gradient(ellipse at 50% 30%, #6ee7b7 0%, #10b981 70%, #059669 100%);
-  border-color: rgba(255, 255, 255, 0.7);
-}
-
-.podium-node.is-completed .podium-icon-badge {
-  border-color: #6ee7b7;
-  background: #ecfdf5;
-  color: #059669;
-  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
-}
-
-/* ================= 2. CURRENT / ACTIVE NODE STATE (Electric Blue & Cyan Glow) ================= */
-.podium-node.is-current .podium-cylinder-wrapper {
-  animation: current-float 2.2s infinite ease-in-out;
-}
-
-.podium-node.is-current .podium-cylinder {
-  background: linear-gradient(180deg, #0066f5 0%, #1d4ed8 60%, #172554 100%);
-  box-shadow:
-    0 10px 22px rgba(0, 102, 245, 0.45),
-    0 0 16px rgba(0, 102, 245, 0.3),
-    inset 0 -3px 5px rgba(0, 0, 0, 0.35);
-}
-
-.podium-node.is-current .podium-top-face {
-  background: radial-gradient(ellipse at 50% 30%, #67e8f9 0%, #0066f5 70%, #1d4ed8 100%);
-  border-color: #ffffff;
-  box-shadow:
-    0 0 12px rgba(0, 102, 245, 0.8),
-    inset 0 2px 5px rgba(255, 255, 255, 0.8);
-}
-
-.podium-node.is-current .podium-icon-badge {
-  border-color: #38bdf8;
-  background: #f0f9ff;
-  color: #0284c7;
-  box-shadow: 0 3px 10px rgba(0, 102, 245, 0.35);
-}
-
-@keyframes current-float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-
-/* ================= 3. LOCKED NODE STATE (Frosted Slate) ================= */
-.podium-node.is-locked {
-  opacity: 0.82;
-}
-
-.podium-node.is-locked:hover {
-  opacity: 0.95;
-}
-
-.podium-node.is-locked .podium-cylinder {
-  background: linear-gradient(180deg, #64748b 0%, #475569 60%, #1e293b 100%);
-  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.16);
-}
-
-.podium-node.is-locked .podium-top-face {
-  background: radial-gradient(ellipse at 50% 30%, #cbd5e1 0%, #94a3b8 70%, #475569 100%);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.podium-node.is-locked .podium-icon-badge {
-  border-color: #e2e8f0;
-  background: #f8fafc;
-  color: #64748b;
-}
-
-/* ================= 4. MILESTONE GOLD CYLINDER (Lvl 04, 08, 12, 16, 20) ================= */
-.podium-node.is-milestone .podium-cylinder {
-  background: linear-gradient(180deg, #f59e0b 0%, #d97706 60%, #78350f 100%);
-  box-shadow:
-    0 8px 18px rgba(245, 158, 11, 0.35),
-    inset 0 -3px 5px rgba(0, 0, 0, 0.4);
-}
-
-.podium-node.is-milestone .podium-top-face {
-  background: radial-gradient(ellipse at 50% 30%, #fef08a 0%, #fbbf24 70%, #d97706 100%);
-  border-color: rgba(255, 255, 255, 0.75);
-}
-
-.podium-node.is-milestone .podium-icon-badge {
-  border-color: #fde68a;
-  background: #fffbeb;
-  color: #b45309;
-  box-shadow: 0 3px 8px rgba(245, 158, 11, 0.3);
+.podium-node:active .podium-book-img {
+  transform: scale(0.95) translateY(1px);
 }
 
 /* ================= SIMPLIFIED TITLE CAPSULE (PILL) ================= */
 .podium-title-capsule {
   margin-top: 6px;
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
   border-radius: 999px;
   padding: 3px 9px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.12);
   max-width: 142px;
   transition: all 0.15s ease;
 }
@@ -384,8 +324,8 @@
 
 /* Title capsule styling variants */
 .podium-node.is-completed .podium-title-capsule {
-  background: #f0fdf4;
-  border-color: #bbf7d0;
+  background: rgba(240, 253, 244, 0.94);
+  border-color: #86efac;
 }
 
 .podium-node.is-completed .podium-title-text {
@@ -393,9 +333,9 @@
 }
 
 .podium-node.is-current .podium-title-capsule {
-  background: #eff6ff;
+  background: rgba(239, 246, 255, 0.96);
   border-color: #93c5fd;
-  box-shadow: 0 2px 8px rgba(0, 102, 245, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 102, 245, 0.2);
 }
 
 .podium-node.is-current .podium-title-text {
@@ -404,8 +344,8 @@
 }
 
 .podium-node.is-locked .podium-title-capsule {
-  background: #f8fafc;
-  border-color: #e2e8f0;
+  background: rgba(248, 250, 252, 0.92);
+  border-color: rgba(226, 232, 240, 0.9);
 }
 
 .podium-node.is-locked .podium-title-text {
@@ -413,7 +353,7 @@
 }
 
 .podium-node.is-milestone .podium-title-capsule {
-  background: #fffbeb;
+  background: rgba(255, 251, 235, 0.95);
   border-color: #fde68a;
 }
 

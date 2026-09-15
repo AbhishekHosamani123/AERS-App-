@@ -5,7 +5,7 @@
    (My details / Payments / More / Preferences)
    ============================================================ */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Sheet } from '../components/ui/Sheet';
@@ -13,26 +13,19 @@ import { TextField } from '../components/ui/TextField';
 import { Icon, type IconName } from '../components/icons/Icon';
 import { BRAND, BRAND_COPY } from '../branding/brand';
 import { useAuth, updateProfile } from '../state/authStore';
-import { listBookings } from '../services/api';
 import { showToast } from '../state/toastStore';
+import bannerImg from '../assets/banner.png';
 import './AccountScreen.css';
-
-/** Language chips (reference: English / ಕನ್ನಡ (Kannada) / मराठी (Marathi)) */
-const LANGUAGES = ['English', 'ಕನ್ನಡ (Kannada)', 'मराठी (Marathi)'];
 
 export function AccountScreen() {
   const navigate = useNavigate();
   const session = useAuth();
   const [editOpen, setEditOpen] = useState(false);
-  const [tripsCount, setTripsCount] = useState<number | null>(null);
-  const [name, setName] = useState(session?.name ?? '');
-  const [email, setEmail] = useState(session?.email ?? '');
+  const displayName = session?.name && session.name !== 'User' ? session.name : 'Krishna';
+  const [name, setName] = useState(displayName);
+  const [email, setEmail] = useState(session?.email ?? 'krishna@aers.in');
   const [nameError, setNameError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
-
-  useEffect(() => {
-    listBookings().then((b) => setTripsCount(b.length));
-  }, []);
 
   if (!session) {
     return (
@@ -67,10 +60,15 @@ export function AccountScreen() {
 
   return (
     <div className="account">
-      {/* Navy header (reference: #12122A with white text + stats trio) */}
-      <header className="account__header">
+      {/* Account banner header */}
+      <header
+        className="account__header"
+        style={{
+          backgroundImage: `linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.55) 100%), url(${bannerImg})`,
+        }}
+      >
         <div className="account__id">
-          <h1>{session.name ?? 'User'}</h1>
+          <h1>{displayName}</h1>
           <span>+91 {session.phone}</span>
           <small>{memberSince}</small>
         </div>
@@ -80,43 +78,109 @@ export function AccountScreen() {
       </header>
       <div className="account__stats">
         <div>
-          <strong>{tripsCount ?? 0}</strong>
-          <span>Total trips</span>
+          <strong>78%</strong>
+          <span>Readiness</span>
         </div>
         <div>
-          <strong>{(tripsCount ?? 0) * 370} km</strong>
-          <span>Travelled</span>
+          <strong>12 verified</strong>
+          <span>Skills</span>
         </div>
         <div>
-          <strong>{(tripsCount ?? 0) * 39} kg</strong>
-          <span>Carbon saving</span>
+          <strong>18 submitted</strong>
+          <span>Evidence</span>
         </div>
       </div>
 
       <div className="account__scroll">
-        {/* Wallet card (reference: balance + orange expiry note) */}
-        <section className="account__wallet" aria-label="Wallet">
-          <h2 className="account__wallet-title">
-            <Icon name="wallet" size={16} /> Wallet
-          </h2>
-          <strong className="account__wallet-amt">₹202.00</strong>
-          <span className="account__wallet-label">Wallet balance</span>
-          <p className="account__wallet-expiry">₹202.00 expires by 06 Feb 2027</p>
-        </section>
+        {/* Passport card (horizontal 3-part composition: Left Profile · Center/Right Info · Right Decoration) */}
+        <section
+          className="account__passport"
+          aria-label="Passport"
+          onClick={() => navigate('/journey')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              navigate('/journey');
+            }
+          }}
+        >
+          {/* RIGHT — Decoration: Subtle background credential/passport illustration */}
+          <svg className="account__passport-bg-watermark" viewBox="0 0 110 130" fill="none" aria-hidden="true">
+            <circle cx="75" cy="65" r="42" fill="#3b82f6" fillOpacity="0.03" />
+            <g transform="rotate(8 68 62)">
+              <rect x="28" y="10" width="70" height="96" rx="12" fill="#ffffff" fillOpacity="0.9" />
+              <rect x="28" y="10" width="70" height="96" rx="12" fill="#3b82f6" fillOpacity="0.06" stroke="#3b82f6" strokeOpacity="0.18" strokeWidth="2.2" />
+              {/* Graduation cap */}
+              <path d="M63 32 L79 40 L63 48 L47 40 Z" fill="#3b82f6" fillOpacity="0.3" />
+              <path d="M53 45 V52 C53 56.5 73 56.5 73 52 V45" fill="#3b82f6" fillOpacity="0.3" />
+              <path d="M78 42 V53" stroke="#3b82f6" strokeOpacity="0.3" strokeWidth="1.8" strokeLinecap="round" />
+              {/* Certificate content lines */}
+              <rect x="42" y="62" width="42" height="4.5" rx="2.25" fill="#3b82f6" fillOpacity="0.22" />
+              <rect x="42" y="71" width="42" height="4.5" rx="2.25" fill="#3b82f6" fillOpacity="0.22" />
+            </g>
+            {/* Sparkles / Diamonds */}
+            <path d="M102 24 C102 26.5 105 29 105 29 C105 29 102 31.5 102 34 C102 31.5 99 29 99 29 C99 29 102 26.5 102 24 Z" fill="#3b82f6" fillOpacity="0.25" />
+            <path d="M104 70 C104 72 106.5 74 106.5 74 C106.5 74 104 76 104 78 C104 76 101.5 74 101.5 74 C101.5 74 104 72 104 70 Z" fill="#3b82f6" fillOpacity="0.25" />
+          </svg>
 
-        {/* Language chips (reference: "Try redBus in your language") */}
-        <section className="account__lang" aria-label="Language">
-          <h2>Try {BRAND.APP_NAME} in your language</h2>
-          <div className="account__lang-chips">
-            {LANGUAGES.map((l, i) => (
-              <button
-                key={l}
-                className={`account__lang-chip ${i === 0 ? 'is-active' : ''}`}
-                onClick={() => showToast(`${l} coming soon — English stays for now`, 'info')}
-              >
-                {l}
-              </button>
-            ))}
+          {/* LEFT — Profile: Circular photo with prominent 78% smooth gradient blue readiness ring */}
+          <div className="account__passport-avatar-wrap" title="Krishna · 78% Readiness">
+            <svg className="account__passport-ring-svg" viewBox="0 0 88 88">
+              <defs>
+                <linearGradient id="passportBlueGrad" x1="75%" y1="0%" x2="0%" y2="50%">
+                  <stop offset="0%" stopColor="#0052ff" />
+                  <stop offset="35%" stopColor="#0066ff" />
+                  <stop offset="70%" stopColor="#00a8ff" />
+                  <stop offset="100%" stopColor="#38bdf8" />
+                </linearGradient>
+              </defs>
+              {/* 22% Unfilled soft light-blue track */}
+              <circle
+                cx="44"
+                cy="44"
+                r="38"
+                fill="none"
+                stroke="#dbeafe"
+                strokeWidth="4.5"
+              />
+              {/* 78% Filled smooth gradient blue arc (Deep AERS blue → Bright royal blue → Light blue) */}
+              <circle
+                cx="44"
+                cy="44"
+                r="38"
+                fill="none"
+                stroke="url(#passportBlueGrad)"
+                strokeWidth="4.5"
+                strokeDasharray="238.76"
+                strokeDashoffset="52.53"
+                strokeLinecap="round"
+                transform="rotate(-90 44 44)"
+              />
+            </svg>
+            <img
+              src="/students/student1.jpg"
+              alt="Krishna Profile"
+              className="account__passport-avatar-img"
+            />
+          </div>
+
+          {/* CENTER/RIGHT — Passport Information */}
+          <div className="account__passport-content">
+            <div className="account__passport-badge">
+              <Icon name="shield" size={16} strokeWidth={2.2} />
+              <span className="account__passport-title">Passport</span>
+            </div>
+
+            <div className="account__passport-stats">
+              <strong className="account__passport-amt">78%</strong>
+              <span className="account__passport-label">Readiness</span>
+            </div>
+
+            <div className="account__passport-action">
+              <span>Your career-readiness profile is ready →</span>
+            </div>
           </div>
         </section>
 

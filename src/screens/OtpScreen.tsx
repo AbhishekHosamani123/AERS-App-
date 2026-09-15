@@ -56,7 +56,7 @@ export function OtpScreen() {
       showToast('Incorrect OTP', 'error');
       return;
     }
-    setSession({ phone });
+    setSession({ phone, name: 'Krishna' });
     showToast('Logged in successfully', 'success');
     navigate('/account', { replace: true });
   }

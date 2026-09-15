@@ -66,6 +66,7 @@ export type IconName =
   | 'grid'
   | 'refresh'
   | 'exclamation'
+  | 'video'
   | 'loader';
 
 export interface IconProps {
@@ -227,6 +228,12 @@ const glyphs: Record<IconName, Glyph> = {
     <g>
       <rect x="4" y="7" width="24" height="18" rx="3" strokeWidth={strokeWidth} />
       <path d="M4 12h24M4 20h24M12 7v18M20 7v18" strokeWidth={strokeWidth} />
+    </g>
+  ),
+  video: ({ strokeWidth }: GlyphProps) => (
+    <g>
+      <rect x="3" y="8" width="18" height="16" rx="3" strokeWidth={strokeWidth} />
+      <path d="m21 13 8-5v16l-8-5v-6z" strokeWidth={strokeWidth} strokeLinejoin="round" />
     </g>
   ),
   lightning: ({ strokeWidth }: GlyphProps) => (
