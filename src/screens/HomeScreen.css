@@ -666,6 +666,21 @@
   margin-top: 1px;
 }
 
+.home__notif-card-icon--mentor {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.home__notif-card-icon--journey {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.home__notif-card-icon--session {
+  background: #fffbeb;
+  color: #d97706;
+}
+
 .home__notif-card-icon--offer {
   background: #eef5ff;
   color: #1769e8;
@@ -677,8 +692,8 @@
 }
 
 .home__notif-card-icon--system {
-  background: #f1f5f9;
-  color: #475569;
+  background: #e0f2fe;
+  color: #0284c7;
 }
 
 .home__notif-card-content {

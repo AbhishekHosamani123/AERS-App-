@@ -53,6 +53,18 @@
   place-items: center;
   flex-shrink: 0;
 }
+.notif__icon--mentor {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+.notif__icon--journey {
+  background: #ecfdf5;
+  color: #059669;
+}
+.notif__icon--session {
+  background: #fffbeb;
+  color: #d97706;
+}
 .notif__icon--offer {
   background: var(--c-primary-soft);
   color: var(--c-primary);
@@ -62,8 +74,8 @@
   color: var(--c-info);
 }
 .notif__icon--system {
-  background: var(--c-surface-muted);
-  color: var(--c-text-secondary);
+  background: #e0f2fe;
+  color: #0284c7;
 }
 
 .notif__text {

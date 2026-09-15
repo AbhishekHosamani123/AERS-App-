@@ -280,7 +280,7 @@ export async function processPayment(req: PaymentRequest): Promise<PaymentResult
 const STORE_KEY = 'busgo.bookings.v1';
 const SETTINGS_KEY = 'busgo.settings.v1';
 const AUTH_KEY = 'busgo.auth.v1';
-const NOTIF_KEY = 'busgo.notifications.v1';
+const NOTIF_KEY = 'aers.notifications.v2';
 
 function readStore<T>(key: string, fallback: T): T {
   try {

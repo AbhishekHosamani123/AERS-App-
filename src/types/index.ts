@@ -170,7 +170,8 @@ export interface AppNotification {
   body: string;
   time: string;
   read: boolean;
-  kind: 'offer' | 'booking' | 'system';
+  kind: 'mentor' | 'journey' | 'session' | 'system' | 'offer' | 'booking';
+  link?: string;
 }
 
 export interface UserProfile {

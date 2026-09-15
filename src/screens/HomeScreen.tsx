@@ -55,9 +55,12 @@ const SHORTCUT_TABS = [
 ] as const;
 
 const KIND_ICON: Record<AppNotification['kind'], IconName> = {
+  mentor: 'user',
+  journey: 'star',
+  session: 'calendar',
+  system: 'lightning',
   offer: 'offer',
   booking: 'ticket',
-  system: 'info',
 };
 
 export function HomeScreen() {
@@ -242,7 +245,7 @@ export function HomeScreen() {
           <div className="home__section-head">
             <div className="home__section-head-left">
               <h2 className="home__section-title">Notifications</h2>
-              <p className="home__section-sub">Updates, reminders and exclusive offers for you</p>
+              <p className="home__section-sub">Live classes, learning milestones & placement updates</p>
             </div>
             <button className="home__link" onClick={() => navigate('/notifications')}>
               View all
@@ -261,9 +264,18 @@ export function HomeScreen() {
                   className={`home__notif-card ${!n.read ? 'is-unread' : ''}`}
                   onClick={async () => {
                     if (!n.read) await markNotifRead(n.id);
-                    if (n.kind === 'offer') navigate('/offers');
-                    else if (n.kind === 'booking') navigate('/trips');
-                    else showToast(n.title, 'info');
+                    if (n.kind === 'mentor' || n.kind === 'session') {
+                      showToast('Opening Google Meet session...', 'success');
+                      if (n.link) {
+                        setTimeout(() => window.open(n.link, '_blank'), 500);
+                      }
+                    } else if (n.kind === 'journey') {
+                      navigate('/journey');
+                    } else if (n.kind === 'offer') {
+                      navigate('/offers');
+                    } else {
+                      showToast(n.title, 'info');
+                    }
                   }}
                 >
                   <span className={`home__notif-card-icon home__notif-card-icon--${n.kind}`}>

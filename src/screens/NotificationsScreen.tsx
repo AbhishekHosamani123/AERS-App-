@@ -13,9 +13,12 @@ import type { AppNotification } from '../types';
 import './NotificationsScreen.css';
 
 const KIND_ICON: Record<AppNotification['kind'], IconName> = {
+  mentor: 'user',
+  journey: 'star',
+  session: 'calendar',
+  system: 'lightning',
   offer: 'offer',
   booking: 'ticket',
-  system: 'info',
 };
 
 export function NotificationsScreen() {
@@ -30,9 +33,20 @@ export function NotificationsScreen() {
     if (!n.read) {
       await markNotifRead(n.id);
     }
-    if (n.kind === 'offer') navigate('/offers');
-    else if (n.kind === 'booking') navigate('/trips');
-    else showToast(n.title, 'info');
+    if (n.kind === 'mentor' || n.kind === 'session') {
+      showToast('Opening Google Meet session...', 'success');
+      if (n.link) {
+        setTimeout(() => window.open(n.link, '_blank'), 500);
+      }
+    } else if (n.kind === 'journey') {
+      navigate('/journey');
+    } else if (n.kind === 'offer') {
+      navigate('/offers');
+    } else if (n.kind === 'booking') {
+      navigate('/trips');
+    } else {
+      showToast(n.title, 'info');
+    }
   }
 
   const unread = items.filter((n) => !n.read).length;
