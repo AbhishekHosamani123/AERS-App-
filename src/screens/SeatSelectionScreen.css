@@ -1,0 +1,252 @@
+.seats {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.seats__scroll {
+  flex: 1;
+  padding: var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+  overflow-y: auto;
+}
+
+/* Trip summary strip */
+.seats__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-md) var(--sp-lg);
+}
+
+.seats__summary > div {
+  display: flex;
+  flex-direction: column;
+}
+.seats__summary strong {
+  font-size: 15px;
+}
+.seats__summary span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--c-text-tertiary);
+}
+
+.seats__summary-mid {
+  flex: 1;
+  display: grid;
+  place-items: center;
+}
+.seats__duration {
+  font-size: 11px;
+  color: var(--c-text-tertiary);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-pill);
+  padding: 2px 8px;
+}
+
+.seats__price {
+  font-size: 18px;
+  font-weight: 800;
+  align-self: center;
+}
+
+/* Boarding/dropping buttons */
+.seats__points {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-md);
+}
+
+.seats__point {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-md);
+  text-align: left;
+  transition: border-color var(--m-fast);
+}
+.seats__point:hover {
+  border-color: var(--c-primary);
+}
+
+.seats__point-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--c-text-tertiary);
+  text-transform: uppercase;
+}
+
+.seats__point-value {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--c-text);
+  line-height: 1.35;
+}
+
+/* Female toggle — reference: 52×32 pill switch, red #D63941 when checked */
+.seats__female {
+  display: flex;
+  gap: var(--sp-md);
+  align-items: center;
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-md);
+  cursor: pointer;
+  line-height: 1.4;
+}
+.seats__female input {
+  appearance: none;
+  width: 52px;
+  height: 32px;
+  border-radius: var(--r-pill);
+  background: var(--c-surface-muted);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--m-fast);
+}
+.seats__female input::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--sh-sm);
+  transition: transform var(--m-fast) var(--ease-standard);
+}
+.seats__female input:checked {
+  background: var(--c-primary);
+}
+.seats__female input:checked::after {
+  transform: translateX(20px);
+}
+
+/* Picked seats */
+.seats__picked h4 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-text-tertiary);
+  margin-bottom: var(--sp-sm);
+}
+.seats__picked-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+}
+.seats__picked-chip {
+  background: var(--c-primary);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
+  border-radius: var(--r-pill);
+  padding: 5px 11px;
+}
+
+/* Sticky fare bar */
+.seats__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-lg);
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-border);
+  padding: var(--sp-md) var(--sp-lg);
+  box-shadow: 0 -4px 16px rgba(16, 24, 40, 0.06);
+}
+
+.seats__bar-total {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.seats__bar-total span {
+  font-size: 12px;
+  color: var(--c-text-tertiary);
+  font-weight: 600;
+}
+.seats__bar-total strong {
+  font-size: 20px;
+  font-weight: 800;
+}
+.seats__bar-hint {
+  font-size: 13px;
+  color: var(--c-text-tertiary);
+  font-weight: 500;
+}
+
+/* Point sheet */
+.pointsheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xs);
+}
+
+.pointsheet__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+  padding: var(--sp-md);
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--c-border);
+  text-align: left;
+  margin-bottom: var(--sp-xs);
+  transition: all var(--m-fast);
+}
+.pointsheet__item.is-active {
+  border-color: var(--c-primary);
+  background: var(--c-primary-soft);
+}
+
+.pointsheet__time {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-primary);
+  min-width: 64px;
+}
+
+.pointsheet__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.pointsheet__info strong {
+  font-size: 13.5px;
+  color: var(--c-text);
+}
+.pointsheet__info small {
+  font-size: 11.5px;
+  color: var(--c-text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pointsheet__check {
+  color: var(--c-primary);
+}

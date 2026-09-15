@@ -1,0 +1,736 @@
+/* ============================================================
+   Student Leaderboard Podium — Visual Reference Exact Match
+   Features: 3-Tier stepped podium + Inset Table (Ranks 4–7)
+   ============================================================ */
+
+.leaderboard-card {
+  width: calc(100% + 32px);
+  margin-left: -16px;
+  margin-right: -16px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #f3f8fe 0%, #ebf4fe 42%, #f8faff 100%);
+  border-top: 1px solid #dce9f8;
+  border-bottom: 1px solid #dce9f8;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  padding: 24px 16px 20px 16px;
+  box-shadow: 0 10px 30px -6px rgba(0, 80, 220, 0.05);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+
+/* ============================================================
+   1. Decorative Background (Botanical Leaves + Confetti)
+   ============================================================ */
+
+.leaderboard-card__leaf {
+  position: absolute;
+  top: 100px;
+  width: 65px;
+  height: 135px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+.leaf--left {
+  left: 0;
+}
+
+.leaf--right {
+  right: 0;
+}
+
+.leaderboard-card__confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.confetti-chip {
+  position: absolute;
+  border-radius: 2px;
+  opacity: 0.85;
+}
+
+.chip--1 {
+  top: 75px;
+  left: 60px;
+  background: #f59e0b;
+  width: 6px;
+  height: 12px;
+  transform: rotate(25deg);
+}
+
+.chip--2 {
+  top: 105px;
+  left: 30px;
+  background: #3b82f6;
+  width: 6px;
+  height: 8px;
+  transform: rotate(-35deg);
+}
+
+.chip--3 {
+  top: 70px;
+  right: 65px;
+  background: #3b82f6;
+  width: 7px;
+  height: 12px;
+  transform: rotate(-30deg);
+}
+
+.chip--4 {
+  top: 105px;
+  right: 32px;
+  background: #f59e0b;
+  width: 6px;
+  height: 10px;
+  transform: rotate(40deg);
+}
+
+.chip--5 {
+  top: 80px;
+  left: 155px;
+  background: #f59e0b;
+  width: 4.5px;
+  height: 8px;
+  transform: rotate(15deg);
+}
+
+.chip--6 {
+  top: 82px;
+  right: 155px;
+  background: #f97316;
+  width: 4.5px;
+  height: 7px;
+  transform: rotate(-20deg);
+}
+
+.chip--7 {
+  top: 28px;
+  left: 88px;
+  background: #3b82f6;
+  width: 4px;
+  height: 8px;
+  transform: rotate(-45deg);
+}
+
+.chip--8 {
+  top: 25px;
+  right: 100px;
+  background: #f59e0b;
+  width: 4px;
+  height: 7px;
+  transform: rotate(20deg);
+}
+
+/* ============================================================
+   2. Header (Title Left + Dropdown Right)
+   ============================================================ */
+
+.leaderboard-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+
+.leaderboard-card__title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.leaderboard-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  position: relative;
+}
+
+.leaderboard-card__trophy {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.leaderboard-card__title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0b192c;
+  letter-spacing: -0.3px;
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* 3 Radiant Spark Lines beside title */
+.leaderboard-card__sparks {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5px;
+  margin-left: 2px;
+}
+
+.spark-line {
+  display: inline-block;
+  background: #1769e8;
+  border-radius: 2px;
+}
+
+.spark-1 {
+  width: 2.5px;
+  height: 10px;
+  transform: rotate(-25deg);
+}
+
+.spark-2 {
+  width: 2.5px;
+  height: 12px;
+  transform: rotate(0deg);
+}
+
+.spark-3 {
+  width: 2.5px;
+  height: 10px;
+  transform: rotate(25deg);
+}
+
+.leaderboard-card__subtitle {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Dropdown Pill */
+.leaderboard-card__filter-wrap {
+  position: relative;
+}
+
+.leaderboard-card__filter-btn {
+  background: #eef5fe;
+  border: 1px solid #d4e5fc;
+  border-radius: 999px;
+  color: #1769e8;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.leaderboard-card__filter-btn:hover {
+  background: #e4effe;
+}
+
+.filter-arrow {
+  font-size: 10px;
+}
+
+.leaderboard-card__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #dce9f8;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 80, 220, 0.12);
+  display: flex;
+  flex-direction: column;
+  min-width: 110px;
+  z-index: 20;
+  overflow: hidden;
+  padding: 4px;
+}
+
+.leaderboard-card__dropdown-opt {
+  padding: 6px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #0b192c;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.leaderboard-card__dropdown-opt:hover {
+  background: #f1f6fe;
+}
+
+.leaderboard-card__dropdown-opt.is-active {
+  color: #1769e8;
+  font-weight: 800;
+  background: #eaf3fe;
+}
+
+/* ============================================================
+   3. Stepped 3-Tier Podium Stage (Ranks 2, 1, 3)
+   ============================================================ */
+
+.leaderboard-card__podium-stage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  margin-top: 12px;
+  margin-bottom: -4px;
+}
+
+.podium-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s ease;
+}
+
+.podium-col:hover {
+  transform: translateY(-2px);
+}
+
+.col--rank-2 {
+  flex: 1;
+  z-index: 2;
+}
+
+.col--rank-1 {
+  flex: 1.18;
+  z-index: 3;
+}
+
+.col--rank-3 {
+  flex: 1;
+  z-index: 2;
+}
+
+/* Crowns */
+.podium-crown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 2px;
+}
+
+.crown--gold {
+  position: relative;
+  margin-bottom: 3px;
+}
+
+.crown--gold svg {
+  width: 36px;
+  height: 22px;
+  filter: drop-shadow(0 3px 6px rgba(217, 119, 6, 0.4));
+}
+
+.crown-rays {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 14px;
+  pointer-events: none;
+}
+
+.c-ray {
+  position: absolute;
+  background: #f59e0b;
+  border-radius: 2px;
+  box-shadow: 0 0 4px #f59e0b;
+}
+
+.ray-l2 { top: 7px; left: 4px; width: 6px; height: 2px; transform: rotate(-35deg); }
+.ray-l1 { top: 1px; left: 13px; width: 6px; height: 2px; transform: rotate(-15deg); }
+.ray-r1 { top: 1px; right: 13px; width: 6px; height: 2px; transform: rotate(15deg); }
+.ray-r2 { top: 7px; right: 4px; width: 6px; height: 2px; transform: rotate(35deg); }
+
+.crown--silver svg {
+  width: 26px;
+  height: 16px;
+  filter: drop-shadow(0 2px 4px rgba(100, 116, 139, 0.3));
+}
+
+.crown--bronze svg {
+  width: 26px;
+  height: 16px;
+  filter: drop-shadow(0 2px 4px rgba(180, 83, 9, 0.3));
+}
+
+/* Avatar Wrappers & Rings */
+.podium-avatar-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+}
+
+.podium-avatar-ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 80, 220, 0.14);
+  background: #e0f2fe;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring--gold {
+  width: 68px;
+  height: 68px;
+  border: 3.5px solid #ffffff;
+  box-shadow: 0 0 0 3px #f59e0b, 0 8px 20px rgba(0, 80, 220, 0.22);
+}
+
+.podium-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Rank Pills */
+.podium-rank-pill {
+  font-size: 9.5px;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 2px 9px;
+  color: #ffffff;
+  margin-top: -9px;
+  position: relative;
+  z-index: 6;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+}
+
+.pill--gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  font-size: 10.5px;
+  padding: 2.5px 11px;
+}
+
+.pill--silver {
+  background: #94a3b8;
+}
+
+.pill--bronze {
+  background: #d97706;
+}
+
+/* Stepped Podium Blocks */
+.podium-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.35);
+}
+
+.block--rank-1 {
+  background: linear-gradient(180deg, #0066f5 0%, #0052cc 100%);
+  height: 130px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  padding-top: 18px;
+  box-shadow: 0 6px 20px rgba(0, 80, 220, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+.block--rank-2 {
+  background: linear-gradient(180deg, #d3e8fc 0%, #c4e0fa 100%);
+  height: 92px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 0;
+  padding-top: 16px;
+}
+
+.block--rank-3 {
+  background: linear-gradient(180deg, #d3e8fc 0%, #c4e0fa 100%);
+  height: 78px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 16px;
+  padding-top: 16px;
+}
+
+.podium-student-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0b192c;
+  line-height: 1.2;
+}
+
+.name--rank-1 {
+  font-size: 17px;
+  color: #ffffff;
+}
+
+.podium-student-xp {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1769e8;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.xp--rank-1 {
+  font-size: 13.5px;
+  color: #fef08a;
+}
+
+/* ============================================================
+   4. Inset White Table Card (Ranks 4–7 & Beyond)
+   ============================================================ */
+
+.leaderboard-card__table-box {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 18px rgba(0, 80, 200, 0.05);
+  padding: 14px 16px 14px 16px;
+  position: relative;
+  z-index: 4;
+  border: 1px solid #edf4fc;
+}
+
+.leaderboard-table__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 8px 4px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.col-header {
+  font-size: 11px;
+  font-weight: 800;
+  color: #8da2bc;
+  letter-spacing: 0.5px;
+}
+
+.col-rank {
+  width: 38px;
+}
+
+.col-student {
+  flex: 1;
+  padding-left: 8px;
+}
+
+.col-xp {
+  text-align: right;
+}
+
+.leaderboard-table__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.leaderboard-table__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px;
+  border-bottom: 1px solid #f8fafc;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border-radius: 8px;
+}
+
+.leaderboard-table__row:last-child {
+  border-bottom: none;
+}
+
+.leaderboard-table__row:hover {
+  background: #f8fbff;
+}
+
+.row-rank-num {
+  width: 38px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.row-student-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 8px;
+}
+
+.row-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.row-student-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0b192c;
+}
+
+.row-xp-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  text-align: right;
+}
+
+/* View Top 10 CTA Button */
+.leaderboard-table__view-btn {
+  background: #eaf3fe;
+  color: #1769e8;
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 999px;
+  height: 42px;
+  border: 1px solid #d4e5fc;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.leaderboard-table__view-btn:hover {
+  background: #dfedfd;
+  transform: translateY(-1px);
+}
+
+.leaderboard-table__view-btn:active {
+  transform: translateY(0);
+}
+
+.view-btn-arrow {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* ============================================================
+   5. Student Profile Popover
+   ============================================================ */
+
+.leaderboard-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.leaderboard-modal__dialog {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #64748b;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.modal-avatar-box {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.modal-avatar-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #1769e8;
+}
+
+.modal-rank-badge {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1769e8;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.modal-student-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0b192c;
+  margin: 0;
+}
+
+.modal-college-name {
+  font-size: 12px;
+  color: #64748b;
+  margin: 4px 0 12px 0;
+}
+
+.modal-xp-pill {
+  background: #eef5fe;
+  color: #1769e8;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid #d4e5fc;
+}

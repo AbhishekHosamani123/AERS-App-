@@ -1,0 +1,398 @@
+.offers {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* White app-style header: wordmark + wallet pill (same as Home) */
+.offers__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--h-appbar);
+  padding: 0 var(--sp-lg);
+  background: var(--c-surface);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-appbar);
+}
+
+.offers__walletpill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: #e4efe6;
+  color: var(--c-text);
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 1px solid #cfe3d2;
+}
+
+/* Service tabs (reference: Bus active with underline) */
+.offers__svctabs {
+  display: flex;
+  background: var(--c-surface);
+  padding: 0 var(--sp-lg);
+  gap: var(--sp-xl);
+  border-bottom: 1px solid var(--c-border);
+}
+.offers__svctab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-text-tertiary);
+  padding: var(--sp-sm) 0;
+  position: relative;
+}
+.offers__svctab.is-active {
+  color: var(--c-text);
+}
+.offers__svctab.is-active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 12%;
+  right: 12%;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--c-primary);
+}
+
+/* Coupon strip (reference: green chips row below tabs) */
+.offers__coupons {
+  display: flex;
+  gap: var(--sp-sm);
+  overflow-x: auto;
+  padding: var(--sp-sm) var(--sp-lg);
+  background: var(--c-surface);
+  scrollbar-width: none;
+}
+.offers__coupons::-webkit-scrollbar {
+  display: none;
+}
+.offers__coupon {
+  flex-shrink: 0;
+  background: #a8f0ae;
+  color: #087028;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 6px 13px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+
+.offers__scroll {
+  flex: 1;
+  padding: var(--sp-md) var(--sp-lg) var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+}
+
+.offers__loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+}
+
+/* Section head (reference: big "Offers" + blue View all) */
+.offers__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.offers__title {
+  font-size: 20px;
+  font-weight: 800;
+}
+.offers__viewall {
+  color: var(--c-link);
+  font-size: 13px;
+  font-weight: 600;
+}
+.offers__sub {
+  font-size: 12.5px;
+  color: var(--c-text-tertiary);
+  margin-top: 2px;
+}
+
+/* Category chips (reference: pill chips) */
+.offers__chips {
+  display: flex;
+  gap: var(--sp-sm);
+  overflow-x: auto;
+  padding-bottom: var(--sp-xs);
+  scrollbar-width: none;
+}
+.offers__chips::-webkit-scrollbar {
+  display: none;
+}
+.offers__chip {
+  flex-shrink: 0;
+  padding: 7px 15px;
+  border-radius: var(--r-pill);
+  background: var(--c-surface-muted);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+  white-space: nowrap;
+  transition: all var(--m-fast);
+}
+.offers__chip.is-active {
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+  box-shadow: inset 0 0 0 1.5px var(--c-primary);
+}
+
+/* Coupon card (reference: cream #F8E8C8 background, ticket notches) */
+.coupon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  background: #f8e8c8;
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg);
+  overflow: hidden;
+}
+
+.coupon--primary {
+  background: #f8e8c8;
+}
+.coupon--secondary {
+  background: #f8e8d0;
+}
+.coupon--accent {
+  background: #f8e0d0;
+}
+
+.coupon::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: #ba5400;
+}
+
+.coupon__notch {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--c-bg);
+  border: 1px solid #e8d0a8;
+  transform: translateY(-50%);
+}
+.coupon__notch--l {
+  left: -9px;
+}
+.coupon__notch--r {
+  right: -9px;
+}
+
+.coupon__tag {
+  display: inline-block;
+  align-self: flex-start;
+  background: #fff;
+  color: var(--c-text-secondary);
+  font-size: 10.5px;
+  font-weight: 700;
+  border-radius: var(--r-sm);
+  padding: 2px 8px;
+  margin-bottom: var(--sp-sm);
+}
+
+.coupon__text h3 {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--c-text);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.coupon__text h3 small {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+}
+
+.coupon__text p {
+  font-size: 12.5px;
+  color: var(--c-text-secondary);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.coupon__fine {
+  font-size: 10.5px;
+  color: #7a5a20;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.coupon__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  border-top: 1.5px dashed #e0c8a0;
+  padding-top: var(--sp-md);
+}
+
+.coupon__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px dashed #ba5400;
+  color: #7a3a00;
+  background: #fff;
+  border-radius: var(--r-pill);
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.coupon__go {
+  margin-left: auto;
+  color: var(--c-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+.coupon__go:hover {
+  text-decoration: underline;
+}
+
+/* Wallet card (reference: white card with balance + orange expiry note) */
+.offers__wallet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg);
+  box-shadow: var(--sh-sm);
+}
+
+.offers__wallet-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.offers__wallet-amt {
+  display: block;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.offers__wallet-expiry {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--c-warning-text);
+  margin-top: 2px;
+}
+
+.offers__wallet-note {
+  font-size: 12px;
+  color: var(--c-text-tertiary);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* Getaway destinations (reference: "Hey, ready for a weekend getaway?") */
+.offers__getaway {
+  border-top: 1px dashed var(--c-border);
+  padding-top: var(--sp-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+.offers__getaway-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14.5px;
+  font-weight: 700;
+}
+.offers__getaway-head span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-text-tertiary);
+}
+.offers__getaway-chips {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+}
+.offers__getaway-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  background: var(--c-primary-soft);
+  color: var(--c-primary-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Rate Us card (reference: white card, heading, star, Rate Now button) */
+.offers__rate {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg);
+  box-shadow: var(--sh-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+}
+
+.offers__rate-title {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.offers__rate-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+}
+.offers__rate-body strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+}
+.offers__rate-body p {
+  font-size: 12.5px;
+  color: var(--c-text-tertiary);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.offers__rate-star {
+  color: #f5a623;
+}
+
+.offers__rate-btn {
+  align-self: flex-start;
+  padding: 9px 24px;
+  border-radius: var(--r-pill);
+  background: var(--c-primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: var(--sh-primary);
+  transition: transform var(--m-fast);
+}
+.offers__rate-btn:active {
+  transform: scale(0.97);
+}

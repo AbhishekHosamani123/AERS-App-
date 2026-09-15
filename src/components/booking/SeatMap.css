@@ -1,0 +1,174 @@
+.seatmap__legend {
+  display: flex;
+  gap: var(--sp-lg);
+  flex-wrap: wrap;
+  padding: var(--sp-md) 0;
+  font-size: 12px;
+  color: var(--c-text-tertiary);
+}
+.seatlegend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sw {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1.5px solid var(--c-border-strong);
+  background: var(--c-surface);
+}
+.sw--avail {
+  background: var(--c-surface);
+  border-color: var(--c-border-strong);
+}
+.sw--unavail {
+  background: var(--c-border);
+  border-color: var(--c-border);
+}
+.sw--ladies {
+  background: var(--c-ladies-soft);
+  border-color: var(--c-ladies);
+}
+.sw--selected {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+}
+
+/* Deck tabs */
+.seatmap__tabs {
+  display: flex;
+  background: var(--c-surface-muted);
+  border-radius: var(--r-md);
+  padding: 3px;
+  gap: 3px;
+  margin-bottom: var(--sp-lg);
+}
+.seatmap__tab {
+  flex: 1;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+  transition: all var(--m-fast) var(--ease-standard);
+}
+.seatmap__tab.is-active {
+  background: var(--c-surface);
+  color: var(--c-primary);
+  box-shadow: var(--sh-sm);
+}
+
+/* Layout canvas */
+.seatmap__layout {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg);
+  position: relative;
+}
+
+.seatmap__driver {
+  position: absolute;
+  top: var(--sp-sm);
+  right: var(--sp-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--c-text-tertiary);
+  font-size: 9px;
+  border: 1.5px dashed var(--c-border-strong);
+  border-radius: var(--r-sm);
+  padding: 6px 8px;
+}
+
+.seatmap__grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+  padding-right: 56px; /* aisle */
+}
+
+.seatmap__row {
+  display: flex;
+  gap: var(--sp-sm);
+}
+
+/* Seats — reference: white available, gray #F3F3F3 sold, brand-red ladies */
+.seat {
+  position: relative;
+  border: 1.5px solid var(--c-border-strong);
+  border-radius: var(--r-sm);
+  background: var(--c-surface);
+  color: var(--c-text-tertiary);
+  display: grid;
+  place-items: center;
+  transition:
+    background var(--m-fast),
+    border-color var(--m-fast),
+    transform var(--m-fast),
+    opacity var(--m-fast);
+}
+
+/* Seater: 36x36 */
+.seat--seater {
+  width: 36px;
+  height: 36px;
+}
+.seat__no {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Sleeper: wide berth 52x30 */
+.seat--sleeper {
+  width: 54px;
+  height: 30px;
+  border-radius: var(--r-pill);
+}
+.seat__berth {
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.seat:hover:not(:disabled) {
+  border-color: var(--c-primary);
+  transform: translateY(-1px);
+}
+
+.seat--unavail {
+  background: var(--c-border);
+  border-color: var(--c-border);
+  color: var(--c-text-tertiary);
+  cursor: not-allowed;
+}
+
+.seat--ladies {
+  background: var(--c-ladies-soft);
+  border-color: var(--c-ladies);
+  color: var(--c-ladies);
+}
+.seat--blocked {
+  opacity: 0.5;
+}
+
+.seat--selected {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  color: var(--c-text-inverse);
+  box-shadow: var(--sh-primary);
+}
+.seat--selected.seat--ladies {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  box-shadow: var(--sh-primary);
+}
+
+.seat__check {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}

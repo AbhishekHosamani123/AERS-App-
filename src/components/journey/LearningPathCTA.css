@@ -1,0 +1,374 @@
+/* ============================================================
+   Learning Path Call-To-Action (CTA) Card — Visual Source of Truth
+   Premium, clean, responsive AERS Learning Stage Card
+   ============================================================ */
+
+/* Card Background */
+.learning-cta-card {
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  background: linear-gradient(145deg, #ffffff 62%, #f2f7fe 100%);
+  border-radius: 24px;
+  border: 1px solid #e5eef7;
+  padding: 24px 20px 20px 20px;
+  box-shadow: 0 10px 30px -6px rgba(0, 80, 220, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+/* ============================================================
+   1. Top Header Row & Compass Illustration
+   ============================================================ */
+
+.learning-cta-card__header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  min-height: 95px;
+}
+
+.learning-cta-card__header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2;
+  max-width: 58%;
+}
+
+.learning-cta-card__stage-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e8f0fe;
+  color: #1769e8;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  padding: 4.5px 12px;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.learning-cta-card__stage-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1769e8;
+}
+
+.learning-cta-card__module-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.learning-cta-card__module-num {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.learning-cta-card__module-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0b192c;
+  letter-spacing: -0.4px;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Compass graphic wrapper - placed properly in the top-right corner */
+.learning-cta-card__compass-wrap {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  width: 138px;
+  height: 130px;
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.learning-cta-card__compass-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ============================================================
+   2. Current Level Row
+   ============================================================ */
+
+.learning-cta-card__level-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 2px;
+  position: relative;
+  z-index: 2;
+}
+
+.learning-cta-card__level-badge {
+  width: 62px;
+  height: 64px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #1769e8 0%, #0d57d0 100%);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(23, 105, 232, 0.3);
+}
+
+.learning-cta-card__level-num {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.learning-cta-card__level-label {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.92;
+  margin-top: 3px;
+  text-transform: capitalize;
+}
+
+.learning-cta-card__level-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.learning-cta-card__status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #e6f9f0;
+  color: #16a34a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border-radius: 999px;
+  padding: 2.5px 8px;
+  width: fit-content;
+  margin-bottom: 2px;
+}
+
+.learning-cta-card__status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+.learning-cta-card__level-title {
+  font-size: 18.5px;
+  font-weight: 800;
+  color: #0b192c;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.learning-cta-card__level-desc {
+  font-size: 12.5px;
+  color: #64748b;
+  line-height: 1.45;
+  margin: 2px 0 0 0;
+}
+
+/* ============================================================
+   3. Skills Chips Row
+   ============================================================ */
+
+.learning-cta-card__skills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.learning-cta-card__skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #eef5ff;
+  color: #1769e8;
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+.learning-cta-card__skill-check {
+  font-weight: 800;
+  font-size: 12px;
+}
+
+/* ============================================================
+   4. Overall Journey Progress Row
+   ============================================================ */
+
+.learning-cta-card__progress-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.learning-cta-card__progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.learning-cta-card__progress-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.learning-cta-card__progress-stat {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1769e8;
+}
+
+.learning-cta-card__progress-track {
+  width: 100%;
+  height: 8px;
+  background: #eaf0f8;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.learning-cta-card__progress-fill {
+  height: 100%;
+  background: #1769e8;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* ============================================================
+   5. Stats Row (3 Columns)
+   ============================================================ */
+
+.learning-cta-card__stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8faff;
+  border: 1px solid #edf2f7;
+  border-radius: 14px;
+  padding: 11px 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.learning-cta-card__stat-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.learning-cta-card__stat-icon {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.learning-cta-card__stat-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.learning-cta-card__stat-text strong {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0b192c;
+  line-height: 1.15;
+}
+
+.learning-cta-card__stat-text small {
+  font-size: 10.5px;
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.learning-cta-card__stat-divider {
+  width: 1px;
+  height: 28px;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   6. Primary Action Button
+   ============================================================ */
+
+.learning-cta-card__cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 48px;
+  padding: 0 20px;
+  background: #1769e8;
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(23, 105, 232, 0.28);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  z-index: 2;
+}
+
+.learning-cta-card__cta-btn:hover {
+  background: #0f5bd1;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(23, 105, 232, 0.36);
+}
+
+.learning-cta-card__cta-btn:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.learning-cta-card__cta-text {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.learning-cta-card__cta-arrow {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.learning-cta-card__cta-btn:hover .learning-cta-card__cta-arrow {
+  transform: translateX(3px);
+}

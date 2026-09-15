@@ -1,0 +1,70 @@
+/* Reference: steps shown as inline text chips — "Select seats",
+   "Board/Drop point", "Passenger Info"; the ACTIVE step is brand red. */
+
+.steps {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-lg);
+  padding: var(--sp-md) var(--sp-lg);
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  overflow-x: auto;
+}
+
+.steps__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.steps__dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--c-surface-muted);
+  color: var(--c-text-tertiary);
+  flex-shrink: 0;
+  transition: all var(--m-fast) var(--ease-standard);
+}
+
+.steps__item--current .steps__dot {
+  background: var(--c-primary);
+  color: #fff;
+}
+.steps__item--done .steps__dot {
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+}
+
+.steps__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--c-text);
+  white-space: nowrap;
+}
+/* Reference: only the active step is red */
+.steps__item--current .steps__label {
+  color: var(--c-primary);
+  font-weight: 600;
+}
+.steps__item--done .steps__label {
+  color: var(--c-text-tertiary);
+  font-weight: 400;
+}
+
+.steps__connector {
+  width: 14px;
+  height: 1.5px;
+  background: var(--c-border-strong);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+.steps__item--done .steps__connector {
+  background: var(--c-primary);
+}

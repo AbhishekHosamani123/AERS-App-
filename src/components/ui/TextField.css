@@ -1,0 +1,73 @@
+.tf {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tf__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+}
+.tf__optional {
+  color: var(--c-text-tertiary);
+  font-weight: 500;
+}
+
+.tf__box {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  height: var(--h-input);
+  padding: 0 var(--sp-md);
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--r-md);
+  transition: border-color var(--m-fast) var(--ease-standard);
+}
+
+.tf--focused .tf__box {
+  border-color: var(--c-primary);
+}
+.tf--error .tf__box {
+  border-color: var(--c-danger);
+}
+
+.tf__icon {
+  color: var(--c-text-tertiary);
+  display: inline-flex;
+}
+.tf--focused .tf__icon {
+  color: var(--c-primary);
+}
+
+.tf__prefix,
+.tf__suffix {
+  color: var(--c-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tf__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  color: var(--c-text);
+}
+.tf__input::placeholder {
+  color: var(--c-text-tertiary);
+}
+
+.tf__msg {
+  font-size: 11px;
+  color: var(--c-text-tertiary);
+  min-height: 14px;
+}
+.tf__msg--error {
+  color: var(--c-danger);
+  font-weight: 600;
+}

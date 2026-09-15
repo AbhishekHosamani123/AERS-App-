@@ -1,0 +1,9 @@
+/* Inter web font (self-host-free; falls back gracefully offline) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+:root {
+  /* Reference app uses Inter. Load from Google Fonts with a robust
+     system fallback so offline development still renders fine. */
+  --font-family: "Inter", "Segoe UI", system-ui, -apple-system, Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}

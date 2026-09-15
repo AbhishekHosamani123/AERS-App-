@@ -1,0 +1,97 @@
+/* Phone frame: on wide viewports the app renders inside a centered
+   device-sized frame; on mobile it is full-bleed. */
+
+.app-viewport {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(214, 57, 65, 0.08), transparent),
+    radial-gradient(900px 500px at 110% 110%, rgba(245, 158, 11, 0.07), transparent),
+    #131318;
+}
+
+.phonescreen {
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.app-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Preview status bar */
+.statusbar {
+  display: none;
+}
+
+@media (min-width: 721px) {
+  .app-viewport {
+    align-items: center;
+    padding: 28px 0;
+  }
+  .phonescreen {
+    height: min(880px, calc(100vh - 56px));
+    border-radius: 36px;
+    box-shadow:
+      0 0 0 10px #1c2630,
+      0 0 0 12px #2c3944,
+      0 30px 80px rgba(0, 0, 0, 0.55);
+  }
+  .statusbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 22px 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--c-text);
+    flex-shrink: 0;
+  }
+  .statusbar__battery {
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    border: 1.5px solid var(--c-text);
+    border-radius: 3px;
+    position: relative;
+  }
+  .statusbar__battery::after {
+    content: '';
+    position: absolute;
+    inset: 1.5px;
+    right: 5px;
+    background: var(--c-text);
+    border-radius: 1px;
+  }
+}
+
+/* Booking-flow route chip */
+.routechip {
+  display: none;
+}
+
+@media (min-width: 721px) {
+  .routechip {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(29, 39, 51, 0.85);
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: var(--r-pill);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+}

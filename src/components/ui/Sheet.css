@@ -1,0 +1,114 @@
+.sheet-root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sheet);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.sheet-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--c-overlay);
+  opacity: 0;
+  transition: opacity var(--m-sheet) var(--ease-standard);
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: var(--c-surface);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  box-shadow: var(--sh-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(100%);
+  transition:
+    transform var(--m-sheet) var(--ease-decelerate),
+    opacity var(--m-sheet);
+  pointer-events: auto;
+}
+
+.sheet-root.is-open .sheet-overlay {
+  opacity: 1;
+}
+.sheet-root.is-open .sheet {
+  transform: translateY(0);
+}
+
+.sheet__grabber-zone {
+  padding: var(--sp-sm) 0 var(--sp-xs);
+  cursor: grab;
+  touch-action: none;
+}
+.sheet__grabber {
+  width: 42px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--c-border-strong);
+  margin: 0 auto;
+}
+
+.sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-sm) var(--sp-lg) var(--sp-sm);
+  border-bottom: 1px solid var(--c-border);
+  flex-shrink: 0;
+}
+.sheet__title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.sheet__close {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--c-surface-muted);
+  color: var(--c-text-secondary);
+  font-size: 18px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  transition: background var(--m-fast);
+}
+.sheet__close:hover {
+  background: var(--c-border);
+}
+
+.sheet__body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--sp-lg);
+}
+
+.sheet__footer {
+  flex-shrink: 0;
+  padding: var(--sp-md) var(--sp-lg);
+  border-top: 1px solid var(--c-border);
+  background: var(--c-surface);
+}
+
+/* Desktop preview: sheet becomes centered dialog-sized panel */
+@media (min-width: 721px) {
+  .sheet-root {
+    align-items: center;
+  }
+  .sheet {
+    border-radius: var(--r-xl);
+    margin-bottom: 0;
+    width: 480px;
+    max-width: calc(100vw - 32px);
+    transform: translateY(24px) scale(0.96);
+    opacity: 0;
+  }
+  .sheet-root.is-open .sheet {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}

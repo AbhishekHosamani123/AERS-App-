@@ -1,0 +1,188 @@
+.trips {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* Screen title (reference: "My bookings" left-aligned heading) */
+.trips__title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  padding: var(--sp-lg) var(--sp-lg) var(--sp-sm);
+}
+
+.trips__scroll {
+  flex: 1;
+  padding: var(--sp-sm) var(--sp-lg) var(--sp-lg);
+}
+
+/* Upcoming empty state (reference: centered text + red-outline Book now) */
+.trips__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--sp-xxl) var(--sp-lg);
+  text-align: center;
+}
+.trips__empty-title {
+  font-size: 15.5px;
+  font-weight: 600;
+}
+.trips__empty-sub {
+  font-size: 13.5px;
+  color: var(--c-text-tertiary);
+}
+.trips__booknow {
+  margin-top: var(--sp-md);
+  padding: 9px 26px;
+  border-radius: var(--r-pill);
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+  font-size: 14px;
+  font-weight: 700;
+  transition: transform var(--m-fast);
+}
+.trips__booknow:active {
+  transform: scale(0.97);
+}
+
+/* Past bookings section */
+.trips__pasttitle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  font-size: 18px;
+  font-weight: 800;
+  margin: var(--sp-lg) 0 var(--sp-md);
+}
+.trips__pastcount {
+  margin-left: auto;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+}
+
+.trips__chips {
+  display: flex;
+  gap: var(--sp-sm);
+  overflow-x: auto;
+  padding-bottom: var(--sp-md);
+  scrollbar-width: none;
+}
+.trips__chips::-webkit-scrollbar {
+  display: none;
+}
+.trips__chip {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  border-radius: var(--r-pill);
+  background: var(--c-surface-muted);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+  white-space: nowrap;
+  transition: all var(--m-fast);
+}
+.trips__chip.is-active {
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+  box-shadow: inset 0 0 0 1.5px var(--c-primary);
+}
+
+.trips__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+}
+
+.trips__cathint {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--c-text-tertiary);
+  padding: var(--sp-lg);
+}
+
+/* Trip card (reference: logo bubble + route + date + operator lines) */
+.tripcard {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-md) var(--sp-lg);
+  text-align: left;
+  transition: all var(--m-fast);
+}
+.tripcard:hover {
+  box-shadow: var(--sh-md);
+}
+
+.tripcard__logo {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--c-surface-muted);
+  flex-shrink: 0;
+}
+
+.tripcard__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tripcard__route {
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tripcard__meta {
+  font-size: 12.5px;
+  color: var(--c-text-secondary);
+}
+.tripcard__meta--muted {
+  color: var(--c-text-tertiary);
+}
+
+.tripcard__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.tripcard__price {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.tripcard__status {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  border-radius: var(--r-pill);
+  padding: 3px 8px;
+}
+.tripcard__status--confirmed {
+  background: var(--c-success-soft);
+  color: var(--c-success);
+}
+.tripcard__status--cancelled {
+  background: var(--c-danger-soft);
+  color: var(--c-danger);
+}
+.tripcard__status--completed {
+  background: var(--c-surface-muted);
+  color: var(--c-text-secondary);
+}

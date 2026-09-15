@@ -1,0 +1,182 @@
+.buscard {
+  position: relative;
+  background: var(--c-surface);
+  /* Reference: cards 20px radius, 16px padding, layered 8% shadow */
+  border-radius: var(--r-lg);
+  border: none;
+  padding: var(--sp-lg);
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: var(--sh-md);
+  transition:
+    box-shadow var(--m-fast) var(--ease-standard),
+    transform var(--m-fast) var(--ease-standard);
+}
+
+.buscard:hover {
+  box-shadow: var(--sh-lg);
+}
+.buscard:active {
+  transform: scale(0.99);
+}
+
+.buscard--prime {
+  outline: 1px solid rgba(0, 102, 245, 0.25);
+}
+
+/* Top row */
+.buscard__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--sp-md);
+}
+
+.buscard__name {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--c-text);
+}
+.buscard__class {
+  font-size: 12px;
+  color: var(--c-text-tertiary);
+  font-weight: 400;
+}
+
+.buscard__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--c-text);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+/* Schedule row */
+.buscard__schedule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-md);
+  margin-top: var(--sp-md);
+}
+
+.buscard__time {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  font-size: 12px;
+  color: var(--c-text-tertiary);
+}
+/* Reference: departs 16px/700, arrives 16px/400 */
+.buscard__time strong {
+  font-size: 16px;
+  color: var(--c-text);
+  font-weight: 700;
+}
+.buscard__time strong:last-of-type {
+  font-weight: 400;
+}
+
+/* Reference: price 16px/700 dark with small strike-through above */
+.buscard__price {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Meta row */
+.buscard__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--sp-sm);
+  gap: var(--sp-md);
+}
+
+.buscard__amenities {
+  display: flex;
+  gap: var(--sp-xs);
+  color: var(--c-text-tertiary);
+}
+.buscard__amenity {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-pill);
+  background: var(--c-surface-muted);
+  display: grid;
+  place-items: center;
+}
+.buscard__amenity--live {
+  background: var(--c-info-soft);
+  color: var(--c-info);
+}
+
+/* Reference: "16 Seats" 12px secondary; "(1 Single)" in burnt orange */
+.buscard__seats {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--c-text-tertiary);
+  white-space: nowrap;
+}
+.buscard__seats--low {
+  color: #b14b00;
+  font-weight: 500;
+}
+
+/* Tags */
+.buscard__tags {
+  display: flex;
+  gap: var(--sp-sm);
+  margin-top: var(--sp-sm);
+  flex-wrap: wrap;
+}
+.buscard__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: var(--r-pill);
+}
+.buscard__tag--prime {
+  background: var(--c-warning-soft);
+  color: var(--c-warning-text);
+}
+.buscard__tag--free {
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+}
+
+/* Select affordance — mirrors reference's price-aligned bottom row */
+.buscard__select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--sp-md);
+  padding-top: var(--sp-sm);
+  border-top: 1px solid var(--c-border);
+  color: var(--c-text-secondary);
+  font-weight: 500;
+  font-size: 12px;
+}
+
+/* Availability strip */
+.buscard__availability {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--c-surface-muted);
+}
+.buscard__availability span {
+  display: block;
+  height: 100%;
+  background: var(--c-primary-soft);
+  transition: width var(--m-slow);
+}

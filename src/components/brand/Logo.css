@@ -1,0 +1,18 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-sm, 8px);
+}
+
+.logo__img {
+  display: block;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.logo__word {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--c-text, #181818);
+}

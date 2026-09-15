@@ -1,0 +1,59 @@
+.bottomnav {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-bottomnav);
+  display: flex;
+  height: var(--h-bottomnav);
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-border);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  flex-shrink: 0;
+}
+
+.bottomnav__tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--c-text-tertiary);
+  transition: color var(--m-fast) var(--ease-standard);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottomnav__tab.is-active {
+  color: var(--c-primary);
+}
+
+.bottomnav__icon {
+  display: grid;
+  place-items: center;
+  transition: transform var(--m-fast) var(--ease-decelerate);
+}
+
+.bottomnav__tab.is-active .bottomnav__icon {
+  transform: translateY(-1px);
+}
+
+.bottomnav__label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Green "New" badge shown on the Offers tab (reference) */
+.bottomnav__new {
+  display: inline-block;
+  margin-left: 3px;
+  padding: 1px 4px 1.5px;
+  border-radius: 999px;
+  background: #087028;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  vertical-align: super;
+  transform: translateY(-1px);
+}

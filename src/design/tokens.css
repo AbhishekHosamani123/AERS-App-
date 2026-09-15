@@ -1,0 +1,106 @@
+/*
+ * Design tokens exposed as CSS custom properties.
+ * Measured from the reference app screenshots (1080x2460 captures):
+ *   - CTA / brand red: #D23642 (Search buses button core)
+ *   - Promo red band: #CC423C / #E4554E
+ *   - Link blue (View all / Know more): #3C3CF0 / #545AC6
+ *   - Coupon strip green chip: #A8F0AE
+ *   - New badge green: #087028
+ *   - Account header navy: #12122A
+ *   - Wallet expiry warning orange: #BA5400
+ *   - Text: #181818, secondary #727272
+ *   - Coupon card cream: #F8E8C8
+ */
+
+:root {
+  /* Brand */
+  --c-primary: #0066f5;
+  --c-primary-dark: #004ec4;
+  --c-primary-soft: rgba(0, 102, 245, 0.08);
+  --c-secondary: #f59e0b;
+  --c-accent: #00b4d8;
+
+  /* Link blue (View all / Know more links) */
+  --c-link: #0066f5;
+  --c-link-soft: rgba(0, 102, 245, 0.08);
+
+  /* Text (reference: #181818 family) */
+  --c-text: #181818;
+  --c-text-secondary: #4a4a4a;
+  --c-text-tertiary: #727272;
+  --c-text-inverse: #fdfdfd;
+
+  /* Surfaces */
+  --c-bg: #fcfcfc;
+  --c-surface: #ffffff;
+  --c-surface-muted: #f0f0f0;
+  --c-border: #e6e6e6;
+  --c-border-strong: #4b4b4b;
+
+  /* Status */
+  --c-success: #1e9e62;
+  --c-success-soft: rgba(30, 158, 98, 0.12);
+  --c-danger: #e11d48;
+  --c-danger-soft: rgba(225, 29, 72, 0.1);
+  --c-info: #0066f5;
+  --c-info-soft: rgba(0, 102, 245, 0.1);
+  --c-warning: #ba5400;
+  --c-warning-soft: #fdeee0;
+  --c-warning-text: #ba5400;
+  --c-ladies: #db2777;
+  --c-ladies-soft: rgba(219, 39, 119, 0.1);
+  --c-gold: #ba5400;
+  --c-navy: #12122a;
+  --c-navy-deep: #0c0c1e;
+  --c-overlay: rgba(0, 0, 0, 0.55);
+
+  /* Spacing (4pt grid) */
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 12px;
+  --sp-lg: 16px;
+  --sp-xl: 20px;
+  --sp-xxl: 24px;
+  --sp-xxxl: 32px;
+
+  /* Radius — reference: cards 20px, chips/buttons pill */
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-xl: 20px;
+  --r-pill: 999px;
+
+  /* Shadows — reference card: layered rgba(0,0,0,.08) */
+  --sh-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --sh-md: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.08);
+  --sh-lg: 0 12px 32px rgba(0, 0, 0, 0.16);
+  --sh-primary: 0 4px 12px rgba(0, 102, 245, 0.25);
+
+  /* Component metrics */
+  --h-appbar: 56px;
+  --h-bottomnav: 62px;
+  --h-button: 48px;
+  --h-button-sm: 40px;
+  --h-input: 48px;
+  --tch: 44px;
+  --screen-pad: 16px;
+
+  /* Motion */
+  --m-instant: 100ms;
+  --m-fast: 160ms;
+  --m-normal: 240ms;
+  --m-slow: 380ms;
+  --m-sheet: 280ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+  /* Z-index */
+  --z-sticky: 10;
+  --z-appbar: 20;
+  --z-bottomnav: 20;
+  --z-overlay: 29;
+  --z-sheet: 30;
+  --z-dialog: 40;
+  --z-toast: 50;
+}

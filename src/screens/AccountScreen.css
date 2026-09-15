@@ -1,0 +1,307 @@
+.account {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--c-bg);
+}
+
+/* Navy header (reference: #12122A solid block, white text) */
+.account__header {
+  background: linear-gradient(180deg, var(--c-navy) 0%, var(--c-navy-deep) 100%);
+  color: #fff;
+  padding: var(--sp-lg) var(--sp-lg) var(--sp-xxl);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-md);
+}
+
+.account__id {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.account__id h1 {
+  font-size: 21px;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.account__id span {
+  font-size: 13.5px;
+  opacity: 0.92;
+}
+.account__id small {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.account__edit {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.account__edit:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Stats trio (reference: overlaps the navy header bottom, white card) */
+.account__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-sm);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-md) var(--sp-sm);
+  margin: calc(var(--sp-lg) * -1) var(--sp-lg) 0;
+  position: relative;
+  z-index: 1;
+  box-shadow: var(--sh-md);
+}
+.account__stats > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--sp-xs) 0;
+}
+.account__stats > div + div {
+  border-left: 1px solid var(--c-border);
+}
+.account__stats strong {
+  font-size: 17px;
+  font-weight: 800;
+}
+.account__stats span {
+  font-size: 11px;
+  color: var(--c-text-tertiary);
+  font-weight: 600;
+}
+
+.account__scroll {
+  flex: 1;
+  padding: var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+}
+
+/* Guest state */
+.account--guest {
+  flex: 1;
+}
+
+.account__guest {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-md);
+  padding: var(--sp-xxl);
+  text-align: center;
+}
+
+.account__guest-icon {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  display: grid;
+  place-items: center;
+  color: var(--c-text-tertiary);
+  margin-bottom: var(--sp-sm);
+}
+
+.account__guest h2 {
+  font-size: 19px;
+}
+.account__guest p {
+  font-size: 13px;
+  color: var(--c-text-secondary);
+  max-width: 280px;
+  line-height: 1.55;
+}
+.account__guest Button {
+  margin-top: var(--sp-sm);
+  width: 100%;
+  max-width: 300px;
+}
+.account__guest-note {
+  font-size: 10.5px !important;
+  color: var(--c-text-tertiary) !important;
+  margin-top: var(--sp-sm);
+}
+
+/* Wallet card (reference: white card, balance + orange expiry) */
+.account__wallet {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg);
+  box-shadow: var(--sh-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.account__wallet-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: var(--sp-xs);
+}
+.account__wallet-amt {
+  font-size: 22px;
+  font-weight: 800;
+}
+.account__wallet-label {
+  font-size: 12px;
+  color: var(--c-text-tertiary);
+}
+.account__wallet-expiry {
+  margin-top: var(--sp-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--c-warning-text);
+}
+
+/* Language chips (reference: "Try redBus in your language") */
+.account__lang h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: var(--sp-sm);
+}
+.account__lang-chips {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+}
+.account__lang-chip {
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+  transition: all var(--m-fast);
+}
+.account__lang-chip.is-active {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+  background: var(--c-primary-soft);
+}
+
+/* Menu groups (reference: titled white cards with row dividers) */
+.account__group {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-xs) 0;
+  overflow: hidden;
+}
+.account__grouptitle {
+  font-size: 15.5px;
+  font-weight: 800;
+  padding: var(--sp-md) var(--sp-lg) var(--sp-xs);
+}
+
+.menurow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+  padding: 12px var(--sp-lg);
+  color: var(--c-text);
+  transition: background var(--m-fast);
+}
+.menurow:hover {
+  background: var(--c-surface-muted);
+}
+.menurow + .menurow {
+  border-top: 1px solid var(--c-border);
+}
+
+.menurow__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-md);
+  background: var(--c-primary-soft);
+  color: var(--c-primary);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.menurow--danger .menurow__icon {
+  background: var(--c-danger-soft);
+  color: var(--c-danger);
+}
+
+.menurow__label {
+  flex: 1;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
+}
+.menurow--danger .menurow__label {
+  color: var(--c-danger);
+}
+
+/* Green "New" badge (reference: Gift Card row) */
+.menurow__badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1.5px 6px;
+  border-radius: 999px;
+  background: #087028;
+  color: #fff;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  vertical-align: middle;
+  transform: translateY(-1px);
+}
+
+/* Grey hint value (reference: "India", "INR", "English") */
+.menurow__hint {
+  font-size: 12.5px;
+  color: var(--c-text-tertiary);
+  flex-shrink: 0;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menurow > svg {
+  color: var(--c-text-tertiary);
+  flex-shrink: 0;
+}
+
+.account__about {
+  font-size: 11px;
+  color: var(--c-text-tertiary);
+  text-align: center;
+  line-height: 1.6;
+  padding-bottom: var(--sp-sm);
+}
+
+/* Edit form */
+.account__editform {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+}
