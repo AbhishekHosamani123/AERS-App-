@@ -9,6 +9,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon, type IconName } from '../components/icons/Icon';
+import { AppHeader } from '../components/ui/AppHeader';
 import { Logo } from '../components/brand/Logo';
 import { BRAND, BRAND_COPY } from '../branding/brand';
 import { FAQ_ITEMS } from '../mock';
@@ -64,10 +65,12 @@ export function HelpScreen() {
 
   return (
     <div className="help">
-      {/* Screen title (reference: big black "Help" heading) */}
-      <h1 className="help__title">Help</h1>
+      {/* White header: wordmark + wallet pill + notifications (same as Home) */}
+      <AppHeader />
 
       <div className="help__scroll">
+        {/* Screen title */}
+        <h1 className="help__title">Help & Support</h1>
         {/* Trip card + section head (reference) */}
         <section className="help__trip" aria-label="Need help with this trip">
           <div className="help__section-head">

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState, useMemo, type CSSProperties } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Logo } from '../components/brand/Logo';
 import {
   AERS_LEVELS,
   AERS_MODULES,
@@ -49,6 +51,7 @@ function saveProgress(state: ProgressState) {
 }
 
 export function JourneyScreen() {
+  const navigate = useNavigate();
   const [progress, setProgress] = useState<ProgressState>(loadProgress);
   const [activeLevel, setActiveLevel] = useState<LevelData | null>(null);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -227,16 +230,15 @@ export function JourneyScreen() {
       {/* ================= STICKY HUD HEADER (Clean Theme) ================= */}
       <header className="journey-hud" aria-label="Journey Progress Header">
         <div className="journey-hud__top-row">
-          <div className="journey-hud__brand">
-            <img
-              src="/AERS_Officel_Logo.png"
-              alt="AERS Logo"
-              className="journey-hud__logo-img"
-            />
-            <div className="journey-hud__titles">
-              <span className="journey-hud__title">Placement Journey</span>
-              <span className="journey-hud__sub">One module at a time: learn, practice, review & succeed</span>
-            </div>
+          <div
+            className="journey-hud__brand"
+            onClick={() => navigate('/home')}
+            role="button"
+            tabIndex={0}
+            title="AERS Home"
+          >
+            <Logo withWordmark size={26} />
+            <span className="app-header__subtitle">Journey</span>
           </div>
 
           <div className="journey-hud__stats">
@@ -357,7 +359,7 @@ export function JourneyScreen() {
           {/* ================= 2. SUMMIT DESTINATION (EMPLOYABILITY PASSPORT) ================= */}
           <div
             className="journey-clean-summit"
-            style={{ left: '210px', top: '240px' }}
+            style={{ left: '215px', top: '120px' }}
             onClick={handlePassportClick}
             role="button"
             tabIndex={0}
@@ -380,41 +382,64 @@ export function JourneyScreen() {
             </div>
 
             <div className="journey-summit-card">
-              <span className="journey-summit-card__badge">FINAL DESTINATION</span>
+              <div className="journey-summit-card__badge-row">
+                <span className="journey-summit-card__badge">🌟 FINAL DESTINATION</span>
+                {progress.passportUnlocked && (
+                  <span className="journey-summit-card__unlocked-tag">UNLOCKED</span>
+                )}
+              </div>
               <h3 className="journey-summit-card__title">EMPLOYABILITY PASSPORT</h3>
               <p className="journey-summit-card__quote">“You Did It! A Brighter Future Awaits”</p>
+              <span className="journey-summit-card__cta">View Credential ➔</span>
             </div>
           </div>
 
           {/* ================= 3. MODULE SECTION BANNERS ================= */}
-          {AERS_MODULES.map((m) => (
-            <div
-              key={m.id}
-              className="journey-module-pill-banner"
-              style={{ left: '210px', top: `${m.pxY}px` }}
-              onClick={() =>
-                setActiveSignInfo({
-                  title: `Module ${m.id} — ${m.name}`,
-                  subtitle: m.range,
-                  text: `Focus Area: ${m.name}.\nMaster core concepts, complete interactive scenario challenges, and collect all stars across ${m.range}.\n\nMotto: "${m.motto}".`,
-                })
-              }
-            >
-              <div className="journey-mod-banner__head">
-                <span className="journey-mod-banner__icon">
-                  {m.icon === 'compass' && '🧭'}
-                  {m.icon === 'document' && '📄'}
-                  {m.icon === 'chat' && '💬'}
-                  {m.icon === 'target' && '🎯'}
-                  {m.icon === 'briefcase' && '💼'}
-                </span>
-                <span className="journey-mod-banner__tag">MODULE {m.id}</span>
-                <span className="journey-mod-banner__range">{m.range}</span>
+          {AERS_MODULES.map((m) => {
+            const modLevels = AERS_LEVELS.filter((l) => l.moduleId === m.id);
+            const completedCount = modLevels.filter((l) =>
+              progress.completedLevels.includes(l.id)
+            ).length;
+            const isModuleFinished = completedCount === modLevels.length;
+
+            return (
+              <div
+                key={m.id}
+                className={`journey-module-pill-banner ${
+                  isModuleFinished ? 'is-module-done' : ''
+                }`}
+                style={{ left: '215px', top: `${m.pxY}px` }}
+                onClick={() =>
+                  setActiveSignInfo({
+                    title: `Module ${m.id} — ${m.name}`,
+                    subtitle: m.range,
+                    text: `Focus Area: ${m.name}.\nMaster core concepts, complete interactive scenario challenges, and collect all stars across ${m.range}.\n\nMotto: "${m.motto}".`,
+                  })
+                }
+              >
+                <div className="journey-mod-banner__icon-wrap">
+                  <span className="journey-mod-banner__icon">
+                    {m.icon === 'compass' && '🧭'}
+                    {m.icon === 'document' && '📄'}
+                    {m.icon === 'chat' && '💬'}
+                    {m.icon === 'target' && '🎯'}
+                    {m.icon === 'briefcase' && '💼'}
+                  </span>
+                </div>
+                <div className="journey-mod-banner__content">
+                  <div className="journey-mod-banner__head">
+                    <span className="journey-mod-banner__tag">MODULE {m.id}</span>
+                    <span className="journey-mod-banner__range">{m.range}</span>
+                  </div>
+                  <div className="journey-mod-banner__name">{m.name}</div>
+                  <div className="journey-mod-banner__motto">{m.motto}</div>
+                </div>
+                <div className="journey-mod-banner__progress-pill">
+                  {isModuleFinished ? '✓ Done' : `${completedCount}/4`}
+                </div>
               </div>
-              <div className="journey-mod-banner__name">{m.name}</div>
-              <div className="journey-mod-banner__motto">{m.motto}</div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* ================= 4. TWENTY 3D ISOMETRIC CYLINDER PODIUM NODES ================= */}
           {AERS_LEVELS.map((lvl) => {
@@ -437,7 +462,7 @@ export function JourneyScreen() {
           {/* ================= 5. START GATE (BOTTOM) ================= */}
           <div
             className="journey-clean-start"
-            style={{ left: '210px', top: '2610px' }}
+            style={{ left: '215px', top: '3240px' }}
             onClick={() => setShowStartModal(true)}
             role="button"
             tabIndex={0}
@@ -446,8 +471,8 @@ export function JourneyScreen() {
             <div className="journey-start-pill">
               <span className="journey-start-pill__arrow">🚀</span>
               <div className="journey-start-pill__text">
-                <span className="journey-start-pill__main">START</span>
-                <span className="journey-start-pill__sub">Let’s Begin!</span>
+                <span className="journey-start-pill__main">START JOURNEY</span>
+                <span className="journey-start-pill__sub">Begin at Level 01</span>
               </div>
             </div>
             <p className="journey-start-motto">AERS Skills Today • A Brighter Tomorrow</p>

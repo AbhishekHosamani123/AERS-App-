@@ -1,6 +1,6 @@
 /* ============================================================
-   3D Floating Isometric Cylinder Podium Node
-   Faithfully recreating the modern edtech inspiration design.
+   AERS Journey Tab — Premium 3D Podium Node Component
+   Professional, sleek, high-contrast & game-like progression
    ============================================================ */
 
 .podium-node {
@@ -11,43 +11,45 @@
   align-items: center;
   cursor: pointer;
   z-index: 15;
-  width: 130px;
+  width: 140px;
   text-align: center;
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
 
 .podium-node:hover {
-  transform: translate(-50%, -50%) scale(1.08);
+  transform: translate(-50%, -50%) scale(1.06);
   z-index: 25;
 }
 
 .podium-node:active {
-  transform: translate(-50%, -50%) scale(0.96);
+  transform: translate(-50%, -50%) scale(0.94);
+  transition-duration: 0.08s;
 }
 
-/* ================= 3 GOLD STARS ================= */
+/* ================= 3 MINI-STARS ================= */
 .podium-node__stars {
   display: flex;
-  gap: 2px;
+  gap: 3px;
   margin-bottom: 2px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.12));
 }
 
 .podium-node__star {
   font-size: 11px;
   line-height: 1;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .podium-node__star.is-earned {
-  filter: drop-shadow(0 0 4px #ffd700);
+  color: #f59e0b;
+  text-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
 }
 
 .podium-node__star.is-empty {
-  opacity: 0.25;
-  filter: grayscale(1);
+  color: #cbd5e1;
+  opacity: 0.6;
 }
 
 /* ================= PLAYER PIN (YOU ARE HERE) ================= */
@@ -58,71 +60,93 @@
   flex-direction: column;
   align-items: center;
   pointer-events: none;
-  animation: pin-bounce 1.4s infinite ease-in-out;
+  animation: node-pin-float 1.8s infinite ease-in-out;
   z-index: 30;
 }
 
-.podium-player-avatar {
+.podium-player-badge {
+  position: relative;
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0066f5 0%, #00b4d8 100%);
+  background: linear-gradient(135deg, #0066f5 0%, #06b6d4 100%);
   border: 2px solid #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 102, 245, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 102, 245, 0.45);
+}
+
+.podium-player-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 102, 245, 0.6);
+  animation: node-pulse-ring 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
 }
 
 .podium-player-icon {
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1;
 }
 
 .podium-player-tag {
   background: #0f172a;
-  color: #ffd700;
+  color: #38bdf8;
   font-size: 7.5px;
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: 0.5px;
-  padding: 1.5px 5px;
+  padding: 2px 6px;
   border-radius: 4px;
-  border: 1px solid rgba(255, 215, 0, 0.6);
-  margin-top: 1px;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  margin-top: 2px;
   white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes pin-bounce {
+@keyframes node-pin-float {
   0%, 100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-6px);
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes node-pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
   }
 }
 
 /* ================= 3D CYLINDER PUCK ================= */
 .podium-cylinder-wrapper {
   position: relative;
-  width: 76px;
-  height: 52px;
+  width: 72px;
+  height: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
-/* Floating White Icon Badge perched on top */
+/* Floating Status Icon Badge on top */
 .podium-icon-badge {
   position: absolute;
-  top: -14px;
+  top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #ffffff;
   border: 2px solid #bfdbfe;
-  box-shadow: 0 4px 10px rgba(0, 102, 245, 0.2);
+  box-shadow: 0 3px 8px rgba(0, 102, 245, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,19 +155,21 @@
 }
 
 .podium-icon-glyph {
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 800;
 }
 
-/* 3D Isometric Cylinder */
+/* 3D Isometric Cylinder Base */
 .podium-cylinder {
   position: relative;
-  width: 72px;
-  height: 38px;
-  border-radius: 0 0 36px 36px / 0 0 16px 16px;
+  width: 68px;
+  height: 36px;
+  border-radius: 0 0 34px 34px / 0 0 16px 16px;
   background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 60%, #172554 100%);
   box-shadow:
-    0 8px 16px rgba(0, 102, 245, 0.35),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.45);
+    0 8px 16px rgba(0, 102, 245, 0.28),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -152,71 +178,238 @@
 /* Top Ellipse Face */
 .podium-top-face {
   position: absolute;
-  top: -12px;
+  top: -11px;
   left: 0;
-  width: 72px;
-  height: 24px;
+  width: 68px;
+  height: 22px;
   border-radius: 50%;
   background: radial-gradient(ellipse at 50% 30%, #60a5fa 0%, #2563eb 70%, #1d4ed8 100%);
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
   box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.7);
 }
 
 .podium-top-highlight {
   position: absolute;
   top: 2px;
-  left: 12px;
-  right: 12px;
-  height: 8px;
+  left: 10px;
+  right: 10px;
+  height: 6px;
   border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, transparent 100%);
 }
 
-/* Front Face Number */
+/* Front Face Level Number */
 .podium-front-body {
-  margin-top: 10px;
+  margin-top: 8px;
   z-index: 5;
 }
 
 .podium-number {
   font-family: var(--font-brand, 'Outfit', 'Inter', system-ui, sans-serif);
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 900;
   color: #ffffff;
   letter-spacing: 0.5px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 /* Diffuse Ground Shadow */
 .podium-ground-shadow {
   position: absolute;
-  bottom: -6px;
+  bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
-  width: 76px;
-  height: 14px;
+  width: 72px;
+  height: 12px;
   border-radius: 50%;
   background: rgba(15, 23, 42, 0.12);
   filter: blur(4px);
   pointer-events: none;
 }
 
-/* ================= MILESTONE GOLD CYLINDER (e.g. Lvl 05, 10, 15, 20) ================= */
+/* ================= 1. COMPLETED NODE STATE (Emerald Teal) ================= */
+.podium-node.is-completed .podium-cylinder {
+  background: linear-gradient(180deg, #059669 0%, #047857 60%, #064e3b 100%);
+  box-shadow:
+    0 8px 16px rgba(5, 150, 105, 0.3),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.35);
+}
+
+.podium-node.is-completed .podium-top-face {
+  background: radial-gradient(ellipse at 50% 30%, #6ee7b7 0%, #10b981 70%, #059669 100%);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.podium-node.is-completed .podium-icon-badge {
+  border-color: #6ee7b7;
+  background: #ecfdf5;
+  color: #059669;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+}
+
+/* ================= 2. CURRENT / ACTIVE NODE STATE (Electric Blue & Cyan Glow) ================= */
+.podium-node.is-current .podium-cylinder-wrapper {
+  animation: current-float 2.2s infinite ease-in-out;
+}
+
+.podium-node.is-current .podium-cylinder {
+  background: linear-gradient(180deg, #0066f5 0%, #1d4ed8 60%, #172554 100%);
+  box-shadow:
+    0 10px 22px rgba(0, 102, 245, 0.45),
+    0 0 16px rgba(0, 102, 245, 0.3),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.35);
+}
+
+.podium-node.is-current .podium-top-face {
+  background: radial-gradient(ellipse at 50% 30%, #67e8f9 0%, #0066f5 70%, #1d4ed8 100%);
+  border-color: #ffffff;
+  box-shadow:
+    0 0 12px rgba(0, 102, 245, 0.8),
+    inset 0 2px 5px rgba(255, 255, 255, 0.8);
+}
+
+.podium-node.is-current .podium-icon-badge {
+  border-color: #38bdf8;
+  background: #f0f9ff;
+  color: #0284c7;
+  box-shadow: 0 3px 10px rgba(0, 102, 245, 0.35);
+}
+
+@keyframes current-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* ================= 3. LOCKED NODE STATE (Frosted Slate) ================= */
+.podium-node.is-locked {
+  opacity: 0.82;
+}
+
+.podium-node.is-locked:hover {
+  opacity: 0.95;
+}
+
+.podium-node.is-locked .podium-cylinder {
+  background: linear-gradient(180deg, #64748b 0%, #475569 60%, #1e293b 100%);
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.16);
+}
+
+.podium-node.is-locked .podium-top-face {
+  background: radial-gradient(ellipse at 50% 30%, #cbd5e1 0%, #94a3b8 70%, #475569 100%);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.podium-node.is-locked .podium-icon-badge {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+/* ================= 4. MILESTONE GOLD CYLINDER (Lvl 04, 08, 12, 16, 20) ================= */
 .podium-node.is-milestone .podium-cylinder {
   background: linear-gradient(180deg, #f59e0b 0%, #d97706 60%, #78350f 100%);
   box-shadow:
-    0 8px 18px rgba(245, 158, 11, 0.4),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.45);
+    0 8px 18px rgba(245, 158, 11, 0.35),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.4);
 }
 
 .podium-node.is-milestone .podium-top-face {
   background: radial-gradient(ellipse at 50% 30%, #fef08a 0%, #fbbf24 70%, #d97706 100%);
-  border-color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.75);
 }
 
 .podium-node.is-milestone .podium-icon-badge {
   border-color: #fde68a;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+  background: #fffbeb;
+  color: #b45309;
+  box-shadow: 0 3px 8px rgba(245, 158, 11, 0.3);
+}
+
+/* ================= SIMPLIFIED TITLE CAPSULE (PILL) ================= */
+.podium-title-capsule {
+  margin-top: 6px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 3px 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+  max-width: 142px;
+  transition: all 0.15s ease;
+}
+
+.podium-title-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.1px;
+}
+
+.podium-status-dot {
+  font-size: 9px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.podium-status-dot.is-check {
+  color: #059669;
+  font-weight: 900;
+}
+
+.podium-status-dot.is-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0066f5;
+  box-shadow: 0 0 6px rgba(0, 102, 245, 0.8);
+  animation: pulse-dot 1.4s infinite;
+}
+
+.podium-status-dot.is-lock {
+  font-size: 8px;
+  opacity: 0.6;
+}
+
+/* Title capsule styling variants */
+.podium-node.is-completed .podium-title-capsule {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.podium-node.is-completed .podium-title-text {
+  color: #166534;
+}
+
+.podium-node.is-current .podium-title-capsule {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  box-shadow: 0 2px 8px rgba(0, 102, 245, 0.15);
+}
+
+.podium-node.is-current .podium-title-text {
+  color: #1d4ed8;
+  font-weight: 800;
+}
+
+.podium-node.is-locked .podium-title-capsule {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.podium-node.is-locked .podium-title-text {
+  color: #64748b;
 }
 
 .podium-node.is-milestone .podium-title-capsule {
@@ -228,105 +421,25 @@
   color: #92400e;
 }
 
-/* ================= COMPLETED NODE STATE ================= */
-.podium-node.is-completed .podium-cylinder {
-  background: linear-gradient(180deg, #10b981 0%, #059669 60%, #064e3b 100%);
-  box-shadow:
-    0 8px 16px rgba(16, 185, 129, 0.35),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.4);
-}
-
-.podium-node.is-completed .podium-top-face {
-  background: radial-gradient(ellipse at 50% 30%, #a7f3d0 0%, #34d399 70%, #059669 100%);
-}
-
-.podium-node.is-completed .podium-icon-badge {
-  border-color: #a7f3d0;
-  background: #f0fdf4;
-  color: #15803d;
-}
-
-/* ================= LOCKED NODE STATE ================= */
-.podium-node.is-locked .podium-cylinder {
-  background: linear-gradient(180deg, #64748b 0%, #475569 60%, #1e293b 100%);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  opacity: 0.85;
-}
-
-.podium-node.is-locked .podium-top-face {
-  background: radial-gradient(ellipse at 50% 30%, #cbd5e1 0%, #94a3b8 70%, #475569 100%);
-}
-
-.podium-node.is-locked .podium-icon-badge {
-  border-color: #e2e8f0;
-  background: #f8fafc;
-  opacity: 0.8;
-}
-
-.podium-node.is-locked .podium-title-capsule {
-  background: #f1f5f9;
-  border-color: #e2e8f0;
-}
-
-.podium-node.is-locked .podium-title-text {
-  color: #64748b;
-}
-
-/* ================= CURRENT / ACTIVE NODE PULSE ================= */
-.podium-node.is-current .podium-cylinder-wrapper {
-  animation: current-float 2s infinite ease-in-out;
-}
-
-.podium-node.is-current .podium-top-face {
-  border-color: #ffffff;
-  box-shadow:
-    0 0 14px rgba(0, 102, 245, 0.8),
-    inset 0 2px 4px rgba(255, 255, 255, 0.9);
-}
-
-@keyframes current-float {
+@keyframes pulse-dot {
   0%, 100% {
-    transform: translateY(0);
+    transform: scale(1);
+    opacity: 1;
   }
   50% {
-    transform: translateY(-5px);
+    transform: scale(1.3);
+    opacity: 0.5;
   }
 }
 
-/* ================= TITLE CAPSULE (PILL) ================= */
-.podium-title-capsule {
-  margin-top: 6px;
-  background: #eff6ff;
-  border: 1.5px solid #bfdbfe;
-  border-radius: 999px;
-  padding: 3px 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  max-width: 120px;
-  transition: all 0.15s ease;
-}
-
-.podium-title-text {
-  font-size: 11px;
-  font-weight: 800;
-  color: #1e40af;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ================= SUBTITLE TEXT ================= */
-.podium-subtitle-text {
-  font-size: 9.5px;
-  color: #64748b;
-  font-weight: 500;
-  line-height: 1.25;
-  margin: 3px 0 0;
-  max-width: 115px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+/* ================= ACCESSIBILITY: REDUCED MOTION ================= */
+@media (prefers-reduced-motion: reduce) {
+  .podium-node,
+  .podium-node__player-pin,
+  .podium-node.is-current .podium-cylinder-wrapper,
+  .podium-player-pulse,
+  .podium-status-dot.is-pulse {
+    animation: none !important;
+    transition: none !important;
+  }
 }

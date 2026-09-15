@@ -6,8 +6,8 @@ import path from 'path';
 
 const EDGE_PATH = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
 const TARGET_URL = "http://localhost:5173/home";
-const OUTPUT_PATH = "d:/ASV/RedBus Clone/full_home_screenshot.png";
-const ARTIFACT_PATH = "C:/Users/GEETA HOSMANI/.gemini/antigravity-ide/brain/7e8b0ce7-064a-4b6e-8492-d7b800b912ab/full_home_screenshot.png";
+const OUTPUT_PATH = "d:/ASV/RedBus Clone/home_screen_shortcuts.png";
+const ARTIFACT_PATH = "C:/Users/GEETA HOSMANI/.gemini/antigravity-ide/brain/4469199c-b7cf-4fbc-8827-2d329c837e0e/home_screen_shortcuts.png";
 const TEMP_PROFILE_DIR = path.join(os.tmpdir(), "edge_cdp_profile_" + Date.now());
 
 async function main() {

@@ -12,35 +12,13 @@ export function PodiumNode({ level, status, stars, onClick }: PodiumNodeProps) {
   const isLocked = status === 'locked';
   const isCurrent = status === 'current';
   const isCompleted = status === 'completed';
-  const isMilestone = level.isMilestone;
+  const isMilestone = Boolean(level.isMilestone);
 
-  const renderIcon = () => {
-    if (isLocked) return '🔒';
+  const getStatusIcon = () => {
     if (isCompleted) return '✓';
-    switch (level.iconName) {
-      case 'search':
-        return '🔍';
-      case 'book':
-        return '📖';
-      case 'compass':
-        return '🧭';
-      case 'trend':
-        return '📈';
-      case 'users':
-        return '👥';
-      case 'chart':
-        return '📊';
-      case 'document':
-        return '📄';
-      case 'shield':
-        return '🛡️';
-      case 'chat':
-        return '💬';
-      case 'target':
-        return '🎯';
-      default:
-        return '⭐';
-    }
+    if (isLocked) return '🔒';
+    if (isMilestone) return '👑';
+    return '⚡';
   };
 
   return (
@@ -52,11 +30,11 @@ export function PodiumNode({ level, status, stars, onClick }: PodiumNodeProps) {
       role="button"
       tabIndex={0}
       aria-label={`Level ${level.numberStr}: ${level.title} - ${
-        isCompleted ? 'Completed' : isCurrent ? 'Current Active' : 'Locked'
+        isCompleted ? 'Completed' : isCurrent ? 'Active Level' : 'Locked'
       }`}
     >
       {/* 3 Gold Stars Floating Above */}
-      <div className="podium-node__stars">
+      <div className="podium-node__stars" aria-hidden="true">
         {[1, 2, 3].map((sIndex) => {
           const hasStar = sIndex <= stars;
           return (
@@ -64,53 +42,54 @@ export function PodiumNode({ level, status, stars, onClick }: PodiumNodeProps) {
               key={sIndex}
               className={`podium-node__star ${hasStar ? 'is-earned' : 'is-empty'}`}
             >
-              ⭐
+              ★
             </span>
           );
         })}
       </div>
 
-      {/* Animated "You Are Here" Player Pin */}
+      {/* Animated "You Are Here" Player Pin for Current Active Level */}
       {isCurrent && (
         <div className="podium-node__player-pin">
-          <div className="podium-player-avatar">
+          <div className="podium-player-badge">
+            <span className="podium-player-pulse" />
             <span className="podium-player-icon">🚀</span>
           </div>
           <div className="podium-player-tag">YOU ARE HERE</div>
         </div>
       )}
 
-      {/* 3D Floating Isometric Cylinder Puck */}
+      {/* 3D Floating Isometric Cylinder / Puck */}
       <div className="podium-cylinder-wrapper">
-        {/* Floating Top Icon Badge */}
+        {/* Floating Top Status Badge */}
         <div className="podium-icon-badge">
-          <span className="podium-icon-glyph">{renderIcon()}</span>
+          <span className="podium-icon-glyph">{getStatusIcon()}</span>
         </div>
 
-        {/* 3D Cylinder */}
+        {/* 3D Cylinder Disc */}
         <div className="podium-cylinder">
-          {/* Top Ellipse Face */}
+          {/* Top Face Ellipse */}
           <div className="podium-top-face">
             <div className="podium-top-highlight" />
           </div>
 
-          {/* Front Body with Number */}
+          {/* Front Face with Level Number */}
           <div className="podium-front-body">
             <span className="podium-number">{level.numberStr}</span>
           </div>
         </div>
 
-        {/* Diffuse Ground Shadow */}
+        {/* Ground Diffuse Shadow */}
         <div className="podium-ground-shadow" />
       </div>
 
-      {/* Title Capsule (Pill) */}
+      {/* Simplified, High-Legibility Title Capsule Pill */}
       <div className="podium-title-capsule">
+        {isCompleted && <span className="podium-status-dot is-check">✓</span>}
+        {isCurrent && <span className="podium-status-dot is-pulse" />}
+        {isLocked && <span className="podium-status-dot is-lock">🔒</span>}
         <span className="podium-title-text">{level.title}</span>
       </div>
-
-      {/* Subtitle Description */}
-      <p className="podium-subtitle-text">{level.subtitle}</p>
     </div>
   );
 }

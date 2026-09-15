@@ -44,8 +44,6 @@ const TABLE_STUDENTS: LeaderboardStudent[] = [
 ];
 
 export function LeaderboardPodium() {
-  const [filter, setFilter] = useState<'This Month' | 'This Week' | 'All Time'>('This Month');
-  const [showDropdown, setShowDropdown] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<LeaderboardStudent | null>(null);
 
@@ -53,26 +51,25 @@ export function LeaderboardPodium() {
   const rank2 = TOP_3_STUDENTS[1];
   const rank3 = TOP_3_STUDENTS[2];
 
-  const visibleTableStudents = expanded ? TABLE_STUDENTS : TABLE_STUDENTS.slice(0, 4);
-
   return (
     <section className="leaderboard-card" aria-label="Student Leaderboard">
-      {/* Decorative Background Botanical Leaves */}
-      <svg className="leaderboard-card__leaf leaf--left" viewBox="0 0 70 140" fill="none" aria-hidden="true">
-        <path d="M10 130 C20 90, 25 50, 40 10" stroke="#bfdbfe" strokeWidth="2.5" strokeLinecap="round" />
-        <ellipse cx="18" cy="110" rx="10" ry="5" transform="rotate(-30 18 110)" fill="#bfdbfe" opacity="0.6" />
-        <ellipse cx="30" cy="85" rx="11" ry="5.5" transform="rotate(-15 30 85)" fill="#93c5fd" opacity="0.7" />
-        <ellipse cx="26" cy="55" rx="10" ry="5" transform="rotate(-35 26 55)" fill="#bfdbfe" opacity="0.6" />
-        <ellipse cx="38" cy="30" rx="9" ry="4.5" transform="rotate(-20 38 30)" fill="#93c5fd" opacity="0.7" />
-      </svg>
+      {/* Subtle entrance shine sweep */}
+      <div className="leaderboard-card__shine-sweep" aria-hidden="true" />
 
-      <svg className="leaderboard-card__leaf leaf--right" viewBox="0 0 70 140" fill="none" aria-hidden="true">
-        <path d="M60 130 C50 90, 45 50, 30 10" stroke="#bfdbfe" strokeWidth="2.5" strokeLinecap="round" />
-        <ellipse cx="52" cy="110" rx="10" ry="5" transform="rotate(30 52 110)" fill="#bfdbfe" opacity="0.6" />
-        <ellipse cx="40" cy="85" rx="11" ry="5.5" transform="rotate(15 40 85)" fill="#93c5fd" opacity="0.7" />
-        <ellipse cx="44" cy="55" rx="10" ry="5" transform="rotate(35 44 55)" fill="#bfdbfe" opacity="0.6" />
-        <ellipse cx="32" cy="30" rx="9" ry="4.5" transform="rotate(20 32 30)" fill="#93c5fd" opacity="0.7" />
-      </svg>
+      {/* Decorative Background Botanical Leaves */}
+      <img
+        src="/leaf.png"
+        alt=""
+        className="leaderboard-card__leaf leaf--left"
+        aria-hidden="true"
+      />
+      <img
+        src="/leaf.png"
+        alt=""
+        className="leaderboard-card__leaf leaf--right"
+        aria-hidden="true"
+      />
+
 
       {/* Floating Confetti Shapes */}
       <div className="leaderboard-card__confetti" aria-hidden="true">
@@ -86,7 +83,7 @@ export function LeaderboardPodium() {
         <span className="confetti-chip chip--8" />
       </div>
 
-      {/* Header: Title Left + Filter Dropdown Right */}
+      {/* Header: Title */}
       <div className="leaderboard-card__header">
         <div className="leaderboard-card__title-box">
           <div className="leaderboard-card__title-row">
@@ -100,35 +97,8 @@ export function LeaderboardPodium() {
           </div>
           <p className="leaderboard-card__subtitle">Top learners advancing on their AERS Journey</p>
         </div>
-
-        {/* Filter Dropdown */}
-        <div className="leaderboard-card__filter-wrap">
-          <button
-            className="leaderboard-card__filter-btn"
-            onClick={() => setShowDropdown(!showDropdown)}
-            aria-label={`Leaderboard timeframe: ${filter}`}
-          >
-            <span>{filter}</span>
-            <span className="filter-arrow">▾</span>
-          </button>
-          {showDropdown && (
-            <div className="leaderboard-card__dropdown">
-              {(['This Month', 'This Week', 'All Time'] as const).map((opt) => (
-                <button
-                  key={opt}
-                  className={`leaderboard-card__dropdown-opt ${filter === opt ? 'is-active' : ''}`}
-                  onClick={() => {
-                    setFilter(opt);
-                    setShowDropdown(false);
-                  }}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
+
 
       {/* 3-Tier Podium (Ranks 2, 1, 3) */}
       <div className="leaderboard-card__podium-stage">
@@ -238,34 +208,38 @@ export function LeaderboardPodium() {
         </div>
       </div>
 
-      {/* Inset White Card: Ranks 4–7 Table */}
-      <div className="leaderboard-card__table-box">
-        {/* Table Header */}
-        <div className="leaderboard-table__header">
-          <span className="col-header col-rank">RANK</span>
-          <span className="col-header col-student">STUDENT</span>
-          <span className="col-header col-xp">XP</span>
-        </div>
-
-        {/* Student Rows */}
-        <div className="leaderboard-table__body">
-          {visibleTableStudents.map((st) => (
-            <div
-              key={st.rank}
-              className="leaderboard-table__row"
-              onClick={() => setSelectedStudent(st)}
-              role="button"
-              tabIndex={0}
-            >
-              <span className="row-rank-num">{st.rank}</span>
-              <div className="row-student-info">
-                <img src={st.avatar} alt={st.name} className="row-avatar-img" />
-                <span className="row-student-name">{st.name}</span>
-              </div>
-              <span className="row-xp-val">{st.xp} XP</span>
+      {/* Top 10 Table & Expand Button */}
+      <div className={`leaderboard-card__table-box ${expanded ? 'is-expanded' : 'is-collapsed'}`}>
+        {expanded && (
+          <>
+            {/* Table Header */}
+            <div className="leaderboard-table__header">
+              <span className="col-header col-rank">RANK</span>
+              <span className="col-header col-student">STUDENT</span>
+              <span className="col-header col-xp">XP</span>
             </div>
-          ))}
-        </div>
+
+            {/* Student Rows (Ranks 4-10) */}
+            <div className="leaderboard-table__body">
+              {TABLE_STUDENTS.map((st) => (
+                <div
+                  key={st.rank}
+                  className="leaderboard-table__row"
+                  onClick={() => setSelectedStudent(st)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <span className="row-rank-num">{st.rank}</span>
+                  <div className="row-student-info">
+                    <img src={st.avatar} alt={st.name} className="row-avatar-img" />
+                    <span className="row-student-name">{st.name}</span>
+                  </div>
+                  <span className="row-xp-val">{st.xp} XP</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* View Top 10 CTA Button */}
         <button

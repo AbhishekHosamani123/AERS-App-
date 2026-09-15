@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="blueBase" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#F59E0B" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <!-- Handles -->
+  <path d="M14 20 C14 29 22 33 28 34" stroke="url(#goldGrad)" stroke-width="4.5" stroke-linecap="round" fill="none" />
+  <path d="M50 20 C50 29 42 33 36 34" stroke="url(#goldGrad)" stroke-width="4.5" stroke-linecap="round" fill="none" />
+  <!-- Cup Body -->
+  <path d="M18 12 H46 V24 C46 33.5 39.5 40 32 40 C24.5 40 18 33.5 18 24 Z" fill="url(#goldGrad)" filter="url(#glow)"/>
+  <!-- Cup Rim highlight -->
+  <ellipse cx="32" cy="12" rx="14" ry="3.5" fill="#FEF08A" />
+  <!-- Star on Cup -->
+  <polygon points="32,19 34,23.5 39,24 35.2,27.5 36.3,32.5 32,29.8 27.7,32.5 28.8,27.5 25,24 30,23.5" fill="#FFFFFF" opacity="0.95"/>
+  <!-- Stem -->
+  <path d="M30 40 H34 V48 H30 Z" fill="#D97706" />
+  <!-- Pedestal Base -->
+  <rect x="22" y="48" width="20" height="9" rx="3" fill="url(#blueBase)" />
+  <rect x="25" y="50.5" width="14" height="4" rx="1.5" fill="#60A5FA" opacity="0.6"/>
+</svg>

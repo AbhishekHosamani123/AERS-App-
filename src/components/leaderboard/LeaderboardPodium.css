@@ -9,20 +9,66 @@
   margin-right: -16px;
   box-sizing: border-box;
   background: linear-gradient(180deg, #f3f8fe 0%, #ebf4fe 42%, #f8faff 100%);
-  border-top: 1px solid #dce9f8;
-  border-bottom: 1px solid #dce9f8;
-  border-left: none;
-  border-right: none;
+  border: none;
   border-radius: 0;
-  padding: 24px 16px 20px 16px;
+  padding: 24px 16px 16px 16px;
   box-shadow: 0 10px 30px -6px rgba(0, 80, 220, 0.05);
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 0;
   text-align: left;
+  animation: lbCardEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
 }
+
+/* Subtle single shine sweep during entrance */
+.leaderboard-card__shine-sweep {
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.08) 75%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  pointer-events: none;
+  z-index: 10;
+  animation: lbShineSweep 0.85s cubic-bezier(0.4, 0, 0.2, 1) 0.2s 1 both;
+}
+
+@keyframes lbCardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lbShineSweep {
+  0% {
+    left: -150%;
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    left: 220%;
+    opacity: 0;
+  }
+}
+
 
 /* ============================================================
    1. Decorative Background (Botanical Leaves + Confetti)
@@ -30,21 +76,53 @@
 
 .leaderboard-card__leaf {
   position: absolute;
-  top: 100px;
-  width: 65px;
-  height: 135px;
+  top: 118px;
+  width: 62px;
+  height: auto;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.85;
+  opacity: 0.82;
+  user-select: none;
+  will-change: transform, opacity;
 }
 
 .leaf--left {
-  left: 0;
+  left: -8px;
+  transform: rotate(-10deg);
+  animation: lbLeafLeftIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both;
 }
 
 .leaf--right {
-  right: 0;
+  right: -8px;
+  transform: scaleX(-1) rotate(-10deg);
+  animation: lbLeafRightIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
 }
+
+@keyframes lbLeafLeftIn {
+  0% {
+    opacity: 0;
+    transform: translate(-12px, 8px) rotate(-18deg);
+  }
+  100% {
+    opacity: 0.82;
+    transform: translate(0, 0) rotate(-10deg);
+  }
+}
+
+@keyframes lbLeafRightIn {
+  0% {
+    opacity: 0;
+    transform: translate(12px, 8px) scaleX(-1) rotate(-18deg);
+  }
+  100% {
+    opacity: 0.82;
+    transform: translate(0, 0) scaleX(-1) rotate(-10deg);
+  }
+}
+
+
+
+
 
 .leaderboard-card__confetti {
   position: absolute;
@@ -141,7 +219,21 @@
   justify-content: space-between;
   position: relative;
   z-index: 2;
+  animation: lbFadeSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+  will-change: transform, opacity;
 }
+
+@keyframes lbFadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 .leaderboard-card__title-box {
   display: flex;
@@ -287,8 +379,8 @@
   width: 100%;
   position: relative;
   z-index: 2;
-  margin-top: 12px;
-  margin-bottom: -4px;
+  margin-top: 16px;
+  margin-bottom: 0;
 }
 
 .podium-col {
@@ -298,25 +390,74 @@
   cursor: pointer;
   outline: none;
   transition: transform 0.2s ease;
+  will-change: transform, opacity;
 }
 
 .podium-col:hover {
   transform: translateY(-2px);
 }
 
-.col--rank-2 {
-  flex: 1;
-  z-index: 2;
-}
-
 .col--rank-1 {
   flex: 1.18;
   z-index: 3;
+  animation: lbRank1Pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s both;
+}
+
+.col--rank-2 {
+  flex: 1;
+  z-index: 2;
+  animation: lbRank2Pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.22s both;
 }
 
 .col--rank-3 {
   flex: 1;
   z-index: 2;
+  animation: lbRank3Pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.32s both;
+}
+
+@keyframes lbRank1Pop {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.88);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes lbRank2Pop {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.9);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes lbRank3Pop {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.9);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Crowns */
@@ -326,7 +467,36 @@
   justify-content: center;
   position: relative;
   margin-bottom: 2px;
+  animation: lbCrownBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
+
+.col--rank-1 .podium-crown {
+  animation-delay: 0.22s;
+}
+
+.col--rank-2 .podium-crown {
+  animation-delay: 0.32s;
+}
+
+.col--rank-3 .podium-crown {
+  animation-delay: 0.42s;
+}
+
+@keyframes lbCrownBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.65);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(1px) scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 
 .crown--gold {
   position: relative;
@@ -504,12 +674,65 @@
 
 .leaderboard-card__table-box {
   background: #ffffff;
-  border-radius: 20px;
+  border-radius: 18px;
   box-shadow: 0 4px 18px rgba(0, 80, 200, 0.05);
   padding: 14px 16px 14px 16px;
   position: relative;
   z-index: 4;
   border: 1px solid #edf4fc;
+  transition: all 0.25s ease;
+  animation: lbButtonIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+  will-change: transform, opacity;
+}
+
+@keyframes lbButtonIn {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.leaderboard-card__table-box.is-collapsed {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.leaderboard-card__table-box.is-collapsed .leaderboard-table__view-btn {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  background: #ffffff;
+  border: 1.5px solid #d4e5fc;
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 6px 16px rgba(0, 80, 220, 0.08);
+}
+
+.leaderboard-card__table-box.is-expanded {
+  margin-top: 12px;
+  margin-bottom: 4px;
+  animation: tableFadeIn 0.25s ease-out;
+}
+
+@keyframes tableFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .leaderboard-table__header {
@@ -608,8 +831,11 @@
   color: #1769e8;
   font-size: 13.5px;
   font-weight: 700;
-  border-radius: 999px;
-  height: 42px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  height: 44px;
   border: 1px solid #d4e5fc;
   width: 100%;
   display: flex;
@@ -734,3 +960,23 @@
   border-radius: 999px;
   border: 1px solid #d4e5fc;
 }
+
+/* Accessibility: Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .leaderboard-card,
+  .leaderboard-card__shine-sweep,
+  .col--rank-1,
+  .col--rank-2,
+  .col--rank-3,
+  .podium-crown,
+  .leaderboard-card__header,
+  .leaderboard-card__leaf,
+  .leaf--left,
+  .leaf--right,
+  .leaderboard-card__table-box {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+

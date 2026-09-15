@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BRAND_COPY } from '../branding/brand';
 import { Icon, type IconName } from '../components/icons/Icon';
-import { Logo } from '../components/brand/Logo';
+import { AppHeader } from '../components/ui/AppHeader';
 import { LearningPathCTA } from '../components/journey/LearningPathCTA';
 import { LeaderboardPodium } from '../components/leaderboard/LeaderboardPodium';
 import { OFFERS, POPULAR_ROUTES } from '../mock';
@@ -13,12 +13,45 @@ import { showToast } from '../state/toastStore';
 import type { AppNotification } from '../types';
 import './HomeScreen.css';
 
-/** Travel category navigation tabs */
-const SERVICE_TABS = [
-  { id: 'bus', label: 'Bus', icon: 'bus' },
-  { id: 'train', label: 'Train', icon: 'route' },
-  { id: 'metro', label: 'Metro', icon: 'route' },
-  { id: 'hotel', label: 'Hotel', icon: 'pin' },
+/** AERS Quick navigation shortcuts */
+const SHORTCUT_TABS = [
+  {
+    id: 'leaderboard',
+    label: 'Leaderboard',
+    iconImg: '/shortcuts/leaderboard.png',
+    action: (navigate: (path: string) => void) => {
+      const el = document.querySelector('.leaderboard-card');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        navigate('/home');
+      }
+    },
+  },
+  {
+    id: 'progress',
+    label: 'My Progress',
+    iconImg: '/shortcuts/progress.png',
+    action: (navigate: (path: string) => void) => {
+      navigate('/journey');
+    },
+  },
+  {
+    id: 'passport',
+    label: 'Passport',
+    iconImg: '/shortcuts/passport.png',
+    action: (navigate: (path: string) => void) => {
+      navigate('/account');
+    },
+  },
+  {
+    id: 'schedule',
+    label: 'Schedule',
+    iconImg: '/shortcuts/schedule.png',
+    action: (navigate: (path: string) => void) => {
+      navigate('/trips');
+    },
+  },
 ] as const;
 
 const KIND_ICON: Record<AppNotification['kind'], IconName> = {
@@ -34,6 +67,8 @@ export function HomeScreen() {
   const [offerIdx, setOfferIdx] = useState(0);
   const { items: notifications } = useNotifications();
   const unreadNotifs = useUnreadNotificationsCount();
+  const [pressedTab, setPressedTab] = useState<string | null>(null);
+  const [ripple, setRipple] = useState<{ x: number; y: number; tabId: string } | null>(null);
 
   /* Fetch unread notifications */
   useEffect(() => {
@@ -48,31 +83,28 @@ export function HomeScreen() {
 
   const offer = OFFERS[offerIdx];
 
+  const handleShortcutTap = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    t: (typeof SHORTCUT_TABS)[number]
+  ) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX ? e.clientX - rect.left : rect.width / 2;
+    const y = e.clientY ? e.clientY - rect.top : rect.height / 2;
+
+    setRipple({ x, y, tabId: t.id });
+    setPressedTab(t.id);
+
+    setTimeout(() => {
+      setPressedTab(null);
+      setRipple(null);
+      t.action(navigate);
+    }, 110);
+  };
+
   return (
     <div className="home">
       {/* 1. Header: AERS Logo Left, Wallet & Notification Bell Right */}
-      <header className="home__header">
-        <Logo withWordmark size={26} />
-        <div className="home__header-actions">
-          <button className="home__walletpill" onClick={() => navigate('/account')} aria-label="Wallet">
-            <Icon name="wallet" size={15} />
-            <span>Wallet ₹202</span>
-          </button>
-          <button
-            className="home__notifbtn"
-            onClick={() => navigate('/notifications')}
-            aria-label={`Notifications${unreadNotifs > 0 ? ` (${unreadNotifs} unread)` : ''}`}
-            title="Notifications"
-          >
-            <img src="/bell_icon.png" alt="Notifications" className="home__notif-bell-img" />
-            {unreadNotifs > 0 && (
-              <span className="home__notif-count-badge">
-                {unreadNotifs > 99 ? '99+' : unreadNotifs}
-              </span>
-            )}
-          </button>
-        </div>
-      </header>
+      <AppHeader unreadNotifs={unreadNotifs} />
 
       <div className="home__scroll">
         {/* 2. User Greeting */}
@@ -83,22 +115,49 @@ export function HomeScreen() {
           <p className="home__greeting-sub">Where would you like to travel today?</p>
         </div>
 
-        {/* 3. Travel Category Navigation (Lightweight & Compact) */}
-        <div className="home__svctabs" role="tablist" aria-label="Services">
-          {SERVICE_TABS.map((t) => (
-            <button
-              key={t.id}
-              role="tab"
-              aria-selected={t.id === 'bus'}
-              className={`home__svctab ${t.id === 'bus' ? 'is-active' : ''}`}
-              onClick={() => t.id !== 'bus' && showToast('Only bus booking is available in this prototype', 'info')}
-            >
-              <span className="home__svctab-icon">
-                <Icon name={t.icon as IconName} size={20} />
-              </span>
-              <span className="home__svctab-label">{t.label}</span>
-            </button>
-          ))}
+        {/* 3. AERS Navigation Shortcuts (Compact, Clean, Minimal) */}
+        <div className="home__svctabs" role="tablist" aria-label="AERS Shortcuts">
+          {SHORTCUT_TABS.map((t) => {
+            const isPressed = pressedTab === t.id;
+            return (
+              <button
+                key={t.id}
+                role="tab"
+                aria-label={t.label}
+                className={`home__svctab ${t.id === 'leaderboard' ? 'home__svctab--leaderboard' : ''} ${isPressed ? 'is-pressed' : ''}`}
+                onClick={(e) => handleShortcutTap(e, t)}
+              >
+                {ripple && ripple.tabId === t.id && (
+                  <span
+                    className="shortcut-ripple"
+                    style={{ left: ripple.x, top: ripple.y }}
+                    aria-hidden="true"
+                  />
+                )}
+                <span className={`home__svctab-icon ${t.id === 'leaderboard' ? 'home__svctab-icon--leaderboard' : ''}`}>
+                  {t.id === 'leaderboard' && (
+                    <>
+                      <span className="trophy-glow-aura" aria-hidden="true" />
+                      <span className="trophy-sparkle" aria-hidden="true">
+                        <svg viewBox="0 0 16 16" fill="none">
+                          <path
+                            d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5L8 0Z"
+                            fill="#FDE047"
+                          />
+                        </svg>
+                      </span>
+                    </>
+                  )}
+                  <img
+                    src={t.iconImg}
+                    alt={t.label}
+                    className={`home__svctab-img ${t.id === 'leaderboard' ? 'home__svctab-img--leaderboard' : ''} ${isPressed ? 'is-popping' : ''}`}
+                  />
+                </span>
+                <span className="home__svctab-label">{t.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* 4. Student Leaderboard Podium */}

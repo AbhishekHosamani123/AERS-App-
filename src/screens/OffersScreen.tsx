@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EmptyState } from '../components/ui/StateView';
 import { Icon } from '../components/icons/Icon';
-import { Logo } from '../components/brand/Logo';
+import { AppHeader } from '../components/ui/AppHeader';
 import { listOffers } from '../services/api';
 import { setSearch } from '../state/searchStore';
 import { showToast } from '../state/toastStore';
@@ -53,14 +53,8 @@ export function OffersScreen() {
 
   return (
     <div className="offers">
-      {/* White header: wordmark + wallet pill (same as Home) */}
-      <header className="offers__header">
-        <Logo withWordmark size={26} />
-        <button className="offers__walletpill" onClick={() => navigate('/account')}>
-          <Icon name="wallet" size={15} />
-          <span>Wallet ₹202</span>
-        </button>
-      </header>
+      {/* White header: wordmark + wallet pill + notifications (same as Home) */}
+      <AppHeader />
 
       {/* Service tabs + coupon strip */}
       <div className="offers__svctabs" role="tablist" aria-label="Services">
