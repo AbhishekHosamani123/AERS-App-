@@ -1367,6 +1367,11 @@
 }
 
 /* ================= 10. EVALUATION STATUS ================= */
+/* ================= 10. EVALUATION STATUS & APPROVED VERIFIED VIEW ================= */
+.lvl1-stage-view--eval {
+  padding-bottom: 24px;
+}
+
 .lvl1-eval-status-box {
   border-radius: 20px;
   padding: 22px;
@@ -1384,11 +1389,6 @@
 .lvl1-eval-status-box--revision {
   background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
   border: 1.5px solid #fed7aa;
-}
-
-.lvl1-eval-status-box--approved {
-  background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
-  border: 1.5px solid #a7f3d0;
 }
 
 .lvl1-status-indicator {
@@ -1469,12 +1469,6 @@
 
 .lvl1-timeline-file strong { color: #0f172a; }
 
-.lvl1-stars-trio {
-  display: flex;
-  gap: 4px;
-  font-size: 24px;
-}
-
 .lvl1-eval-feedback-note {
   display: flex;
   align-items: flex-start;
@@ -1489,15 +1483,365 @@
   line-height: 1.5;
 }
 
-.lvl1-eval-feedback-note.is-approved {
-  border-color: #a7f3d0;
-  border-left-color: #10b981;
-  color: #065f46;
-}
-
 .lvl1-eval-feedback-icon {
   font-size: 18px;
   flex-shrink: 0;
+}
+
+/* ================= EXACT MATCH: APPROVED VERIFIED VIEW ================= */
+.lvl1-eval-approved-view {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: lvl1ScaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes lvl1ScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 1. Main Success Hero Card */
+.lvl1-eval-hero-card {
+  background: linear-gradient(145deg, #e9faf2 0%, #d4f5e7 50%, #e0f9f0 100%);
+  border: 1.5px solid #a7f3d0;
+  border-radius: 24px;
+  padding: 22px 18px 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -8px rgba(16, 185, 129, 0.12);
+}
+
+.lvl1-eval-badge-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #047857;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.lvl1-eval-check-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #10b981;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
+}
+
+.lvl1-eval-hero-body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  position: relative;
+}
+
+.lvl1-eval-hero-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.lvl1-eval-stars-row {
+  display: flex;
+  gap: 4px;
+  font-size: 26px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.lvl1-gold-star {
+  display: inline-block;
+  filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.35));
+  animation: starPop 0.5s ease backwards;
+}
+
+.lvl1-gold-star:nth-child(1) { animation-delay: 0.1s; }
+.lvl1-gold-star:nth-child(2) { animation-delay: 0.2s; }
+.lvl1-gold-star:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes starPop {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.lvl1-eval-congrats-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.lvl1-eval-level-verified {
+  display: block;
+  color: #059669;
+  font-size: 24px;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.lvl1-eval-hero-right {
+  flex-shrink: 0;
+  margin-top: -12px;
+  margin-right: -6px;
+}
+
+.lvl1-medal-svg {
+  display: block;
+  animation: medalFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes medalFloat {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-4px) rotate(2deg); }
+}
+
+.lvl1-eval-summary-desc {
+  font-size: 13.5px;
+  color: #334155;
+  line-height: 1.45;
+  margin: 12px 0 16px;
+  max-width: 95%;
+}
+
+.lvl1-eval-summary-desc strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* Evaluator Rubric Note Box */
+.lvl1-eval-rubric-card {
+  background: #ffffff;
+  border: 1.5px solid #6ee7b7;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.06);
+}
+
+.lvl1-eval-rubric-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ede9fe;
+  color: #6366f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.lvl1-eval-rubric-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.lvl1-eval-rubric-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #047857;
+  margin: 0 0 4px;
+}
+
+.lvl1-eval-rubric-quote {
+  font-size: 12.5px;
+  color: #334155;
+  line-height: 1.45;
+  margin: 0;
+  font-style: normal;
+}
+
+/* Large Orange Continue CTA Button */
+.lvl1-eval-continue-btn {
+  width: 100%;
+  height: 52px;
+  background: linear-gradient(90deg, #f59e0b 0%, #ea580c 100%);
+  border: none;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 0 10px;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(234, 88, 12, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lvl1-eval-continue-btn:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(234, 88, 12, 0.42);
+}
+
+.lvl1-eval-continue-btn:active {
+  transform: scale(0.98);
+}
+
+.lvl1-eval-btn-arrow-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.lvl1-eval-btn-text {
+  flex: 1;
+  text-align: center;
+  color: #ffffff;
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.lvl1-eval-btn-burst {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* 2. Next Step Card */
+.lvl1-eval-next-step-card {
+  background: linear-gradient(135deg, #f0f7ff 0%, #f5f3ff 100%);
+  border: 1.5px solid #dbeafe;
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.lvl1-eval-next-step-card:hover {
+  background: linear-gradient(135deg, #e0f2fe 0%, #ede9fe 100%);
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+}
+
+.lvl1-next-step-icon {
+  flex-shrink: 0;
+}
+
+.lvl1-map-svg {
+  display: block;
+}
+
+.lvl1-next-step-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lvl1-next-step-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: capitalize;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.lvl1-next-step-title {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 2px;
+}
+
+.lvl1-next-step-desc {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.lvl1-next-step-chevron {
+  color: #64748b;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3. Inspirational Quote Carousel */
+.lvl1-eval-quote-carousel {
+  margin: 16px 0 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.lvl1-eval-quote-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.lvl1-quote-mark {
+  color: #93c5fd;
+  font-size: 26px;
+  font-family: Georgia, serif;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+.lvl1-quote-text {
+  font-size: 13.5px;
+  font-style: italic;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0;
+}
+
+.lvl1-carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.lvl1-carousel-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  transition: all 0.2s ease;
+}
+
+.lvl1-carousel-dot.is-active {
+  background: #059669;
+  width: 8px;
+  height: 8px;
 }
 
 /* ================= 11. FLOATING BOTTOM CTA BAR ================= */

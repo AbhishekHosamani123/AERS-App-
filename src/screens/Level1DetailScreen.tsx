@@ -1307,10 +1307,14 @@ export function Level1DetailScreen() {
 
   // 9. EVALUATION STATUS (Pending / Revision / Approved)
   const renderEvaluationStatus = () => {
+    const isApproved = currentStage === 'eval_approved';
+    const isRevision = currentStage === 'eval_revision';
+    const isPending = currentStage === 'eval_pending';
+
     return (
-      <div className="lvl1-stage-view">
+      <div className="lvl1-stage-view lvl1-stage-view--eval">
         {/* PENDING STATE */}
-        {currentStage === 'eval_pending' && (
+        {isPending && (
           <div className="lvl1-eval-status-box lvl1-eval-status-box--pending">
             <div className="lvl1-status-indicator lvl1-status-indicator--pending">
               <span className="lvl1-status-pulse lvl1-status-pulse--pending" />
@@ -1354,7 +1358,7 @@ export function Level1DetailScreen() {
         )}
 
         {/* REVISION REQUIRED STATE */}
-        {currentStage === 'eval_revision' && (
+        {isRevision && (
           <div className="lvl1-eval-status-box lvl1-eval-status-box--revision">
             <div className="lvl1-status-indicator lvl1-status-indicator--revision">
               <span className="lvl1-status-pulse lvl1-status-pulse--revision" />
@@ -1395,45 +1399,230 @@ export function Level1DetailScreen() {
           </div>
         )}
 
-        {/* APPROVED STATE */}
-        {currentStage === 'eval_approved' && (
-          <div className="lvl1-eval-status-box lvl1-eval-status-box--approved">
-            <div className="lvl1-status-indicator lvl1-status-indicator--approved">
-              <span className="lvl1-status-pulse lvl1-status-pulse--approved" />
-              <span>LEVEL 1 COMPLETED ✓</span>
-            </div>
+        {/* APPROVED STATE (EXACT MATCH TO REFERENCE DESIGN) */}
+        {isApproved && (
+          <div className="lvl1-eval-approved-view">
+            {/* 1. Main Success Hero Card */}
+            <div className="lvl1-eval-hero-card">
+              {/* Badge: Level 1 Completed */}
+              <div className="lvl1-eval-badge-done">
+                <span className="lvl1-eval-check-circle">✓</span>
+                <span>LEVEL 1 COMPLETED</span>
+              </div>
 
-            <div className="lvl1-stars-trio">
-              <span>⭐</span>
-              <span>⭐</span>
-              <span>⭐</span>
-            </div>
+              {/* Title & Stars + Floating 3D Medal */}
+              <div className="lvl1-eval-hero-body">
+                <div className="lvl1-eval-hero-left">
+                  <div className="lvl1-eval-stars-row">
+                    <span className="lvl1-gold-star">⭐</span>
+                    <span className="lvl1-gold-star">⭐</span>
+                    <span className="lvl1-gold-star">⭐</span>
+                  </div>
+                  <h2 className="lvl1-eval-congrats-title">
+                    Congratulations!
+                    <span className="lvl1-eval-level-verified">Level 01 Verified</span>
+                  </h2>
+                </div>
 
-            <h2 className="lvl1-eval-status-title">Congratulations! Level 01 Verified</h2>
-            <p className="lvl1-eval-status-desc">
-              Your Self-Awareness Snapshot has been reviewed and verified by the placement board with 3 Gold Stars.
-            </p>
+                <div className="lvl1-eval-hero-right">
+                  <svg
+                    width="116"
+                    height="116"
+                    viewBox="0 0 120 120"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="lvl1-medal-svg"
+                  >
+                    <defs>
+                      <linearGradient id="medalGoldGrad" x1="20" y1="20" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor="#FFF176" />
+                        <stop offset="45%" stopColor="#FBC02D" />
+                        <stop offset="100%" stopColor="#F57F17" />
+                      </linearGradient>
+                      <linearGradient id="medalInnerGold" x1="30" y1="30" x2="70" y2="70" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor="#FFEE58" />
+                        <stop offset="60%" stopColor="#FDD835" />
+                        <stop offset="100%" stopColor="#F9A825" />
+                      </linearGradient>
+                      <linearGradient id="medalStarGrad" x1="40" y1="40" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor="#FFFFFF" />
+                        <stop offset="40%" stopColor="#FFF59D" />
+                        <stop offset="100%" stopColor="#FBC02D" />
+                      </linearGradient>
+                      <linearGradient id="ribbonLeftGrad" x1="40" y1="60" x2="20" y2="105" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor="#00E676" />
+                        <stop offset="50%" stopColor="#00C853" />
+                        <stop offset="100%" stopColor="#00897B" />
+                      </linearGradient>
+                      <linearGradient id="ribbonRightGrad" x1="60" y1="60" x2="80" y2="105" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor="#69F0AE" />
+                        <stop offset="50%" stopColor="#00E676" />
+                        <stop offset="100%" stopColor="#00B0FF" />
+                      </linearGradient>
+                      <filter id="medalGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#F57F17" floodOpacity="0.25" />
+                      </filter>
+                    </defs>
 
-            <div className="lvl1-eval-feedback-note is-approved">
-              <span className="lvl1-eval-feedback-icon">🎓</span>
-              <p>
-                <strong>Evaluator Rubric Note:</strong> "Excellent articulation of technical problem solving and leadership with quantifiable project outcomes. Level 02 is now unlocked on your Journey map."
+                    {/* Radiant Confetti Particles */}
+                    <rect x="18" y="24" width="5.5" height="13" rx="2.75" transform="rotate(-40 18 24)" fill="#FF9800" />
+                    <rect x="42" y="10" width="5" height="11" rx="2.5" transform="rotate(10 42 10)" fill="#00E5FF" />
+                    <rect x="74" y="12" width="5" height="12" rx="2.5" transform="rotate(35 74 12)" fill="#1DE9B6" />
+                    <circle cx="94" cy="30" r="3" fill="#FFD600" />
+                    <rect x="92" y="48" width="5" height="12" rx="2.5" transform="rotate(85 92 48)" fill="#00B0FF" />
+                    <rect x="11" y="44" width="5" height="11" rx="2.5" transform="rotate(-65 11 44)" fill="#00E5FF" />
+                    <circle cx="92" cy="74" r="2.8" fill="#FFCA28" />
+
+                    {/* Ribbons */}
+                    <path d="M42 62 L26 98 L36 93 L46 99 L50 64 Z" fill="url(#ribbonLeftGrad)" />
+                    <path d="M58 64 L74 99 L64 93 L54 98 L50 62 Z" fill="url(#ribbonRightGrad)" />
+
+                    {/* Medal Disc */}
+                    <g filter="url(#medalGlow)">
+                      <circle cx="50" cy="50" r="32" fill="#F57F17" />
+                      <circle cx="50" cy="50" r="30" fill="url(#medalGoldGrad)" />
+                      <circle cx="50" cy="50" r="26" fill="#FBC02D" stroke="#FFF59D" strokeWidth="1.5" />
+                      <circle cx="50" cy="50" r="22" fill="url(#medalInnerGold)" />
+                      
+                      {/* Center 3D Star */}
+                      <polygon 
+                        points="50,35 53.5,44.5 64,44.5 55.5,51 59,60.5 50,55 41,60.5 44.5,51 36,44.5 46.5,44.5" 
+                        fill="url(#medalStarGrad)" 
+                        stroke="#F57F17" 
+                        strokeWidth="0.8"
+                      />
+                      <path d="M37 38 Q50 31 63 38 Q50 34 37 38 Z" fill="#FFFFFF" opacity="0.65" />
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Verified Subtitle */}
+              <p className="lvl1-eval-summary-desc">
+                Your Self-Awareness Snapshot has been reviewed and verified by the placement board with <strong>3 Gold Stars</strong>.
               </p>
-            </div>
 
-            <footer className="lvl1-floating-cta-bar">
+              {/* Evaluator Rubric Note Box */}
+              <div className="lvl1-eval-rubric-card">
+                <div className="lvl1-eval-rubric-icon">
+                  <span>🎓</span>
+                </div>
+                <div className="lvl1-eval-rubric-content">
+                  <h4 className="lvl1-eval-rubric-title">Evaluator Rubric Note</h4>
+                  <p className="lvl1-eval-rubric-quote">
+                    “Excellent articulation of technical problem solving and leadership with quantifiable project outcomes. Level 02 is now unlocked on your Journey map.”
+                  </p>
+                </div>
+              </div>
+
+              {/* Continue to Level 2 CTA Button */}
               <button
-                className="lvl1-btn-cta lvl1-btn-cta--gold"
+                className="lvl1-eval-continue-btn"
                 onClick={handleContinueToLevel2}
               >
-                Continue to Level 2 →
+                <span className="lvl1-eval-btn-arrow-circle">➔</span>
+                <span className="lvl1-eval-btn-text">Continue to Level 2</span>
+                <span className="lvl1-eval-btn-burst">✨</span>
               </button>
-            </footer>
+            </div>
+
+            {/* 2. Next Step Card */}
+            <div
+              className="lvl1-eval-next-step-card"
+              onClick={handleContinueToLevel2}
+              role="button"
+              tabIndex={0}
+            >
+              <div className="lvl1-next-step-icon">
+                <svg
+                  width="44"
+                  height="44"
+                  viewBox="0 0 48 48"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="lvl1-map-svg"
+                >
+                  <defs>
+                    <linearGradient id="mapCardGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#E8FDF5" />
+                      <stop offset="100%" stopColor="#D1FAE5" />
+                    </linearGradient>
+                    <linearGradient id="mapPathGrad" x1="8" y1="40" x2="40" y2="10" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#6EE7B7" />
+                      <stop offset="100%" stopColor="#A7F3D0" />
+                    </linearGradient>
+                    <linearGradient id="pinGrad" x1="24" y1="8" x2="36" y2="28" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#00E676" />
+                      <stop offset="50%" stopColor="#00C853" />
+                      <stop offset="100%" stopColor="#00897B" />
+                    </linearGradient>
+                    <filter id="pinShadow" x="14" y="8" width="24" height="28" filterUnits="userSpaceOnUse">
+                      <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#00897B" floodOpacity="0.25" />
+                    </filter>
+                  </defs>
+
+                  <rect width="48" height="48" rx="14" fill="url(#mapCardGrad)" />
+
+                  <path
+                    d="M 6 38 C 14 34, 16 26, 24 26 C 32 26, 34 14, 42 12"
+                    stroke="url(#mapPathGrad)"
+                    strokeWidth="10"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                  <path
+                    d="M 6 38 C 14 34, 16 26, 24 26 C 32 26, 34 14, 42 12"
+                    stroke="#FFFFFF"
+                    strokeWidth="2.5"
+                    strokeDasharray="4 3"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+
+                  <g filter="url(#pinShadow)">
+                    <path
+                      d="M26 9 C22.13 9 19 12.13 19 16 C19 21.25 26 28 26 28 C26 28 33 21.25 33 16 C33 12.13 29.87 9 26 9 Z"
+                      fill="url(#pinGrad)"
+                    />
+                    <circle cx="26" cy="15.5" r="3" fill="#FFFFFF" />
+                  </g>
+                </svg>
+              </div>
+              <div className="lvl1-next-step-info">
+                <span className="lvl1-next-step-kicker">Next Step</span>
+                <h4 className="lvl1-next-step-title">Level 2: Career Exploration</h4>
+                <p className="lvl1-next-step-desc">
+                  Discover career paths, job roles and skills that match your interests.
+                </p>
+              </div>
+              <div className="lvl1-next-step-chevron">
+                <Icon name="chevron-right" size={20} strokeWidth={2.4} />
+              </div>
+            </div>
+
+            {/* 3. Inspirational Quote Carousel */}
+            <div className="lvl1-eval-quote-carousel">
+              <div className="lvl1-eval-quote-row">
+                <span className="lvl1-quote-mark">“</span>
+                <p className="lvl1-quote-text">You're one step closer to your dreams!</p>
+                <span className="lvl1-quote-mark">”</span>
+              </div>
+              <div className="lvl1-carousel-dots">
+                <span className="lvl1-carousel-dot is-active" />
+                <span className="lvl1-carousel-dot" />
+                <span className="lvl1-carousel-dot" />
+              </div>
+            </div>
           </div>
         )}
       </div>
     );
   };
+
+  const isEvalStage =
+    currentStage === 'eval_pending' ||
+    currentStage === 'eval_revision' ||
+    currentStage === 'eval_approved';
 
   return (
     <div className="lvl1-screen-container">
@@ -1444,7 +1633,7 @@ export function Level1DetailScreen() {
             className="lvl1-nav-back-btn"
             onClick={() => {
               sound.playTap();
-              if (currentStage === 'overview') {
+              if (currentStage === 'overview' || isEvalStage) {
                 navigate('/journey');
               } else {
                 setCurrentStage('overview');
@@ -1457,10 +1646,12 @@ export function Level1DetailScreen() {
 
           <div className="lvl1-nav-titles">
             <span className="lvl1-nav-kicker">
-              {currentStepNum > 0 ? `LEVEL 01 · STEP ${currentStepNum} OF 6` : 'CAREER CLARITY'}
+              {isEvalStage ? 'CAREER CLARITY' : currentStepNum > 0 ? `LEVEL 01 · STEP ${currentStepNum} OF 6` : 'CAREER CLARITY'}
             </span>
             <h1 className="lvl1-nav-title">
-              {currentStage === 'overview'
+              {isEvalStage
+                ? 'Evaluation Status'
+                : currentStage === 'overview'
                 ? 'Level 01 · Discovering Myself'
                 : currentStage === 'objectives'
                 ? 'Learning Objectives'
@@ -1485,12 +1676,16 @@ export function Level1DetailScreen() {
             onClick={() => setShowDevBar(!showDevBar)}
             title="Switch Screen / State Tester"
           >
-            🧪 State
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: 4 }}>
+              <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M5 5.5H11M5 8H11M5 10.5H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            State
           </button>
         </div>
 
-        {/* Segmented Step Indicator */}
-        {currentStepNum > 0 && (
+        {/* Segmented Step Indicator - Only show during learning steps 1..6 */}
+        {currentStepNum > 0 && !isEvalStage && (
           <div className="lvl1-nav-segments">
             {[1, 2, 3, 4, 5, 6].map((st) => (
               <div
