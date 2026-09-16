@@ -399,16 +399,17 @@
 .journey-clean-summit__trophy {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: -10px;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
   z-index: 5;
 }
 
 .journey-summit-book-icon {
-  width: 72px;
-  height: 64px;
+  width: 92px;
+  height: 82px;
   object-fit: contain;
-  filter: drop-shadow(0 8px 20px rgba(245, 158, 11, 0.6));
+  filter: drop-shadow(0 10px 24px rgba(245, 158, 11, 0.65));
   animation: summit-book-float 3s infinite ease-in-out;
   display: block;
   user-select: none;
@@ -420,12 +421,12 @@
     transform: translateY(0) rotate(0deg) scale(1);
   }
   50% {
-    transform: translateY(-5px) rotate(1.5deg) scale(1.05);
+    transform: translateY(-6px) rotate(1.5deg) scale(1.05);
   }
 }
 
 .journey-clean-summit__sparkle {
-  font-size: 16px;
+  font-size: 18px;
   color: #fbbf24;
   animation: sparkle-pulse 2s infinite ease-in-out alternate;
 }
@@ -437,69 +438,17 @@
   }
   100% {
     opacity: 1;
-    transform: scale(1.2);
+    transform: scale(1.25);
   }
 }
 
 .journey-passport__book-crest {
-  width: 76px;
-  height: 68px;
+  width: 84px;
+  height: 76px;
   object-fit: contain;
-  margin: 0 auto 8px;
+  margin: 0 auto 10px;
   display: block;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.35));
-}
-
-/* 3D Golden Summit Podium */
-.journey-summit-podium {
-  position: relative;
-  width: 96px;
-  height: 48px;
-  margin-bottom: 8px;
-}
-
-.journey-summit-top-face {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 96px;
-  height: 28px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 30%, #fef08a 0%, #f59e0b 70%, #d97706 100%);
-  border: 2px solid #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-}
-
-.journey-summit-crown {
-  font-size: 14px;
-  margin-top: -2px;
-}
-
-.journey-summit-body {
-  position: absolute;
-  top: 14px;
-  left: 0;
-  width: 96px;
-  height: 32px;
-  border-radius: 0 0 48px 48px / 0 0 20px 20px;
-  background: linear-gradient(180deg, #d97706 0%, #b45309 60%, #78350f 100%);
-  box-shadow: 0 8px 18px rgba(180, 83, 9, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.journey-summit-title {
-  font-family: var(--font-brand, 'Outfit', 'Inter', system-ui, sans-serif);
-  font-size: 11px;
-  font-weight: 900;
-  color: #ffffff;
-  letter-spacing: 1px;
-  margin-top: 4px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.35));
 }
 
 /* Summit Card */

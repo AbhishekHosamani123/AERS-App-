@@ -55,7 +55,7 @@
 /* ================= PLAYER PIN (YOU ARE HERE) ================= */
 .podium-node__player-pin {
   position: absolute;
-  top: -46px;
+  top: -54px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -127,8 +127,8 @@
 /* ================= 3D BOOK VISUAL CONTAINER ================= */
 .podium-book-wrapper {
   position: relative;
-  width: 64px;
-  height: 56px;
+  width: 80px;
+  height: 68px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -136,10 +136,15 @@
   margin-top: 4px;
 }
 
-/* 3D Book Graphic */
+.podium-node.is-current .podium-book-wrapper {
+  width: 98px;
+  height: 80px;
+}
+
+/* 3D Book Graphic (Closed / Milestone / Locked Books) */
 .podium-book-img {
-  width: 58px;
-  height: 50px;
+  width: 72px;
+  height: 62px;
   object-fit: contain;
   display: block;
   z-index: 5;
@@ -147,14 +152,16 @@
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
   user-select: none;
   -webkit-user-drag: none;
+  opacity: 1;
 }
 
-/* Open Book current level specific sizing and styling */
+/* Open Book current level specific sizing — larger & more prominent */
 .podium-book-img.is-current-book {
-  width: 66px;
-  height: 56px;
-  filter: drop-shadow(0 8px 18px rgba(0, 102, 245, 0.45));
+  width: 94px;
+  height: 76px;
+  filter: drop-shadow(0 10px 22px rgba(0, 102, 245, 0.5));
   animation: current-book-bounce 2.2s infinite ease-in-out;
+  opacity: 1;
 }
 
 @keyframes current-book-bounce {
@@ -162,21 +169,21 @@
     transform: translateY(0) scale(1);
   }
   50% {
-    transform: translateY(-4px) scale(1.05);
+    transform: translateY(-4px) scale(1.04);
   }
 }
 
 /* Floating Level Number Pill Badge on Top-Right of Book */
 .podium-book-badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: -4px;
+  right: -4px;
   z-index: 12;
   background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
   color: #ffffff;
   border: 1.5px solid #ffffff;
   border-radius: 999px;
-  padding: 1.5px 6px;
+  padding: 2px 6.5px;
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.2px;
@@ -209,6 +216,8 @@
   background: linear-gradient(135deg, #0066f5 0%, #0284c7 100%);
   border-color: #ffffff;
   box-shadow: 0 3px 10px rgba(0, 102, 245, 0.5);
+  top: -6px;
+  right: -2px;
 }
 
 .podium-node.is-milestone .podium-book-badge {
@@ -234,23 +243,22 @@
   filter: drop-shadow(0 6px 14px rgba(5, 150, 105, 0.35));
 }
 
-/* Locked frosted opacity */
-.podium-node.is-locked {
-  opacity: 0.85;
-}
-
-.podium-node.is-locked:hover {
-  opacity: 0.98;
+/* All nodes have 100% full opacity */
+.podium-node,
+.podium-node.is-locked,
+.podium-node.is-completed,
+.podium-node.is-current {
+  opacity: 1 !important;
 }
 
 /* Diffuse Ground Shadow */
 .podium-ground-shadow {
   position: absolute;
-  bottom: -4px;
+  bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
-  width: 58px;
-  height: 10px;
+  width: 72px;
+  height: 12px;
   border-radius: 50%;
   background: rgba(15, 23, 42, 0.22);
   filter: blur(4px);
@@ -258,9 +266,15 @@
   z-index: 1;
 }
 
+.podium-node.is-current .podium-ground-shadow {
+  width: 90px;
+  height: 14px;
+  bottom: -6px;
+}
+
 /* Hover and active dynamics */
 .podium-node:hover .podium-book-img {
-  transform: scale(1.1) translateY(-2px);
+  transform: scale(1.08) translateY(-2px);
 }
 
 .podium-node:active .podium-book-img {

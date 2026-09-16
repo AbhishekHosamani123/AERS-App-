@@ -331,21 +331,11 @@ export function JourneyScreen() {
               <span className="journey-clean-summit__sparkle">✨</span>
               <img
                 src={lastBookImg}
-                alt="Golden Sacred Passport Book"
+                alt="Golden Sacred Employability Passport Book"
                 className="journey-summit-book-icon"
                 draggable={false}
               />
               <span className="journey-clean-summit__sparkle">✨</span>
-            </div>
-
-            {/* Grand Golden 3D Podium */}
-            <div className="journey-summit-podium">
-              <div className="journey-summit-top-face">
-                <span className="journey-summit-crown">👑</span>
-              </div>
-              <div className="journey-summit-body">
-                <span className="journey-summit-title">PASSPORT</span>
-              </div>
             </div>
 
             <div className="journey-summit-card">
