@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AERS_LEVELS, AERS_MODULES } from '../../data/journeyData';
 import './LearningPathCTA.css';
 
-const STORAGE_KEY = 'aers_journey_progress_v4';
+const STORAGE_KEY = 'aers_journey_progress_v5';
 
 interface ProgressState {
   completedLevels: number[];
@@ -14,9 +14,9 @@ interface ProgressState {
 }
 
 const DEFAULT_STATE: ProgressState = {
-  completedLevels: [1],
-  levelStars: { 1: 3 },
-  currentLevel: 2,
+  completedLevels: [],
+  levelStars: {},
+  currentLevel: 1,
   passportUnlocked: false,
   learnerName: 'Alex Morgan',
 };
@@ -38,7 +38,7 @@ export function LearningPathCTA() {
 
   // Find active level data
   const currentLevel = useMemo(() => {
-    return AERS_LEVELS.find((l) => l.id === progress.currentLevel) || AERS_LEVELS[1] || AERS_LEVELS[0];
+    return AERS_LEVELS.find((l) => l.id === progress.currentLevel) || AERS_LEVELS[0];
   }, [progress.currentLevel]);
 
   // Find active module data
@@ -47,9 +47,9 @@ export function LearningPathCTA() {
   }, [currentLevel.moduleId]);
 
   // Calculate stats
-  const totalStars = Object.values(progress.levelStars || {}).reduce((acc, s) => acc + s, 0) || 3;
-  const completedCount = progress.completedLevels ? progress.completedLevels.length : 1;
-  const progressPct = Math.round((completedCount / 20) * 100) || 5;
+  const totalStars = Object.values(progress.levelStars || {}).reduce((acc, s) => acc + s, 0);
+  const completedCount = progress.completedLevels ? progress.completedLevels.length : 0;
+  const progressPct = Math.round((completedCount / 20) * 100);
 
   function handleResume() {
     if (currentLevel.id === 1) {
