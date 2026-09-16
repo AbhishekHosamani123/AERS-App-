@@ -24,12 +24,12 @@ interface ProgressState {
   learnerName: string;
 }
 
-const STORAGE_KEY = 'aers_journey_progress_v5';
+const STORAGE_KEY = 'aers_journey_progress_v4';
 
 const DEFAULT_STATE: ProgressState = {
-  completedLevels: [],
-  levelStars: {},
-  currentLevel: 1,
+  completedLevels: [1],
+  levelStars: { 1: 3 },
+  currentLevel: 2,
   passportUnlocked: false,
   soundEnabled: true,
   learnerName: 'Alex Morgan',

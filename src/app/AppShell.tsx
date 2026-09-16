@@ -19,7 +19,7 @@ export function AppShell() {
   const location = useLocation();
   const { pathname } = location;
 
-  const isTabRoute = TAB_ROUTES.includes(pathname);
+  const isTabRoute = TAB_ROUTES.some((r) => pathname.startsWith(r));
   const isBookingFlow = pathname.startsWith('/booking') || pathname.startsWith('/search');
 
   /* Scroll to top on route change (Android-style new-screen behavior) */
