@@ -123,6 +123,12 @@ export function JourneyScreen() {
     }
 
     sound.playTap();
+
+    if (level.id === 1) {
+      navigate('/journey/level-1');
+      return;
+    }
+
     setActiveLevel(level);
     setSelectedOption(null);
     setHasAnswered(false);
@@ -695,7 +701,7 @@ export function JourneyScreen() {
                 className="journey-btn journey-btn--primary"
                 onClick={() => {
                   setShowStartModal(false);
-                  handleLevelClick(AERS_LEVELS[0]);
+                  navigate('/journey/level-1');
                 }}
               >
                 Start Level 01 Now ➔

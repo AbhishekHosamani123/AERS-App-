@@ -52,7 +52,11 @@ export function LearningPathCTA() {
   const progressPct = Math.round((completedCount / 20) * 100) || 5;
 
   function handleResume() {
-    navigate('/journey');
+    if (currentLevel.id === 1) {
+      navigate('/journey/level-1');
+    } else {
+      navigate('/journey');
+    }
   }
 
   return (

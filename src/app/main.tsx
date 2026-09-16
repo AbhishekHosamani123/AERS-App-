@@ -18,6 +18,7 @@ import { LoginScreen } from '../screens/LoginScreen';
 import { OtpScreen } from '../screens/OtpScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { NotificationsScreen } from '../screens/NotificationsScreen';
+import { Level1DetailScreen } from '../screens/Level1DetailScreen';
 
 /* --font-family token used by global.css */
 import './fonts.css';
@@ -37,6 +38,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/ticket/:bookingId" element={<TicketScreen />} />
             <Route path="/trips" element={<TripsScreen />} />
             <Route path="/journey" element={<TripsScreen />} />
+            <Route path="/journey/level-1" element={<Level1DetailScreen />} />
+            <Route path="/journey/level/1" element={<Level1DetailScreen />} />
             <Route path="/offers" element={<OffersScreen />} />
             <Route path="/help" element={<HelpScreen />} />
             <Route path="/account" element={<AccountScreen />} />
