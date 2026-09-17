@@ -186,7 +186,7 @@ export function OffersScreen() {
           <h2 className="offers__rate-title">Rate Us</h2>
           <div className="offers__rate-body">
             <div>
-              <strong>Enjoying BusGo?</strong>
+              <strong>Enjoying AERS?</strong>
               <p>Share your experience with us and help spread the word!</p>
             </div>
             <Icon name="star-filled" size={34} className="offers__rate-star" />

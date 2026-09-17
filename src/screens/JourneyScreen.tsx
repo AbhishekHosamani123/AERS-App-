@@ -64,6 +64,11 @@ export function JourneyScreen() {
   const [confettiActive, setConfettiActive] = useState(false);
   const [showDevMenu, setShowDevMenu] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  // UX: transient feedback when tapping a locked level
+  const [unlockToast, setUnlockToast] = useState<string | null>(null);
+  const [shakeNodeId, setShakeNodeId] = useState<number | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const shakeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -79,23 +84,39 @@ export function JourneyScreen() {
   }, [progress.levelStars]);
 
   const progressPercent = useMemo(() => {
-    const totalPossible = 20;
+    const totalPossible = AERS_LEVELS.length;
     const completedCount = progress.completedLevels.length;
     return Math.min(100, Math.round((completedCount / totalPossible) * 100));
   }, [progress.completedLevels]);
 
+  /* Walk up from the level node to find the element that ACTUALLY scrolls.
+     The screen is mounted inside AppShell's wrapper div, so the height chain
+     can break and .journey-scroll may expand instead of scrolling — in that
+     case #app-scroll (or another ancestor) is the real scroller. */
+  const findScrollParent = (el: HTMLElement): HTMLElement | null => {
+    let node: HTMLElement | null = el.parentElement;
+    while (node) {
+      const style = getComputedStyle(node);
+      const isScrollable = /(auto|scroll)/.test(style.overflowY);
+      if (isScrollable && node.scrollHeight > node.clientHeight + 1) return node;
+      node = node.parentElement;
+    }
+    return null;
+  };
+
   const scrollToLevel = (levelId: number, smooth = true) => {
     const nodeEl = document.getElementById(`level-node-${levelId}`);
-    if (nodeEl && scrollRef.current) {
-      const container = scrollRef.current;
-      const containerHeight = container.clientHeight;
-      const nodeTop = nodeEl.offsetTop;
-      const targetScroll = Math.max(0, nodeTop - containerHeight / 2 + 20);
-      container.scrollTo({
-        top: targetScroll,
-        behavior: smooth ? 'smooth' : 'auto',
-      });
-    }
+    if (!nodeEl) return;
+    const container = findScrollParent(nodeEl) ?? scrollRef.current;
+    if (!container) return;
+    // Node position relative to the scroller's content (layout-safe even mid-animation)
+    const nodeTopInScroller =
+      nodeEl.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+    const targetScroll = Math.max(0, nodeTopInScroller - container.clientHeight / 2 + 20);
+    container.scrollTo({
+      top: targetScroll,
+      behavior: smooth ? 'smooth' : 'auto',
+    });
   };
 
   // Initial scroll: Automatically center on the learner's CURRENT learning stage on switch
@@ -106,9 +127,14 @@ export function JourneyScreen() {
     const t2 = setTimeout(() => {
       scrollToLevel(progress.currentLevel, true);
     }, 220);
+    // Late retry: cover slow layout/image loading that shifts node positions
+    const t3 = setTimeout(() => {
+      scrollToLevel(progress.currentLevel, true);
+    }, 700);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
+      clearTimeout(t3);
     };
   }, [progress.currentLevel]);
 
@@ -119,6 +145,14 @@ export function JourneyScreen() {
 
     if (isLocked) {
       sound.playLocked();
+      // UX: explain WHY the level is locked + shake the node for visible feedback
+      const requiredLevel = Math.max(1, level.id - 1);
+      setUnlockToast(`🔒 Locked — Complete Level ${requiredLevel.toString().padStart(2, '0')} to unlock`);
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+      toastTimerRef.current = setTimeout(() => setUnlockToast(null), 2400);
+      setShakeNodeId(level.id);
+      if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
+      shakeTimerRef.current = setTimeout(() => setShakeNodeId(null), 500);
       return;
     }
 
@@ -164,8 +198,12 @@ export function JourneyScreen() {
         ...prev.levelStars,
         [activeLevel.id]: Math.max(prev.levelStars[activeLevel.id] || 0, earnedStars),
       };
-      const nextLevel = Math.min(20, Math.max(prev.currentLevel, activeLevel.id + 1));
-      const passportUnlocked = nextCompleted.length >= 20 || activeLevel.id === 20;
+      const nextLevel = Math.min(
+        AERS_LEVELS.length,
+        Math.max(prev.currentLevel, activeLevel.id + 1)
+      );
+      const passportUnlocked =
+        nextCompleted.length >= AERS_LEVELS.length || activeLevel.id === AERS_LEVELS.length;
 
       return {
         ...prev,
@@ -193,7 +231,7 @@ export function JourneyScreen() {
     setProgress({
       completedLevels: allIds,
       levelStars: allStars,
-      currentLevel: 20,
+      currentLevel: AERS_LEVELS.length,
       passportUnlocked: true,
       soundEnabled: progress.soundEnabled,
       learnerName: progress.learnerName,
@@ -237,9 +275,11 @@ export function JourneyScreen() {
           <div className="journey-hud__stats">
             {/* Stars Pill */}
             <div className="journey-hud__pill journey-hud__pill--stars" title="Total Stars Earned">
-              <span className="journey-hud__star-icon">⭐</span>
+              <svg className="journey-hud__star-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l2.9 6.26 6.85.72-5.1 4.6 1.43 6.72L12 16.9l-6.08 3.4 1.43-6.72-5.1-4.6 6.85-.72L12 2z" />
+              </svg>
               <span className="journey-hud__pill-val">{totalStars}</span>
-              <span className="journey-hud__pill-max">/60</span>
+              <span className="journey-hud__pill-max">/{AERS_LEVELS.length * 3}</span>
             </div>
 
             {/* Level Pill */}
@@ -247,8 +287,13 @@ export function JourneyScreen() {
               className="journey-hud__pill journey-hud__pill--lvl"
               onClick={() => scrollToLevel(progress.currentLevel)}
               title="Jump to current active level"
+              aria-label={`Jump to current level ${progress.currentLevel}`}
             >
-              <span className="journey-hud__lvl-icon">🎯</span>
+              <svg className="journey-hud__lvl-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="4.5" />
+                <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
+              </svg>
               <span className="journey-hud__pill-val">Lvl {progress.currentLevel}</span>
             </button>
 
@@ -257,9 +302,21 @@ export function JourneyScreen() {
               className={`journey-hud__icon-btn ${progress.soundEnabled ? 'is-active' : ''}`}
               onClick={toggleSound}
               aria-label="Toggle game sounds"
+              aria-pressed={progress.soundEnabled}
               title={progress.soundEnabled ? 'Mute Audio' : 'Enable Audio'}
             >
-              {progress.soundEnabled ? '🔊' : '🔇'}
+              {progress.soundEnabled ? (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" stroke="none" />
+                  <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+                  <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+                </svg>
+              ) : (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" stroke="none" />
+                  <path d="m16 9 5 5M21 9l-5 5" />
+                </svg>
+              )}
             </button>
 
             {/* Dev Controls */}
@@ -268,14 +325,29 @@ export function JourneyScreen() {
               onClick={() => setShowDevMenu(!showDevMenu)}
               title="Demo Actions"
               aria-label="Demo options"
+              aria-expanded={showDevMenu}
             >
-              ⚙️
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="3.2" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
             </button>
           </div>
         </div>
 
-        {/* Multi-color Gradient Progress Bar */}
-        <div className="journey-hud__progress-track" title={`${progressPercent}% Journey Completed`}>
+        {/* Progress bar with explicit completion semantics */}
+        <div className="journey-hud__progress-meta">
+          <span>Career Map Progress</span>
+          <strong>{progressPercent}% Complete</strong>
+        </div>
+        <div
+          className="journey-hud__progress-track"
+          role="progressbar"
+          aria-valuenow={progressPercent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Overall journey completion"
+        >
           <div className="journey-hud__progress-fill" style={{ width: `${progressPercent}%` }} />
         </div>
       </header>
@@ -286,11 +358,11 @@ export function JourneyScreen() {
           <div className="journey-devmodal" onClick={(e) => e.stopPropagation()}>
             <h3 className="journey-devmodal__title">Demo / Progression Controls</h3>
             <p className="journey-devmodal__desc">
-              Quickly test unlocking all 20 levels or reset progression to Level 1.
+              Quickly test unlocking all 24 levels or reset progression to Level 1.
             </p>
             <div className="journey-devmodal__actions">
               <button className="journey-btn journey-btn--primary" onClick={unlockAllDemo}>
-                ⚡ Unlock All 20 Levels & Passport
+                ⚡ Unlock All 24 Levels & Passport
               </button>
               <button className="journey-btn journey-btn--secondary" onClick={resetProgressDemo}>
                 🔄 Reset to Level 1
@@ -417,6 +489,7 @@ export function JourneyScreen() {
                 level={lvl}
                 status={status}
                 stars={stars}
+                isShaking={shakeNodeId === lvl.id}
                 onClick={() => handleLevelClick(lvl)}
               />
             );
@@ -425,7 +498,7 @@ export function JourneyScreen() {
           {/* ================= 5. START GATE (BOTTOM) ================= */}
           <div
             className="journey-clean-start"
-            style={{ left: '215px', top: '3240px' }}
+            style={{ left: '215px', top: '3830px' }}
             onClick={() => setShowStartModal(true)}
             role="button"
             tabIndex={0}
@@ -606,11 +679,11 @@ export function JourneyScreen() {
 
                 <div className="journey-passport__stats-grid">
                   <div className="journey-passport__stat-card">
-                    <span className="journey-passport__stat-val">{progress.completedLevels.length}/20</span>
+                    <span className="journey-passport__stat-val">{progress.completedLevels.length}/{AERS_LEVELS.length}</span>
                     <span className="journey-passport__stat-lbl">Levels Completed</span>
                   </div>
                   <div className="journey-passport__stat-card">
-                    <span className="journey-passport__stat-val">{totalStars}/60</span>
+                    <span className="journey-passport__stat-val">{totalStars}/{AERS_LEVELS.length * 3}</span>
                     <span className="journey-passport__stat-lbl">Stars Earned</span>
                   </div>
                   <div className="journey-passport__stat-card">
@@ -692,7 +765,7 @@ export function JourneyScreen() {
                 </div>
                 <div className="journey-start-step">
                   <span className="journey-start-step__icon">3️⃣</span>
-                  <span>Climb through all 5 modules and claim your verified Passport at the top!</span>
+                  <span>Climb through all 6 modules and claim your verified Passport at the top!</span>
                 </div>
               </div>
             </div>
@@ -737,6 +810,13 @@ export function JourneyScreen() {
               </button>
             </footer>
           </div>
+        </div>
+      )}
+
+      {/* ================= LOCKED LEVEL FEEDBACK TOAST ================= */}
+      {unlockToast && (
+        <div className="journey-unlock-toast" role="status" aria-live="polite">
+          {unlockToast}
         </div>
       )}
 

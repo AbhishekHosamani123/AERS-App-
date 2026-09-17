@@ -25,8 +25,8 @@ export const BRAND = {
 /** Neutral copy shown across the app — replace with your own voice. */
 export const BRAND_COPY = {
   supportPhone: '+91 80 4000 0000',
-  supportEmail: 'support@busgo.example',
+  supportEmail: 'support@aers.in',
   demoNotice: 'Prototype — payments are simulated, no real money moves.',
   aboutText:
-    'BusGo is an educational rebuild of a bus-ticketing app experience. All data is fictional and generated locally.',
+    'AERS is an educational learning and preparation platform.',
 } as const;

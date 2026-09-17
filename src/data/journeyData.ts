@@ -32,7 +32,7 @@ export interface ModuleData {
 }
 
 export const CANVAS_WIDTH = 430;
-export const CANVAS_HEIGHT = 3360;
+export const CANVAS_HEIGHT = 3950;
 
 export const AERS_MODULES: ModuleData[] = [
   {
@@ -42,7 +42,7 @@ export const AERS_MODULES: ModuleData[] = [
     motto: 'Discover • Plan • Grow',
     icon: 'compass',
     badgeColor: '#0066F5',
-    pxY: 3120,
+    pxY: 3710,
   },
   {
     id: 2,
@@ -51,7 +51,7 @@ export const AERS_MODULES: ModuleData[] = [
     motto: 'Show Your Skills to the World',
     icon: 'document',
     badgeColor: '#0066F5',
-    pxY: 2550,
+    pxY: 3140,
   },
   {
     id: 3,
@@ -60,7 +60,7 @@ export const AERS_MODULES: ModuleData[] = [
     motto: 'Communicate with Confidence',
     icon: 'chat',
     badgeColor: '#0066F5',
-    pxY: 1970,
+    pxY: 2560,
   },
   {
     id: 4,
@@ -69,7 +69,7 @@ export const AERS_MODULES: ModuleData[] = [
     motto: 'Prepare • Perform • Get Placed',
     icon: 'target',
     badgeColor: '#0066F5',
-    pxY: 1390,
+    pxY: 1980,
   },
   {
     id: 5,
@@ -77,6 +77,15 @@ export const AERS_MODULES: ModuleData[] = [
     range: 'Levels 17–20',
     motto: 'Succeed • Build • Grow',
     icon: 'briefcase',
+    badgeColor: '#0066F5',
+    pxY: 1400,
+  },
+  {
+    id: 6,
+    name: 'Career Launchpad',
+    range: 'Levels 21–24',
+    motto: 'Launch • Lead • Succeed',
+    icon: 'compass',
     badgeColor: '#0066F5',
     pxY: 810,
   },
@@ -94,7 +103,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Self-assessment & priorities',
     iconName: 'search',
     pxX: 95,
-    pxY: 3020,
+    pxY: 3610,
     objective: 'Discover your core interests, personality traits, and internal drivers to establish a foundation for career success.',
     skills: ['Self-Assessment', 'Values Mapping', 'Interest Profiling'],
     challenge: {
@@ -120,7 +129,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Signature skills & strengths',
     iconName: 'book',
     pxX: 215,
-    pxY: 2900,
+    pxY: 3490,
     objective: 'Identify your signature technical and soft skills through evidence-based reflection on past achievements.',
     skills: ['Strength Identification', 'Skill Categorization', 'Feedback Synthesis'],
     challenge: {
@@ -146,7 +155,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Industry roles & market trends',
     iconName: 'compass',
     pxX: 335,
-    pxY: 2780,
+    pxY: 3370,
     objective: 'Research industry domains, job families, daily job responsibilities, and growth trajectories.',
     skills: ['Industry Research', 'Job Role Mapping', 'Market Trend Analysis'],
     challenge: {
@@ -173,7 +182,7 @@ export const AERS_LEVELS: LevelData[] = [
     iconName: 'trend',
     isMilestone: true,
     pxX: 335,
-    pxY: 2660,
+    pxY: 3250,
     objective: 'Formulate a structured 1-to-3 year milestone roadmap linking skill acquisition, portfolio projects, and target companies.',
     skills: ['SMART Goal Setting', 'Gap Analysis', 'Action Roadmapping'],
     challenge: {
@@ -201,7 +210,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Evidence & metrics tracking',
     iconName: 'users',
     pxX: 215,
-    pxY: 2440,
+    pxY: 3030,
     objective: 'Compile comprehensive documentation of academic projects, internships, leadership roles, and hackathons.',
     skills: ['Evidence Gathering', 'Metrics Tracking', 'Portfolio Archiving'],
     challenge: {
@@ -227,7 +236,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'STAR narrative & impact',
     iconName: 'chart',
     pxX: 95,
-    pxY: 2320,
+    pxY: 2910,
     objective: 'Craft compelling narrative hooks and bullet points that demonstrate initiative, problem-solving, and adaptability.',
     skills: ['Action Verb Mastery', 'STAR Narrative Format', 'Concise Impact Writing'],
     challenge: {
@@ -253,7 +262,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'ATS-compliant layout',
     iconName: 'document',
     pxX: 95,
-    pxY: 2200,
+    pxY: 2790,
     objective: 'Structure a clean, ATS-compliant 1-page résumé layout highlighting relevant qualifications in standard sections.',
     skills: ['ATS Optimization', 'Visual Hierarchy', 'Section Layout Architecture'],
     challenge: {
@@ -280,7 +289,7 @@ export const AERS_LEVELS: LevelData[] = [
     iconName: 'shield',
     isMilestone: true,
     pxX: 215,
-    pxY: 2080,
+    pxY: 2670,
     objective: 'Perform rigorous proofreading, grammar checks, keyword alignment, and peer review audits.',
     skills: ['Quality Assurance', 'Keyword Matching', 'Proofreading & Verification'],
     challenge: {
@@ -308,7 +317,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: '60s elevator pitch',
     iconName: 'chat',
     pxX: 335,
-    pxY: 1860,
+    pxY: 2450,
     objective: 'Deliver an engaging 60-to-90 second professional elevator pitch highlighting your background, passions, and value.',
     skills: ['Elevator Pitching', 'First Impressions', 'Value Proposition Delivery'],
     challenge: {
@@ -334,7 +343,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Active listening & empathy',
     iconName: 'users',
     pxX: 335,
-    pxY: 1740,
+    pxY: 2330,
     objective: 'Practice active listening, empathetic questioning, non-verbal cues, and clarity in collaborative dialogue.',
     skills: ['Active Listening', 'Clarifying Questions', 'Non-Verbal Attunement'],
     challenge: {
@@ -360,7 +369,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Email & status reporting',
     iconName: 'document',
     pxX: 215,
-    pxY: 1620,
+    pxY: 2210,
     objective: 'Master professional workplace communication, email etiquette, clear status reports, and articulate tone.',
     skills: ['Business Writing', 'Tone Modulation', 'Concise Articulation'],
     challenge: {
@@ -387,7 +396,7 @@ export const AERS_LEVELS: LevelData[] = [
     iconName: 'trend',
     isMilestone: true,
     pxX: 95,
-    pxY: 1500,
+    pxY: 2090,
     objective: 'Deliver engaging technical presentations and lead productive group discussions with poise and confidence.',
     skills: ['Presentation Delivery', 'Audience Engagement', 'Handling Q&A'],
     challenge: {
@@ -415,7 +424,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Process mapping & rubrics',
     iconName: 'target',
     pxX: 95,
-    pxY: 1280,
+    pxY: 1870,
     objective: 'Demystify interview rounds (Screening, Technical, Behavioral, Managerial) and evaluator rubrics.',
     skills: ['Interview Process Mapping', 'Evaluation Rubrics', 'Company Research'],
     challenge: {
@@ -441,7 +450,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Behavioral & self-awareness',
     iconName: 'users',
     pxX: 215,
-    pxY: 1160,
+    pxY: 1750,
     objective: 'Confidently answer core questions on strengths, weaknesses, conflict resolution, and career aspirations.',
     skills: ['Behavioral Answering', 'Self-Awareness', 'Conflict Resolution Frameworks'],
     challenge: {
@@ -467,7 +476,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Technical problem solving',
     iconName: 'search',
     pxX: 335,
-    pxY: 1040,
+    pxY: 1630,
     objective: 'Deconstruct domain-specific case studies, technical problem solving, system fundamentals, and architectural tradeoffs.',
     skills: ['Structured Problem Solving', 'Technical Articulation', 'Tradeoff Analysis'],
     challenge: {
@@ -494,7 +503,7 @@ export const AERS_LEVELS: LevelData[] = [
     iconName: 'shield',
     isMilestone: true,
     pxX: 335,
-    pxY: 920,
+    pxY: 1510,
     objective: 'Simulate high-pressure live interview conditions, receive peer/expert feedback, and calibrate readiness.',
     skills: ['Stress Management', 'Real-Time Performance', 'Feedback Implementation'],
     challenge: {
@@ -522,7 +531,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Ethics & organizational norms',
     iconName: 'compass',
     pxX: 215,
-    pxY: 700,
+    pxY: 1290,
     objective: 'Navigate organizational structures, corporate ethics, compliance policies, and stakeholder expectations.',
     skills: ['Workplace Norms', 'Ethics & Compliance', 'Organizational Awareness'],
     challenge: {
@@ -548,7 +557,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Accountability & reliability',
     iconName: 'trend',
     pxX: 95,
-    pxY: 580,
+    pxY: 1170,
     objective: 'Demonstrate accountability, proactive problem solving, time management, and extreme reliability on deliverables.',
     skills: ['Accountability', 'Time Management', 'Proactive Ownership'],
     challenge: {
@@ -574,7 +583,7 @@ export const AERS_LEVELS: LevelData[] = [
     subtitle: 'Cross-functional teamwork',
     iconName: 'users',
     pxX: 95,
-    pxY: 460,
+    pxY: 1050,
     objective: 'Collaborate seamlessly across cross-functional teams, resolve workplace disagreements, and foster an inclusive culture.',
     skills: ['Cross-Functional Collaboration', 'Empathy & Inclusivity', 'Constructive Disagreement'],
     challenge: {
@@ -601,7 +610,7 @@ export const AERS_LEVELS: LevelData[] = [
     iconName: 'book',
     isMilestone: true,
     pxX: 215,
-    pxY: 330,
+    pxY: 920,
     objective: 'Design a 30-60-90 day onboarding blueprint: Learn (Days 1-30), Align & Build (Days 31-60), Lead & Deliver (Days 61-90).',
     skills: ['Onboarding Strategy', 'Rapid Value Creation', 'Executive Presence'],
     challenge: {
@@ -615,6 +624,113 @@ export const AERS_LEVELS: LevelData[] = [
       ],
       correctIndex: 1,
       explanation: 'A strong first 30 days is focused on deep learning and relationship building, creating the launchpad for high-impact contributions in days 60 and 90.',
+    },
+  },
+
+  // ---------------- MODULE 6: Career Launchpad (Levels 21–24) ----------------
+  {
+    id: 21,
+    numberStr: '21',
+    moduleId: 6,
+    moduleName: 'Career Launchpad',
+    moduleRange: 'Levels 21–24',
+    title: 'Network & Grow',
+    subtitle: 'Professional networking',
+    iconName: 'users',
+    pxX: 215,
+    pxY: 700,
+    objective: 'Build and nurture a professional network: informational interviews, alumni outreach, and meaningful follow-ups that open career doors.',
+    skills: ['Professional Networking', 'Informational Interviews', 'Follow-Up Etiquette'],
+    challenge: {
+      scenario: 'You met an industry professional at a webinar who works at your dream company.',
+      question: 'What is the most effective next step to turn this contact into a career opportunity?',
+      options: [
+        'Immediately ask them to refer you for any open job.',
+        'Send a personalized thank-you note, share a genuine insight from their talk, and request a short informational chat.',
+        'Add them on every social platform and wait silently.',
+        'Send your resume daily until they respond.',
+      ],
+      correctIndex: 1,
+      explanation: 'Authentic, value-first networking builds trust. Thoughtful follow-ups convert brief contacts into mentors, referrals, and opportunities.',
+    },
+  },
+  {
+    id: 22,
+    numberStr: '22',
+    moduleId: 6,
+    moduleName: 'Career Launchpad',
+    moduleRange: 'Levels 21–24',
+    title: 'Personal Branding',
+    subtitle: 'LinkedIn & digital presence',
+    iconName: 'star',
+    pxX: 95,
+    pxY: 580,
+    objective: 'Craft a consistent personal brand: optimize your LinkedIn profile, showcase projects, and communicate your unique professional story.',
+    skills: ['Personal Branding', 'LinkedIn Optimization', 'Digital Footprint'],
+    challenge: {
+      scenario: 'A recruiter views your LinkedIn profile after you apply for a role.',
+      question: 'Which profile most strengthens your candidacy?',
+      options: [
+        'A blank profile with only your current job title.',
+        'A clear headline, results-focused summary, showcased projects with measurable outcomes, and recommendations from mentors.',
+        'A profile filled with inspirational quotes and no work details.',
+        'A private profile with no photo and no experience listed.',
+      ],
+      correctIndex: 1,
+      explanation: 'Recruiters look for evidence of impact. A results-oriented, well-documented profile validates your skills before the first conversation even happens.',
+    },
+  },
+  {
+    id: 23,
+    numberStr: '23',
+    moduleId: 6,
+    moduleName: 'Career Launchpad',
+    moduleRange: 'Levels 21–24',
+    title: 'Lifelong Learning',
+    subtitle: 'Up-skilling & growth mindset',
+    iconName: 'book',
+    pxX: 95,
+    pxY: 460,
+    objective: 'Adopt a growth mindset: build a personal learning plan, track emerging industry skills, and commit to continuous up-skilling.',
+    skills: ['Growth Mindset', 'Learning Agility', 'Industry Trend Tracking'],
+    challenge: {
+      scenario: 'Your industry is rapidly adopting a new technology that is not yet in your college curriculum.',
+      question: 'How should you respond to stay career-ready?',
+      options: [
+        'Wait for the college to add it to the syllabus.',
+        'Create a self-learning plan: take a beginner course, build a small project with it, and add the experience to your portfolio.',
+        'Assume the trend will pass and ignore it.',
+        'Memorize its definition for interviews without using it.',
+      ],
+      correctIndex: 1,
+      explanation: 'Careers compound through continuous learning. Proactive up-skilling with hands-on projects keeps you ahead of industry shifts.',
+    },
+  },
+  {
+    id: 24,
+    numberStr: '24',
+    moduleId: 6,
+    moduleName: 'Career Launchpad',
+    moduleRange: 'Levels 21–24',
+    title: 'Career Champion',
+    subtitle: 'Capstone — launch your career',
+    iconName: 'trophy',
+    isMilestone: true,
+    pxX: 215,
+    pxY: 330,
+    objective: 'Synthesize everything: finalize your career roadmap, portfolio, and story, and commit to a 12-month plan for your first role and beyond.',
+    skills: ['Career Roadmapping', 'Portfolio Curation', 'Goal Commitment'],
+    challenge: {
+      scenario: 'You have completed all 24 AERS levels and earned your Employability Passport.',
+      question: 'What is the smartest way to launch from here?',
+      options: [
+        'Apply randomly to hundreds of jobs with a generic resume.',
+        'Execute a focused 12-month plan: targeted applications, ongoing networking, portfolio updates, and monthly skill milestones.',
+        'Take a full year off before starting any applications.',
+        'Rely entirely on campus placement day with no preparation.',
+      ],
+      correctIndex: 1,
+      explanation: 'A structured launch plan compounds every skill you earned across the journey — turning your Employability Passport into real offers.',
     },
   },
 ];

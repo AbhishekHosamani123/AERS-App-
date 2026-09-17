@@ -118,6 +118,27 @@
   background: #dbeafe;
 }
 
+/* UX: dev/state tester as de-emphasized icon tool — matches back-btn metrics */
+.lvl1-tester-btn--icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lvl1-tester-btn--icon:hover {
+  background: #e2e8f0;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
 /* Segmented Progress Line */
 .lvl1-nav-segments {
   display: flex;
@@ -438,6 +459,28 @@
   gap: 10px;
 }
 
+/* ================= ROADMAP CONTINUITY (connector spine) ================= */
+.lvl1-roadmap-item {
+  position: relative;
+}
+
+/* Vertical spine linking step badges into one continuous learning path */
+.lvl1-roadmap-connector {
+  position: absolute;
+  left: 35px; /* center of the 34px number badge (14px card pad + 17px) */
+  top: 54px;
+  bottom: -10px; /* bridge the 10px gap to the next card */
+  width: 2px;
+  border-radius: 2px;
+  background: #e2e8f0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.lvl1-roadmap-connector.is-done {
+  background: linear-gradient(180deg, #10b981, #6ee7b7);
+}
+
 .lvl1-step-card-modern {
   display: flex;
   align-items: center;
@@ -446,7 +489,10 @@
   border: 1.5px solid #e2e8f0;
   border-radius: 16px;
   padding: 14px;
+  min-height: 68px;
   cursor: pointer;
+  position: relative;
+  z-index: 1; /* keeps card above the connector spine */
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -561,11 +607,13 @@
 .lvl1-step-desc {
   font-size: 11.5px;
   color: #64748b;
-  line-height: 1.4;
+  line-height: 1.45;
   margin: 0;
-  white-space: nowrap;
+  /* UX: allow 2 lines so descriptions are never cut mid-phrase */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .lvl1-step-action-col {
@@ -1852,12 +1900,55 @@
   gap: 10px;
 }
 
+/* UX: stacked variant with an "up next" context line above the primary action */
+.lvl1-floating-cta-bar.lvl1-cta-stack {
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: max(4px, env(safe-area-inset-bottom));
+}
+
+.lvl1-cta-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  min-height: 40px;
+}
+
+.lvl1-cta-hint__label {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #0066f5;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.lvl1-cta-hint__value {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .lvl1-btn-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   padding: 13px 18px;
+  min-height: 48px; /* touch target guideline */
   border-radius: 14px;
   font-size: 13.5px;
   font-weight: 700;
@@ -1939,5 +2030,30 @@
   }
   .lvl1-formula-equation {
     font-size: 10.5px;
+  }
+}
+
+/* ================= KEYBOARD FOCUS VISIBILITY ================= */
+.lvl1-step-card-modern:focus-visible,
+.lvl1-btn-cta:focus-visible,
+.lvl1-nav-back-btn:focus-visible,
+.lvl1-tester-btn:focus-visible,
+.lvl1-lang-choice:focus-visible,
+.lvl1-nav-segment:focus-visible {
+  outline: 2px solid #0066f5;
+  outline-offset: 2px;
+}
+
+/* ================= ACCESSIBILITY: REDUCED MOTION ================= */
+@media (prefers-reduced-motion: reduce) {
+  .lvl1-screen-container,
+  .lvl1-step-card-modern,
+  .lvl1-btn-cta,
+  .lvl1-pulse-dot,
+  .lvl1-hero-progress-fill,
+  .lvl1-nav-segment,
+  .lvl1-roadmap-connector {
+    animation: none !important;
+    transition: none !important;
   }
 }

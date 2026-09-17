@@ -309,7 +309,7 @@ export const FAQ_ITEMS: { category: string; q: string; a: string }[] = [
   {
     category: 'Learning Path',
     q: 'How do I earn my Employability Passport?',
-    a: 'Complete all 20 levels in your AERS Journey, earn 5 module badges, and submit your capstone portfolio to unlock your verified Employability Passport.',
+    a: 'Complete all 24 levels in your AERS Journey, earn 6 module badges, and submit your capstone portfolio to unlock your verified Employability Passport.',
   },
   {
     category: 'Mentorship',

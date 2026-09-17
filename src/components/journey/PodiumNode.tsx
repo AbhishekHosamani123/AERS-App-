@@ -10,9 +10,11 @@ interface PodiumNodeProps {
   status: 'completed' | 'current' | 'locked';
   stars: number;
   onClick: () => void;
+  /** UX: briefly shake the node when the learner taps a locked level */
+  isShaking?: boolean;
 }
 
-export function PodiumNode({ level, status, stars, onClick }: PodiumNodeProps) {
+export function PodiumNode({ level, status, stars, onClick, isShaking }: PodiumNodeProps) {
   const isLocked = status === 'locked';
   const isCurrent = status === 'current';
   const isCompleted = status === 'completed';
@@ -35,7 +37,9 @@ export function PodiumNode({ level, status, stars, onClick }: PodiumNodeProps) {
   return (
     <div
       id={`level-node-${level.id}`}
-      className={`podium-node is-${status} ${isMilestone ? 'is-milestone' : ''}`}
+      className={`podium-node is-${status} ${isMilestone ? 'is-milestone' : ''} ${
+        isShaking ? 'is-shaking' : ''
+      }`}
       style={{ left: `${level.pxX}px`, top: `${level.pxY}px` }}
       onClick={onClick}
       role="button"

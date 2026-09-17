@@ -84,9 +84,9 @@
 }
 
 .journey-hud__sub {
-  font-size: 9.5px;
+  font-size: 10.5px;
   font-weight: 500;
-  color: #64748b;
+  color: #475569;
   letter-spacing: 0.1px;
   max-width: 170px;
   white-space: nowrap;
@@ -105,7 +105,8 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
+  padding: 6px 10px;
+  min-height: 30px;
   border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
@@ -153,9 +154,9 @@
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   color: #334155;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -178,11 +179,27 @@
   color: #1d4ed8;
 }
 
+/* Progress meta row — explicit completion semantics */
+.journey-hud__progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.2px;
+}
+
+.journey-hud__progress-meta strong {
+  color: #0066f5;
+  font-weight: 800;
+}
+
 /* Progress bar track */
 .journey-hud__progress-track {
   width: 100%;
-  height: 4px;
-  background: #f1f5f9;
+  height: 6px;
+  background: #eef2f7;
   border-radius: 999px;
   overflow: hidden;
   position: relative;
@@ -190,10 +207,37 @@
 
 .journey-hud__progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #0066f5, #00c48c, #f59e0b, #e11d48, #ffd700);
+  /* Brand-meaningful gradient: blue (in-progress) → teal (momentum) → gold tip (stars) */
+  background: linear-gradient(90deg, #0066f5 0%, #0ea5e9 55%, #14b8a6 82%, #f59e0b 100%);
   border-radius: 999px;
   transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 0 6px rgba(0, 102, 245, 0.5);
+  box-shadow: 0 0 8px rgba(0, 102, 245, 0.45);
+  position: relative;
+}
+
+/* Subtle moving shine so progress feels alive but stays purposeful */
+.journey-hud__progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  animation: journey-progress-shine 2.8s linear infinite;
+}
+
+@keyframes journey-progress-shine {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
 }
 
 /* Active Learning Stage Spotlight Banner */
@@ -1332,8 +1376,82 @@
   .journey-clean-summit__cup,
   .journey-clean-summit__sparkle,
   .journey-hud__pulse-dot,
+  .journey-hud__progress-fill::after,
+  .journey-unlock-toast,
   .journey-confetti__piece {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* ================= LOCKED-LEVEL FEEDBACK TOAST ================= */
+.journey-unlock-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 86px;
+  transform: translateX(-50%);
+  z-index: 120;
+  max-width: calc(100% - 48px);
+  background: rgba(15, 23, 42, 0.94);
+  color: #f8fafc;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: journey-toast-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+@keyframes journey-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+/* ================= LOCKED NODE SHAKE FEEDBACK ================= */
+.podium-node.is-shaking {
+  animation: podium-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes podium-shake {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateX(0);
+  }
+  20% {
+    transform: translate(-50%, -50%) translateX(-5px);
+  }
+  40% {
+    transform: translate(-50%, -50%) translateX(5px);
+  }
+  60% {
+    transform: translate(-50%, -50%) translateX(-3px);
+  }
+  80% {
+    transform: translate(-50%, -50%) translateX(3px);
+  }
+}
+
+/* ================= KEYBOARD FOCUS VISIBILITY ================= */
+.journey-hud__icon-btn:focus-visible,
+.journey-hud__pill:focus-visible,
+.podium-node:focus-visible,
+.journey-clean-summit:focus-visible,
+.journey-clean-start:focus-visible {
+  outline: 2px solid #0066f5;
+  outline-offset: 2px;
+  border-radius: 10px;
 }

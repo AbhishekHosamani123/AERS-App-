@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BRAND_COPY } from '../branding/brand';
 import { Icon, type IconName } from '../components/icons/Icon';
 import { AppHeader } from '../components/ui/AppHeader';
 import { LearningPathCTA } from '../components/journey/LearningPathCTA';
 import { LeaderboardPodium } from '../components/leaderboard/LeaderboardPodium';
-import { OFFERS, POPULAR_ROUTES } from '../mock';
 import { useAuth } from '../state/authStore';
 import { fetchNotifications, markNotifRead, useNotifications, useUnreadNotificationsCount } from '../state/notificationStore';
-import { setSearch } from '../state/searchStore';
 import { showToast } from '../state/toastStore';
 import type { AppNotification } from '../types';
 import './HomeScreen.css';
@@ -67,7 +64,6 @@ export function HomeScreen() {
   const navigate = useNavigate();
   const auth = useAuth();
   const userName = auth?.name || 'Krishna';
-  const [offerIdx, setOfferIdx] = useState(0);
   const { items: notifications } = useNotifications();
   const unreadNotifs = useUnreadNotificationsCount();
   const [pressedTab, setPressedTab] = useState<string | null>(null);
@@ -77,14 +73,6 @@ export function HomeScreen() {
   useEffect(() => {
     fetchNotifications();
   }, []);
-
-  /* Offers auto-advance */
-  useEffect(() => {
-    const t = setInterval(() => setOfferIdx((i) => (i + 1) % OFFERS.length), 4000);
-    return () => clearInterval(t);
-  }, []);
-
-  const offer = OFFERS[offerIdx];
 
   const handleShortcutTap = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -173,72 +161,6 @@ export function HomeScreen() {
           <LearningPathCTA />
         </div>
 
-        {/* 6. SECONDARY: Offers Section */}
-        <section className="home__section home__section--offers" aria-label="Offers">
-          <div className="home__section-head">
-            <div className="home__section-head-left">
-              <h2 className="home__section-title">Offers</h2>
-              <p className="home__section-sub">Get best deals with great offers</p>
-            </div>
-            <button className="home__link" onClick={() => navigate('/offers')}>
-              View all
-            </button>
-          </div>
-
-          <div
-            className={`offer-slide offer-slide--${offer.color}`}
-            onClick={() => navigate('/offers')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && navigate('/offers')}
-          >
-            <div className="offer-slide__text">
-              <span className="offer-slide__chip">{offer.code}</span>
-              <h3 className="offer-slide__heading">{offer.title}</h3>
-              <p className="offer-slide__subtext">{offer.subtitle}</p>
-            </div>
-            <div className="offer-slide__icon-wrap">
-              <Icon name="offer" size={38} strokeWidth={1.5} />
-            </div>
-          </div>
-
-          <div className="carousel-dots" aria-hidden="true">
-            {OFFERS.map((_, i) => (
-              <button
-                key={i}
-                className={`carousel-dots__dot ${i === offerIdx ? 'is-active' : ''}`}
-                onClick={() => setOfferIdx(i)}
-                aria-label={`Offer ${i + 1}`}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* 7. TERTIARY: Popular Routes */}
-        <section className="home__section home__section--routes" aria-label="Popular routes">
-          <div className="home__section-head">
-            <h2 className="home__section-title">Popular routes</h2>
-            <button className="home__link" onClick={() => navigate('/search')}>
-              View all
-            </button>
-          </div>
-          <div className="home__routes">
-            {POPULAR_ROUTES.map((r) => (
-              <button
-                key={`${r.fromId}-${r.toId}`}
-                className="route-chip"
-                onClick={() => {
-                  setSearch({ fromCityId: r.fromId, toCityId: r.toId });
-                  navigate('/search');
-                }}
-              >
-                <span>{r.from}</span>
-                <span className="route-chip__arrow">→</span>
-                <span>{r.to}</span>
-              </button>
-            ))}
-          </div>
-        </section>
 
         {/* 8. TERTIARY: Notifications */}
         <section className="home__section home__section--notifs" aria-label="Notifications">
@@ -293,12 +215,6 @@ export function HomeScreen() {
               ))
             )}
           </div>
-        </section>
-
-        {/* 9. Prototype Info Notice */}
-        <section className="home__notice" aria-label="About this prototype">
-          <Icon name="info" size={15} />
-          <p>{BRAND_COPY.demoNotice}</p>
         </section>
       </div>
     </div>

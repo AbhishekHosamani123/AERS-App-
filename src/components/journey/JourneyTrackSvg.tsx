@@ -2,24 +2,28 @@ import { CANVAS_WIDTH, CANVAS_HEIGHT } from '../../data/journeyData';
 
 export function JourneyTrackSvg() {
   const pathD = `
-    M 215,3240
-    C 160,3200 95,3130 95,3020
-    C 95,2960 155,2930 215,2900
-    C 275,2870 335,2840 335,2780
-    C 335,2720 335,2680 335,2660
-    C 335,2550 215,2510 215,2440
-    C 215,2380 95,2360 95,2320
-    C 95,2260 95,2230 95,2200
-    C 95,2140 155,2110 215,2080
-    C 275,2050 335,1980 335,1860
-    C 335,1800 335,1770 335,1740
-    C 335,1680 275,1650 215,1620
-    C 155,1590 95,1560 95,1500
-    C 95,1390 95,1340 95,1280
-    C 95,1220 155,1190 215,1160
-    C 275,1130 335,1100 335,1040
-    C 335,980 335,950 335,920
-    C 335,810 215,770 215,700
+    M 215,3830
+    C 160,3790 95,3720 95,3610
+    C 95,3550 155,3520 215,3490
+    C 275,3460 335,3430 335,3370
+    C 335,3310 335,3270 335,3250
+    C 335,3140 215,3100 215,3030
+    C 215,2970 95,2950 95,2910
+    C 95,2850 95,2820 95,2790
+    C 95,2730 155,2700 215,2670
+    C 275,2640 335,2570 335,2450
+    C 335,2390 335,2360 335,2330
+    C 335,2270 275,2240 215,2210
+    C 155,2180 95,2150 95,2090
+    C 95,1980 95,1930 95,1870
+    C 95,1810 155,1780 215,1750
+    C 275,1720 335,1690 335,1630
+    C 335,1570 335,1540 335,1510
+    C 335,1400 215,1360 215,1290
+    C 215,1230 95,1210 95,1170
+    C 95,1110 95,1080 95,1050
+    C 95,990 155,950 215,920
+    C 215,860 215,760 215,700
     C 215,640 95,620 95,580
     C 95,520 95,490 95,460
     C 95,400 155,360 215,330
@@ -85,29 +89,35 @@ export function JourneyTrackSvg() {
 
       {/* ================= 3. SLEEK WAYPOINT BEADS ================= */}
       {/* Module 1 Waypoints */}
-      <circle cx="155" cy="2960" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="275" cy="2840" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="335" cy="2720" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="3550" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="275" cy="3430" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="335" cy="3310" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
 
       {/* Module 2 Waypoints */}
-      <circle cx="275" cy="2550" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="155" cy="2380" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="95" cy="2260" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="155" cy="2140" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="275" cy="3140" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="2970" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="95" cy="2850" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="2730" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
 
       {/* Module 3 Waypoints */}
-      <circle cx="275" cy="1970" r="3.5" fill="#0ea5e9" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="335" cy="1800" r="3.5" fill="#0ea5e9" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="275" cy="1680" r="3.5" fill="#0ea5e9" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="155" cy="1560" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="275" cy="2560" r="3.5" fill="#0ea5e9" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="335" cy="2390" r="3.5" fill="#0ea5e9" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="275" cy="2270" r="3.5" fill="#0ea5e9" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="2150" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
 
       {/* Module 4 Waypoints */}
-      <circle cx="95" cy="1390" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="155" cy="1220" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="275" cy="1100" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
-      <circle cx="335" cy="980" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="95" cy="1980" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="1810" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="275" cy="1690" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="335" cy="1570" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
 
       {/* Module 5 Waypoints */}
+      <circle cx="275" cy="1400" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="1230" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="95" cy="1110" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="985" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+
+      {/* Module 6 Waypoints */}
       <circle cx="275" cy="810" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
       <circle cx="155" cy="640" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
       <circle cx="95" cy="520" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />

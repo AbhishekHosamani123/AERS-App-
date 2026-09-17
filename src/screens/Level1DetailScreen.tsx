@@ -438,7 +438,8 @@ export function Level1DetailScreen() {
         {/* Hero Milestone Card */}
         <section className="lvl1-hero-milestone" aria-label="Level Overview">
           <div className="lvl1-hero-milestone__pill-row">
-            <span className="lvl1-badge-kicker">MODULE 01 · CAREER CLARITY</span>
+            {/* UX: shows learner position in the overall journey (nav bar already shows module) */}
+            <span className="lvl1-badge-kicker">LEVEL 01 OF 24 · MODULE 01</span>
             <span className="lvl1-xp-badge">⚡ +150 XP</span>
           </div>
 
@@ -455,7 +456,7 @@ export function Level1DetailScreen() {
             </div>
           </div>
 
-          {/* Progress Bar */}
+          {/* Progress Bar — UX: no fake dot at 0%, min-width only once progress exists */}
           <div className="lvl1-hero-progress-block">
             <div className="lvl1-hero-progress-meta">
               <span>Overall Stage Progress</span>
@@ -464,7 +465,7 @@ export function Level1DetailScreen() {
             <div className="lvl1-hero-progress-track">
               <div
                 className="lvl1-hero-progress-fill"
-                style={{ width: `${Math.max(progressPct, 4)}%` }}
+                style={{ width: completedSteps.length > 0 ? `${progressPct}%` : '0%' }}
               />
             </div>
           </div>
@@ -478,28 +479,37 @@ export function Level1DetailScreen() {
           </div>
 
           <div className="lvl1-roadmap-list">
-            {stepsData.map((step) => {
+            {stepsData.map((step, idx) => {
               const isDone = completedSteps.includes(step.id);
               const isUnlocked = step.id === 1 || completedSteps.includes(step.id - 1);
               const isCurrent = isUnlocked && !isDone;
+              const isLast = idx === stepsData.length - 1;
 
               return (
-                <div
-                  key={step.id}
-                  className={`lvl1-step-card-modern ${
-                    isDone ? 'is-done' : isCurrent ? 'is-current' : 'is-locked'
-                  }`}
-                  onClick={() => {
-                    if (isUnlocked) {
-                      sound.playTap();
-                      setCurrentStage(step.stage);
-                    } else {
-                      sound.playLocked();
-                    }
-                  }}
-                  role="button"
-                  tabIndex={isUnlocked ? 0 : -1}
-                >
+                <div key={step.id} className={`lvl1-roadmap-item ${isLast ? 'is-last' : ''}`}>
+                  {/* Connector spine linking steps into one continuous path */}
+                  {!isLast && (
+                    <div
+                      className={`lvl1-roadmap-connector ${isDone ? 'is-done' : ''}`}
+                      aria-hidden="true"
+                    />
+                  )}
+                    <div
+                    className={`lvl1-step-card-modern ${
+                      isDone ? 'is-done' : isCurrent ? 'is-current' : 'is-locked'
+                    }`}
+                    onClick={() => {
+                      if (isUnlocked) {
+                        sound.playTap();
+                        setCurrentStage(step.stage);
+                      } else {
+                        sound.playLocked();
+                      }
+                    }}
+                    role="button"
+                    tabIndex={isUnlocked ? 0 : -1}
+                    aria-disabled={!isUnlocked}
+                  >
                   <div className="lvl1-step-badge-col">
                     <span className="lvl1-step-badge-num">
                       {isDone ? '✓' : `0${step.id}`}
@@ -525,14 +535,25 @@ export function Level1DetailScreen() {
                       <span className="lvl1-status-pill lvl1-status-pill--locked">🔒 Locked</span>
                     )}
                   </div>
+                  </div>
                 </div>
               );
             })}
           </div>
         </section>
 
-        {/* Bottom CTA Bar */}
-        <footer className="lvl1-floating-cta-bar">
+        {/* Bottom CTA Bar — UX: context line tells the learner exactly what's next */}
+        <footer className="lvl1-floating-cta-bar lvl1-cta-stack">
+          <div className="lvl1-cta-hint" role="note">
+            <span className="lvl1-cta-hint__label">
+              {completedSteps.length === 0 ? 'Up next' : completedSteps.length >= 6 ? 'All steps done' : 'Resume'}
+            </span>
+            <span className="lvl1-cta-hint__value">
+              {completedSteps.length >= 6
+                ? 'Evaluation in review'
+                : `Step 0${nextAvailableStep} · ${stepsData[nextAvailableStep - 1].title} · ${stepsData[nextAvailableStep - 1].duration}`}
+            </span>
+          </div>
           <button className="lvl1-btn-cta lvl1-btn-cta--primary" onClick={handleStartOrResume}>
             <span>
               {completedSteps.length === 0
@@ -1671,16 +1692,18 @@ export function Level1DetailScreen() {
             </h1>
           </div>
 
+          {/* UX: dev/state tester is a tool, not a primary action — de-emphasized icon button */}
           <button
-            className="lvl1-tester-btn"
+            className="lvl1-tester-btn lvl1-tester-btn--icon"
             onClick={() => setShowDevBar(!showDevBar)}
-            title="Switch Screen / State Tester"
+            title="Switch Screen / State Tester (dev tool)"
+            aria-label="Open state tester (dev tool)"
+            aria-expanded={showDevBar}
           >
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: 4 }}>
-              <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
-              <path d="M5 5.5H11M5 8H11M5 10.5H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3" />
+              <path d="M1 14h6M9 8h6M17 16h6" />
             </svg>
-            State
           </button>
         </div>
 

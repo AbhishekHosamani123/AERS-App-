@@ -311,7 +311,7 @@ export function PaymentScreen() {
             <div className="pay__wallet">
               <Icon name="wallet" size={26} />
               <div>
-                <strong>BusGo Wallet</strong>
+                <strong>AERS Wallet</strong>
                 <p>Balance: {currency.format(2500)} · pays instantly</p>
               </div>
             </div>

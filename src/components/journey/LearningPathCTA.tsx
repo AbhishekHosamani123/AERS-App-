@@ -49,7 +49,7 @@ export function LearningPathCTA() {
   // Calculate stats
   const totalStars = Object.values(progress.levelStars || {}).reduce((acc, s) => acc + s, 0) || 3;
   const completedCount = progress.completedLevels ? progress.completedLevels.length : 1;
-  const progressPct = Math.round((completedCount / 20) * 100) || 5;
+  const progressPct = Math.round((completedCount / 24) * 100) || 5;
 
   function handleResume() {
     if (currentLevel.id === 1) {
@@ -121,7 +121,7 @@ export function LearningPathCTA() {
         <div className="learning-cta-card__progress-meta">
           <span className="learning-cta-card__progress-title">Overall Progress</span>
           <span className="learning-cta-card__progress-stat">
-            {progressPct}% ({completedCount}/20 Levels)
+            {progressPct}% ({completedCount}/24 Levels)
           </span>
         </div>
         <div className="learning-cta-card__progress-track">
