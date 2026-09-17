@@ -959,6 +959,16 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           <p className="lvl1-view-subtitle">Complete your verified reflections. Drafts are automatically saved.</p>
         </div>
 
+        {/* Worksheet Status & Autosave Toolbar */}
+        <div className="lvl1-worksheet-toolbar">
+          <div className="lvl1-worksheet-autosave-badge">
+            <span>✓</span> Auto-saved locally
+          </div>
+          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>
+            Module 1 Competency Artifact
+          </span>
+        </div>
+
         {/* LESSON 1 WORKSHEET */}
         {levelId === 1 && (
           <div className="lvl1-worksheet-fields-stack">
@@ -1689,6 +1699,81 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
             <span className="lang-badge-pill">{language.toUpperCase()}</span>
           </div>
         </div>
+
+        {/* Level Quick Switcher Strip (Levels 1 to 4) */}
+        <div className="lvl1-module-levels-strip" role="tablist" aria-label="Module 1 Lessons">
+          {[
+            { id: 1, label: 'Discovering Myself' },
+            { id: 2, label: 'Strengths-to-Career' },
+            { id: 3, label: 'Role Exploration' },
+            { id: 4, label: 'Career Action Plan' },
+          ].map((item) => (
+            <button
+              key={item.id}
+              className={`lvl1-level-tab-chip ${levelId === item.id ? 'is-active' : ''}`}
+              onClick={() => {
+                sound.playTap();
+                navigate(`/journey/level/${item.id}`);
+              }}
+              role="tab"
+              aria-selected={levelId === item.id}
+            >
+              <span className="lvl1-level-tab-num">L{item.id}</span>
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* 6-Step Segmented Progress Bar */}
+        <div className="lvl1-nav-segments" aria-label="Progress across 6 milestones">
+          {[1, 2, 3, 4, 5, 6].map((step) => {
+            const isDone = completedSteps.includes(step);
+            const isCurrent = currentStepNum === step;
+            return (
+              <div
+                key={step}
+                className={`lvl1-nav-segment ${isDone ? 'is-completed' : ''} ${isCurrent ? 'is-current' : ''}`}
+                title={`Step ${step}: ${isDone ? 'Done' : isCurrent ? 'Active' : 'Pending'}`}
+              />
+            );
+          })}
+        </div>
+
+        {/* 6-Stage Horizontal Navigation Tabs */}
+        <nav className="lvl1-stage-tabs-scroll" aria-label="Lesson Stages">
+          {[
+            { id: 'overview' as LessonStage, label: 'Overview', icon: '📋' },
+            { id: 'objectives' as LessonStage, label: 'Objectives', icon: '🎯' },
+            { id: 'notes' as LessonStage, label: 'Notes', icon: '📖' },
+            { id: 'video' as LessonStage, label: 'Video', icon: '🎬' },
+            { id: 'quiz' as LessonStage, label: 'Quiz', icon: '⚡' },
+            { id: 'activity' as LessonStage, label: 'Worksheet', icon: '✍️' },
+            { id: 'submission' as LessonStage, label: 'Evidence & Eval', icon: '📤' },
+          ].map((tab) => {
+            const isActive =
+              currentStage === tab.id ||
+              (tab.id === 'submission' &&
+                ['eval_pending', 'eval_revision', 'eval_approved'].includes(currentStage));
+            return (
+              <button
+                key={tab.id}
+                ref={(el) => {
+                  if (isActive && el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                  }
+                }}
+                className={`lvl1-stage-tab-btn ${isActive ? 'is-active' : ''}`}
+                onClick={() => {
+                  sound.playTap();
+                  setCurrentStage(tab.id);
+                }}
+              >
+                <span className="lvl1-stage-tab-icon">{tab.icon}</span>
+                <span className="lvl1-stage-tab-text">{tab.label}</span>
+              </button>
+            );
+          })}
+        </nav>
       </header>
 
       {/* Main Content Area */}

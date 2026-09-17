@@ -255,3 +255,764 @@
   background: #f1f5f9;
   color: #475569;
 }
+
+/* ============================================================
+   PRO UI/UX ENHANCEMENTS: Header Level Switcher & Stage Tabs
+   ============================================================ */
+
+/* Top header level switcher strip (Levels 1 to 4) */
+.lvl1-module-levels-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 4px 0 2px;
+}
+
+.lvl1-module-levels-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.lvl1-level-tab-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.lvl1-level-tab-chip:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.lvl1-level-tab-chip.is-active {
+  background: #0066f5;
+  color: #ffffff;
+  border-color: #0052c2;
+  box-shadow: 0 2px 8px rgba(0, 102, 245, 0.28);
+}
+
+.lvl1-level-tab-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.lvl1-level-tab-chip.is-active .lvl1-level-tab-num {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* 6-Stage Horizontal Navigation Tabs */
+.lvl1-stage-tabs-scroll {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 6px 0 2px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.lvl1-stage-tabs-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.lvl1-stage-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: transparent;
+  color: #64748b;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.lvl1-stage-tab-btn:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.lvl1-stage-tab-btn.is-active {
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16);
+}
+
+.lvl1-stage-tab-icon {
+  font-size: 12px;
+}
+
+/* Worksheet Toolbar & Controls */
+.lvl1-worksheet-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+
+.lvl1-worksheet-autosave-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #059669;
+  background: #ecfdf5;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid #a7f3d0;
+}
+
+.lvl1-sample-loader-btn {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lvl1-sample-loader-btn:hover {
+  background: #f1f5f9;
+  color: #0066f5;
+  border-color: #94a3b8;
+}
+
+/* Card subtle depth and typography polish */
+.lvl1-card-box {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  display: block;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.lvl1-card-box:focus-within {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.lvl1-card-subtitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lvl1-card-body {
+  font-size: 12.5px;
+  color: #64748b;
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.lvl1-field-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 6px;
+  display: block;
+  line-height: 1.45;
+}
+
+/* Comprehensive Modern Form Input Styling */
+.lvl1-input,
+.lvl1-textarea,
+.canvas-role-card input,
+.canvas-role-card textarea,
+.horizon-card input,
+.horizon-card textarea {
+  width: 100% !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #0f172a;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.lvl1-input:focus,
+.lvl1-textarea:focus,
+.canvas-role-card input:focus,
+.canvas-role-card textarea:focus,
+.horizon-card input:focus,
+.horizon-card textarea:focus {
+  background: #ffffff;
+  border-color: #0066f5;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 102, 245, 0.15);
+}
+
+/* Step Card Design System in Overview */
+.lvl1-step-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.lvl1-step-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.lvl1-step-card:hover {
+  border-color: #93c5fd;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 102, 245, 0.08);
+}
+
+.lvl1-step-card.is-current {
+  border-color: #0066f5;
+  background: #f8fbff;
+  box-shadow: 0 4px 14px rgba(0, 102, 245, 0.1);
+}
+
+.lvl1-step-card.is-done {
+  border-color: #d1fae5;
+  background: #ffffff;
+}
+
+.lvl1-step-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lvl1-step-card.is-done .lvl1-step-badge {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.lvl1-step-card.is-current .lvl1-step-badge {
+  background: #0066f5;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 102, 245, 0.3);
+}
+
+.lvl1-step-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.lvl1-step-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.lvl1-step-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  display: block;
+}
+
+.lvl1-step-desc {
+  font-size: 11.5px;
+  color: #64748b;
+  margin: 2px 0 0;
+  line-height: 1.35;
+}
+
+/* Language Toggle Segmented Pill */
+.lvl1-view-lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: #e2e8f0;
+  padding: 3px;
+  border-radius: 999px;
+  gap: 2px;
+}
+
+.lvl1-lang-pill {
+  border: none;
+  background: transparent;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lvl1-lang-pill.is-active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.lvl1-view-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+/* ================= 1. PEDAGOGICAL FORMULA & QUOTE CARDS ================= */
+.lvl1-formula-banner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+}
+
+.lvl1-formula-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #38bdf8;
+}
+
+.lvl1-formula-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.45;
+  font-family: var(--font-mono, monospace, sans-serif);
+}
+
+.lvl1-quote-box {
+  background: #fdfaf6;
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 14px 14px 0;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  position: relative;
+  box-shadow: 0 1px 4px rgba(245, 158, 11, 0.08);
+}
+
+.lvl1-quote-icon {
+  font-size: 32px;
+  line-height: 1;
+  color: #f59e0b;
+  font-family: Georgia, serif;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.lvl1-quote-body {
+  font-size: 13.5px;
+  font-style: italic;
+  color: #78350f;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ================= 2. QUIZ INTERFACE & OPTION CARDS ================= */
+.lvl1-quiz-pagination-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.lvl1-quiz-dot-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lvl1-quiz-dot-btn:hover {
+  border-color: #93c5fd;
+  background: #f8fbff;
+}
+
+.lvl1-quiz-dot-btn.is-active {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+}
+
+.lvl1-quiz-dot-btn.is-answered:not(.is-active) {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+
+.lvl1-question-card {
+  margin-bottom: 14px;
+}
+
+.lvl1-question-num-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #0066f5;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.lvl1-question-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.45;
+  margin: 0 0 16px;
+}
+
+.lvl1-options-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lvl1-option-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.45;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.lvl1-option-btn:hover:not(:disabled) {
+  border-color: #93c5fd;
+  background: #f8fbff;
+  transform: translateX(2px);
+}
+
+.lvl1-option-btn.is-selected {
+  border-color: #0066f5;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.lvl1-option-btn.is-correct {
+  border-color: #10b981;
+  background: #ecfdf5;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.lvl1-option-btn.is-wrong {
+  border-color: #ef4444;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.lvl1-option-letter {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.lvl1-option-btn.is-selected .lvl1-option-letter {
+  background: #0066f5;
+  color: #ffffff;
+}
+
+.lvl1-option-btn.is-correct .lvl1-option-letter {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.lvl1-option-btn.is-wrong .lvl1-option-letter {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.lvl1-option-label {
+  flex: 1;
+}
+
+.lvl1-option-icon {
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.lvl1-explanation-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #334155;
+  margin-top: 14px;
+}
+
+.lvl1-explanation-card strong {
+  display: block;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.lvl1-quiz-nav-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.lvl1-quiz-result-card {
+  padding: 18px;
+  text-align: center;
+  border-radius: 14px;
+}
+
+.lvl1-quiz-result-card.is-pass {
+  background: #ecfdf5;
+  border: 1.5px solid #a7f3d0;
+  color: #065f46;
+}
+
+.lvl1-quiz-result-card.is-fail {
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
+  color: #92400e;
+}
+
+/* ================= 3. VIDEO MASTERCLASS PLAYER ================= */
+.lvl1-video-player-card {
+  background: #0b0f19;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid #1e293b;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.lvl1-video-screen {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  background: radial-gradient(circle at center, #1e293b 0%, #0b0f19 100%);
+}
+
+.lvl1-video-center-controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lvl1-video-play-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #0066f5;
+  border: 2.5px solid #ffffff;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 102, 245, 0.6);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.lvl1-video-play-btn:hover {
+  transform: scale(1.08);
+  background: #0052c2;
+}
+
+.lvl1-video-subtitles-bar {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.4;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lvl1-video-progress-bar {
+  height: 5px;
+  background: #1e293b;
+  width: 100%;
+}
+
+.lvl1-video-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0066f5, #06b6d4);
+  transition: width 0.2s ease;
+}
+
+.lvl1-video-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 14px;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* ================= 4. GLOBAL ACTION BUTTONS ================= */
+.lvl1-primary-btn {
+  width: 100%;
+  background: #0066f5;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 13px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 102, 245, 0.25);
+  transition: all 0.18s ease;
+}
+
+.lvl1-primary-btn:hover:not(:disabled) {
+  background: #0052c2;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 102, 245, 0.35);
+}
+
+.lvl1-primary-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.lvl1-outline-btn {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #334155;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lvl1-outline-btn:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.lvl1-outline-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lvl1-bottom-bar {
+  position: sticky;
+  bottom: 56px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  padding: 12px 16px;
+  border-top: 1px solid #e2e8f0;
+  margin: 20px -16px -16px;
+  z-index: 20;
+}
+
+
+

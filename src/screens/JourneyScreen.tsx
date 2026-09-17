@@ -139,6 +139,14 @@ export function JourneyScreen() {
   }, [progress.currentLevel]);
 
   const handleLevelClick = (level: LevelData) => {
+    sound.playTap();
+
+    // Module 1 Testing: Unconditionally unlock Levels 1, 2, 3, and 4
+    if (level.id >= 1 && level.id <= 4) {
+      navigate(`/journey/level/${level.id}`);
+      return;
+    }
+
     const isCompleted = progress.completedLevels.includes(level.id);
     const isCurrent = progress.currentLevel === level.id;
     const isLocked = !isCompleted && !isCurrent;
@@ -153,13 +161,6 @@ export function JourneyScreen() {
       setShakeNodeId(level.id);
       if (shakeTimerRef.current) clearTimeout(shakeTimerRef.current);
       shakeTimerRef.current = setTimeout(() => setShakeNodeId(null), 500);
-      return;
-    }
-
-    sound.playTap();
-
-    if (level.id >= 1 && level.id <= 4) {
-      navigate(`/journey/level/${level.id}`);
       return;
     }
 
@@ -478,10 +479,17 @@ export function JourneyScreen() {
 
           {/* ================= 4. TWENTY 3D ISOMETRIC CYLINDER PODIUM NODES ================= */}
           {AERS_LEVELS.map((lvl) => {
+            const isModule1Testing = lvl.id >= 1 && lvl.id <= 4;
             const isCompleted = progress.completedLevels.includes(lvl.id);
             const isCurrent = progress.currentLevel === lvl.id;
-            const status = isCompleted ? 'completed' : isCurrent ? 'current' : 'locked';
-            const stars = progress.levelStars[lvl.id] || (isCompleted ? 3 : 0);
+            const status = isCompleted
+              ? 'completed'
+              : isCurrent
+              ? 'current'
+              : isModule1Testing
+              ? 'unlocked'
+              : 'locked';
+            const stars = progress.levelStars[lvl.id] || (isCompleted ? 3 : isModule1Testing ? 3 : 0);
 
             return (
               <PodiumNode

@@ -227,10 +227,22 @@
   box-shadow: 0 3px 10px rgba(245, 158, 11, 0.5);
 }
 
+.podium-node.is-unlocked .podium-book-badge {
+  background: linear-gradient(135deg, #0066f5 0%, #06b6d4 100%);
+  border-color: #e0f2fe;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 102, 245, 0.45);
+}
+
 .podium-node.is-locked .podium-book-badge {
   background: linear-gradient(135deg, #64748b 0%, #475569 100%);
   border-color: #e2e8f0;
   color: #e2e8f0;
+}
+
+/* Unlocked glow */
+.podium-node.is-unlocked .podium-book-img {
+  filter: drop-shadow(0 8px 18px rgba(0, 102, 245, 0.4));
 }
 
 /* Milestone glow */

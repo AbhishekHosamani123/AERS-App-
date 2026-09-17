@@ -7,7 +7,7 @@ import './PodiumNode.css';
 
 interface PodiumNodeProps {
   level: LevelData;
-  status: 'completed' | 'current' | 'locked';
+  status: 'completed' | 'current' | 'unlocked' | 'locked';
   stars: number;
   onClick: () => void;
   /** UX: briefly shake the node when the learner taps a locked level */
@@ -18,12 +18,13 @@ export function PodiumNode({ level, status, stars, onClick, isShaking }: PodiumN
   const isLocked = status === 'locked';
   const isCurrent = status === 'current';
   const isCompleted = status === 'completed';
+  const isUnlocked = status === 'unlocked';
   const isMilestone = Boolean(level.isMilestone);
 
   const getBookImage = () => {
     if (isMilestone) return goldenBookImg;
     if (isCompleted) return greenBookImg;
-    if (isCurrent) return openBookImg;
+    if (isCurrent || isUnlocked) return openBookImg;
     return blueBookImg; // locked
   };
 
@@ -31,6 +32,7 @@ export function PodiumNode({ level, status, stars, onClick, isShaking }: PodiumN
     if (isMilestone) return `Milestone Level ${level.numberStr} (Golden Book)`;
     if (isCompleted) return `Completed Level ${level.numberStr} (Green Book)`;
     if (isCurrent) return `Current Active Level ${level.numberStr} (Open Book)`;
+    if (isUnlocked) return `Unlocked Level ${level.numberStr} (Open Book)`;
     return `Locked Level ${level.numberStr} (Blue Book)`;
   };
 
@@ -80,6 +82,7 @@ export function PodiumNode({ level, status, stars, onClick, isShaking }: PodiumN
         <div className="podium-book-badge">
           <span className="podium-book-num">{level.numberStr}</span>
           {isCompleted && <span className="podium-book-badge-icon">✓</span>}
+          {isUnlocked && <span className="podium-book-badge-icon">⚡</span>}
           {isLocked && <span className="podium-book-badge-icon">🔒</span>}
           {isMilestone && <span className="podium-book-badge-icon">👑</span>}
         </div>
@@ -88,7 +91,7 @@ export function PodiumNode({ level, status, stars, onClick, isShaking }: PodiumN
         <img
           src={getBookImage()}
           alt={getBookAltText()}
-          className={`podium-book-img ${isCurrent ? 'is-current-book' : ''}`}
+          className={`podium-book-img ${isCurrent || isUnlocked ? 'is-current-book' : ''}`}
           draggable={false}
         />
 
@@ -100,6 +103,7 @@ export function PodiumNode({ level, status, stars, onClick, isShaking }: PodiumN
       <div className="podium-title-capsule">
         {isCompleted && <span className="podium-status-dot is-check">✓</span>}
         {isCurrent && <span className="podium-status-dot is-pulse" />}
+        {isUnlocked && <span className="podium-status-dot is-sparkle">⚡</span>}
         {isLocked && <span className="podium-status-dot is-lock">🔒</span>}
         <span className="podium-title-text">{level.title}</span>
       </div>
