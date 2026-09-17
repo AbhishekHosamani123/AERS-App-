@@ -52,8 +52,8 @@ export function LearningPathCTA() {
   const progressPct = Math.round((completedCount / 24) * 100) || 5;
 
   function handleResume() {
-    if (currentLevel.id === 1) {
-      navigate('/journey/level-1');
+    if (currentLevel.id >= 1 && currentLevel.id <= 4) {
+      navigate(`/journey/level/${currentLevel.id}`);
     } else {
       navigate('/journey');
     }

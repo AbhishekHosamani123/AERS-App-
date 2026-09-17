@@ -18,7 +18,7 @@ import { LoginScreen } from '../screens/LoginScreen';
 import { OtpScreen } from '../screens/OtpScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { NotificationsScreen } from '../screens/NotificationsScreen';
-import { Level1DetailScreen } from '../screens/Level1DetailScreen';
+import { LessonDetailScreen } from '../screens/LessonDetailScreen';
 
 /* --font-family token used by global.css */
 import './fonts.css';
@@ -38,8 +38,11 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/ticket/:bookingId" element={<TicketScreen />} />
             <Route path="/trips" element={<TripsScreen />} />
             <Route path="/journey" element={<TripsScreen />} />
-            <Route path="/journey/level-1" element={<Level1DetailScreen />} />
-            <Route path="/journey/level/1" element={<Level1DetailScreen />} />
+            <Route path="/journey/level/:levelId" element={<LessonDetailScreen />} />
+            <Route path="/journey/level-1" element={<LessonDetailScreen levelId={1} />} />
+            <Route path="/journey/level-2" element={<LessonDetailScreen levelId={2} />} />
+            <Route path="/journey/level-3" element={<LessonDetailScreen levelId={3} />} />
+            <Route path="/journey/level-4" element={<LessonDetailScreen levelId={4} />} />
             <Route path="/offers" element={<OffersScreen />} />
             <Route path="/help" element={<HelpScreen />} />
             <Route path="/account" element={<AccountScreen />} />

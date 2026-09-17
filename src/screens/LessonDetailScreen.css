@@ -1,0 +1,257 @@
+/* ============================================================
+   AERS Universal Lesson Detail Screen — Lessons 1, 2, 3 & 4
+   Extends and enhances Level 1 design system
+   ============================================================ */
+
+@import './Level1DetailScreen.css';
+
+/* Multi-role and comparative matrix styles for Lesson 3 */
+.canvas-role-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.canvas-role-card input,
+.canvas-role-card textarea,
+.canvas-role-card select,
+.horizon-card input,
+.horizon-card textarea,
+.horizon-card select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.canvas-role-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.canvas-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #eff6ff;
+  color: #0066f5;
+  border: 1px solid #bfdbfe;
+}
+
+.canvas-role-badge--alt {
+  background: #fdf2f8;
+  color: #be185d;
+  border-color: #fbcfe8;
+}
+
+.comparison-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 12px;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.comparison-matrix-table th {
+  background: #f8fafc;
+  color: #334155;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 700;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.comparison-matrix-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.comparison-matrix-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* SMART-E & 4-Horizon Milestone styling for Lesson 4 */
+.horizon-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border-left: 4px solid #0066f5;
+}
+
+.horizon-card--30d {
+  border-left-color: #10b981;
+}
+
+.horizon-card--3m {
+  border-left-color: #f59e0b;
+}
+
+.horizon-card--6m {
+  border-left-color: #8b5cf6;
+}
+
+.horizon-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.horizon-pill {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.smarte-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.smarte-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+/* Transferable skills selector tags for Lesson 2 */
+.skills-selector-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+
+.skill-tag-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.skill-tag-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.skill-tag-btn.is-selected {
+  background: #0066f5;
+  color: #ffffff;
+  border-color: #0052c2;
+  box-shadow: 0 2px 4px rgba(0, 102, 245, 0.2);
+}
+
+/* Activity ratings (1 to 5) */
+.activity-rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  border: 1px solid #edf2f7;
+}
+
+.activity-rating-row label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.activity-rating-stars {
+  display: flex;
+  gap: 4px;
+}
+
+.activity-star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #cbd5e1;
+  padding: 2px;
+  transition: transform 0.1s ease;
+}
+
+.activity-star-btn.is-active {
+  color: #f59e0b;
+}
+
+.activity-star-btn:hover {
+  transform: scale(1.15);
+}
+
+/* Balanced preparation pillar cards */
+.prep-pillar-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.prep-pillar-card strong {
+  display: block;
+  font-size: 13px;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.prep-pillar-card span {
+  font-size: 11.5px;
+  color: #64748b;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Bilingual switcher floating chip */
+.lang-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #475569;
+}

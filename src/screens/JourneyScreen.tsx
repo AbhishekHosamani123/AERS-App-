@@ -158,8 +158,8 @@ export function JourneyScreen() {
 
     sound.playTap();
 
-    if (level.id === 1) {
-      navigate('/journey/level-1');
+    if (level.id >= 1 && level.id <= 4) {
+      navigate(`/journey/level/${level.id}`);
       return;
     }
 
