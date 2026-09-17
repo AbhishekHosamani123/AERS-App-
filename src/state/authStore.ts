@@ -6,8 +6,19 @@ import { createStore } from './createStore';
 
 const KEY = persistence.authKey;
 
+const DEFAULT_SESSION: AuthSession = {
+  phone: '9876543210',
+  name: 'Krishna',
+  email: 'krishna@aers.in',
+};
+
 function load(): AuthSession | null {
-  return persistence.read<AuthSession | null>(KEY, null);
+  const saved = persistence.read<AuthSession | null>(KEY, null);
+  if (!saved) {
+    persistence.write(KEY, DEFAULT_SESSION);
+    return DEFAULT_SESSION;
+  }
+  return saved;
 }
 
 export const authStore = createStore<AuthSession | null>(load());

@@ -38,7 +38,7 @@ const SHORTCUT_TABS = [
     label: 'Passport',
     iconImg: '/shortcuts/passport.png',
     action: (navigate: (path: string) => void) => {
-      navigate('/account');
+      navigate('/account?passport=true');
     },
   },
   {

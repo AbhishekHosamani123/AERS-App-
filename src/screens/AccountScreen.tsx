@@ -14,29 +14,38 @@ import { Icon, type IconName } from '../components/icons/Icon';
 import { BRAND, BRAND_COPY } from '../branding/brand';
 import { useAuth, updateProfile } from '../state/authStore';
 import { showToast } from '../state/toastStore';
-import { StudentPassportModal } from '../components/passport/StudentPassportModal';
+import { PassportProgressCard } from '../components/passport/PassportProgressCard';
 import bannerImg from '../assets/banner.png';
 import './AccountScreen.css';
 
-export function AccountScreen({ initialPassportOpen = false }: { initialPassportOpen?: boolean } = {}) {
+export function AccountScreen() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const session = useAuth();
   const [editOpen, setEditOpen] = useState(false);
   const [passportOpen, setPassportOpen] = useState(
-    initialPassportOpen || searchParams.get('view') === 'passport' || searchParams.get('passport') === 'true'
+    () => searchParams.get('passport') === 'true'
   );
-
-  useEffect(() => {
-    if (initialPassportOpen || searchParams.get('view') === 'passport' || searchParams.get('passport') === 'true') {
-      setPassportOpen(true);
-    }
-  }, [initialPassportOpen, searchParams]);
   const displayName = session?.name && session.name !== 'User' ? session.name : 'Krishna';
   const [name, setName] = useState(displayName);
   const [email, setEmail] = useState(session?.email ?? 'krishna@aers.in');
   const [nameError, setNameError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (searchParams.get('passport') === 'true') {
+      setPassportOpen(true);
+    }
+  }, [searchParams]);
+
+  const handleClosePassport = () => {
+    setPassportOpen(false);
+    if (searchParams.get('passport') === 'true') {
+      const next = new URLSearchParams(searchParams);
+      next.delete('passport');
+      setSearchParams(next, { replace: true });
+    }
+  };
 
   if (!session) {
     return (
@@ -106,7 +115,7 @@ export function AccountScreen({ initialPassportOpen = false }: { initialPassport
         {/* Passport card (horizontal 3-part composition: Left Profile · Center/Right Info · Right Decoration) */}
         <section
           className="account__passport"
-          aria-label="Employability Passport"
+          aria-label="Passport: Career Readiness"
           onClick={() => setPassportOpen(true)}
           role="button"
           tabIndex={0}
@@ -181,16 +190,17 @@ export function AccountScreen({ initialPassportOpen = false }: { initialPassport
           <div className="account__passport-content">
             <div className="account__passport-badge">
               <Icon name="shield" size={16} strokeWidth={2.2} />
-              <span className="account__passport-title">Employability Passport</span>
+              <span className="account__passport-title">Passport</span>
+              <span className="account__passport-pill">6 Areas</span>
             </div>
 
             <div className="account__passport-stats">
               <strong className="account__passport-amt">78%</strong>
-              <span className="account__passport-label">Overall Readiness · 6 Pillars</span>
+              <span className="account__passport-label">Readiness across 6 fields</span>
             </div>
 
             <div className="account__passport-action">
-              <span>View Official Credential &amp; 6 Readiness % →</span>
+              <span>View readiness in all 6 areas →</span>
             </div>
           </div>
         </section>
@@ -198,13 +208,6 @@ export function AccountScreen({ initialPassportOpen = false }: { initialPassport
         {/* Menu groups (reference: My details / Payments / More / Preferences) */}
         <section className="account__group" aria-label="My details">
           <h2 className="account__grouptitle">My details</h2>
-          <MenuRow
-            icon="shield"
-            label="Employability Passport"
-            badge="78% Ready"
-            hint="6 Placement Competency Pillars"
-            onClick={() => setPassportOpen(true)}
-          />
           <MenuRow icon="ticket" label="Bookings" onClick={() => navigate('/trips')} />
           <MenuRow icon="offer" label="Scratch Card" onClick={() => showToast('Scratch cards coming soon', 'info')} />
           <MenuRow icon="user" label="Personal information" onClick={() => setEditOpen(true)} />
@@ -289,14 +292,42 @@ export function AccountScreen({ initialPassportOpen = false }: { initialPassport
         </div>
       </Sheet>
 
-      {/* Official AERS Student Employability Passport Modal */}
-      <StudentPassportModal
-        isOpen={passportOpen}
-        onClose={() => setPassportOpen(false)}
-        studentName={displayName}
-        studentPhone={`+91 ${session.phone}`}
-        studentEmail={email}
-      />
+      {/* Career Readiness Passport Sheet */}
+      <Sheet
+        open={passportOpen}
+        onClose={handleClosePassport}
+        title="Career Readiness Passport"
+        footer={
+          <div className="account__sheet-footer-actions">
+            <Button
+              variant="secondary"
+              block
+              onClick={handleClosePassport}
+            >
+              Close
+            </Button>
+            <Button
+              variant="primary"
+              block
+              onClick={() => {
+                handleClosePassport();
+                navigate('/journey');
+              }}
+            >
+              Improve Scores in Journey →
+            </Button>
+          </div>
+        }
+      >
+        <div className="account__passport-sheet-content">
+          <PassportProgressCard
+            onActionClick={() => {
+              handleClosePassport();
+              navigate('/journey');
+            }}
+          />
+        </div>
+      </Sheet>
     </div>
   );
 }

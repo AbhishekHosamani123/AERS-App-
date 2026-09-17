@@ -282,6 +282,27 @@
   line-height: 1.2;
 }
 
+.account__passport-pill {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #0066f5;
+  background: #eff6ff;
+  padding: 2px 7.5px;
+  border-radius: 999px;
+  border: 1px solid #bfdbfe;
+  margin-left: 4px;
+}
+
+.account__passport-sheet-content {
+  padding: 14px 16px;
+}
+
+.account__sheet-footer-actions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
 .account__passport-action {
   font-size: 12.8px;
   font-weight: 700;

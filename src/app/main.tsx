@@ -46,7 +46,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/offers" element={<OffersScreen />} />
             <Route path="/help" element={<HelpScreen />} />
             <Route path="/account" element={<AccountScreen />} />
-            <Route path="/account/passport" element={<AccountScreen initialPassportOpen />} />
+            <Route path="/passport" element={<Navigate to="/account?passport=true" replace />} />
+            <Route path="/account/passport" element={<Navigate to="/account?passport=true" replace />} />
             <Route path="/account/login" element={<LoginScreen />} />
             <Route path="/account/otp" element={<OtpScreen />} />
             <Route path="/account/settings" element={<SettingsScreen />} />
