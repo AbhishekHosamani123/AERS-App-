@@ -5,8 +5,8 @@
    (My details / Payments / More / Preferences)
    ============================================================ */
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Sheet } from '../components/ui/Sheet';
 import { TextField } from '../components/ui/TextField';
@@ -14,13 +14,24 @@ import { Icon, type IconName } from '../components/icons/Icon';
 import { BRAND, BRAND_COPY } from '../branding/brand';
 import { useAuth, updateProfile } from '../state/authStore';
 import { showToast } from '../state/toastStore';
+import { StudentPassportModal } from '../components/passport/StudentPassportModal';
 import bannerImg from '../assets/banner.png';
 import './AccountScreen.css';
 
-export function AccountScreen() {
+export function AccountScreen({ initialPassportOpen = false }: { initialPassportOpen?: boolean } = {}) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const session = useAuth();
   const [editOpen, setEditOpen] = useState(false);
+  const [passportOpen, setPassportOpen] = useState(
+    initialPassportOpen || searchParams.get('view') === 'passport' || searchParams.get('passport') === 'true'
+  );
+
+  useEffect(() => {
+    if (initialPassportOpen || searchParams.get('view') === 'passport' || searchParams.get('passport') === 'true') {
+      setPassportOpen(true);
+    }
+  }, [initialPassportOpen, searchParams]);
   const displayName = session?.name && session.name !== 'User' ? session.name : 'Krishna';
   const [name, setName] = useState(displayName);
   const [email, setEmail] = useState(session?.email ?? 'krishna@aers.in');
@@ -95,14 +106,14 @@ export function AccountScreen() {
         {/* Passport card (horizontal 3-part composition: Left Profile · Center/Right Info · Right Decoration) */}
         <section
           className="account__passport"
-          aria-label="Passport"
-          onClick={() => navigate('/journey')}
+          aria-label="Employability Passport"
+          onClick={() => setPassportOpen(true)}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              navigate('/journey');
+              setPassportOpen(true);
             }
           }}
         >
@@ -170,16 +181,16 @@ export function AccountScreen() {
           <div className="account__passport-content">
             <div className="account__passport-badge">
               <Icon name="shield" size={16} strokeWidth={2.2} />
-              <span className="account__passport-title">Passport</span>
+              <span className="account__passport-title">Employability Passport</span>
             </div>
 
             <div className="account__passport-stats">
               <strong className="account__passport-amt">78%</strong>
-              <span className="account__passport-label">Readiness</span>
+              <span className="account__passport-label">Overall Readiness · 6 Pillars</span>
             </div>
 
             <div className="account__passport-action">
-              <span>Your career-readiness profile is ready →</span>
+              <span>View Official Credential &amp; 6 Readiness % →</span>
             </div>
           </div>
         </section>
@@ -187,6 +198,13 @@ export function AccountScreen() {
         {/* Menu groups (reference: My details / Payments / More / Preferences) */}
         <section className="account__group" aria-label="My details">
           <h2 className="account__grouptitle">My details</h2>
+          <MenuRow
+            icon="shield"
+            label="Employability Passport"
+            badge="78% Ready"
+            hint="6 Placement Competency Pillars"
+            onClick={() => setPassportOpen(true)}
+          />
           <MenuRow icon="ticket" label="Bookings" onClick={() => navigate('/trips')} />
           <MenuRow icon="offer" label="Scratch Card" onClick={() => showToast('Scratch cards coming soon', 'info')} />
           <MenuRow icon="user" label="Personal information" onClick={() => setEditOpen(true)} />
@@ -270,6 +288,15 @@ export function AccountScreen() {
           <TextField label="Mobile number" prefix="+91" value={session.phone} disabled hint="Contact support to change your number" />
         </div>
       </Sheet>
+
+      {/* Official AERS Student Employability Passport Modal */}
+      <StudentPassportModal
+        isOpen={passportOpen}
+        onClose={() => setPassportOpen(false)}
+        studentName={displayName}
+        studentPhone={`+91 ${session.phone}`}
+        studentEmail={email}
+      />
     </div>
   );
 }
