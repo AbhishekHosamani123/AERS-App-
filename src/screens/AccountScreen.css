@@ -391,13 +391,25 @@
   vertical-align: middle;
   transform: translateY(-1px);
 }
+.menurow__badge--blue {
+  background: #0066f5;
+}
+.menurow__badge--green {
+  background: #059669;
+}
+.menurow__badge--amber {
+  background: #d97706;
+}
+.menurow__badge--purple {
+  background: #7c3aed;
+}
 
 /* Grey hint value (reference: "India", "INR", "English") */
 .menurow__hint {
   font-size: 12.5px;
   color: var(--c-text-tertiary);
   flex-shrink: 0;
-  max-width: 40%;
+  max-width: 48%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -422,3 +434,262 @@
   flex-direction: column;
   gap: var(--sp-lg);
 }
+
+/* Resume builder modal */
+.account__resume-modal {
+  padding: 14px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.account__resume-score-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  padding: 16px;
+}
+.account__resume-score-val {
+  font-size: 32px;
+  font-weight: 900;
+  color: #0052ff;
+  line-height: 1;
+}
+.account__resume-score-val span {
+  font-size: 16px;
+  font-weight: 600;
+  color: #64748b;
+}
+.account__resume-score-info strong {
+  display: block;
+  font-size: 14.5px;
+  color: #0f172a;
+  margin-bottom: 3px;
+}
+.account__resume-score-info p {
+  font-size: 12px;
+  color: #475569;
+  margin: 0;
+  line-height: 1.35;
+}
+.account__resume-sections {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px;
+}
+.account__resume-sections h4 {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+  margin: 0 0 10px;
+}
+.account__resume-sec-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  padding: 7px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+.account__resume-sec-item:last-child {
+  border-bottom: none;
+}
+.account__resume-sec-item span {
+  color: #1e293b;
+  font-weight: 500;
+}
+.account__resume-sec-item strong {
+  color: #059669;
+  font-size: 11px;
+}
+
+/* Jobs modal */
+.account__jobs-list {
+  padding: 14px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.account__job-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+.account__job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.account__job-header h4 {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 2px;
+}
+.account__job-header p {
+  font-size: 11.5px;
+  color: #64748b;
+  margin: 0;
+}
+.account__job-match {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0066f5;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.account__job-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #334155;
+  font-weight: 600;
+}
+
+/* Certificate modal */
+.account__cert-modal {
+  padding: 14px 18px 20px;
+}
+.account__cert-card {
+  background: linear-gradient(145deg, #ffffff 0%, #fefce8 100%);
+  border: 2px solid #fef08a;
+  border-radius: 16px;
+  padding: 20px 18px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(234, 179, 8, 0.12);
+}
+.account__cert-seal {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #b45309;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.account__cert-card h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 6px;
+}
+.account__cert-awarded {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+.account__cert-name {
+  font-size: 22px;
+  font-weight: 900;
+  color: #0052ff;
+  margin: 4px 0 10px;
+}
+.account__cert-desc {
+  font-size: 12px;
+  color: #334155;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+.account__cert-footer {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #fef08a;
+  padding-top: 12px;
+  text-align: left;
+}
+.account__cert-footer small {
+  display: block;
+  font-size: 9.5px;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.account__cert-footer strong {
+  font-size: 12px;
+  color: #0f172a;
+}
+.account__cert-footer code {
+  font-size: 11px;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* Mentor modal */
+.account__mentor-modal {
+  padding: 14px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.account__mentor-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px;
+}
+.account__mentor-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #0066f5;
+  color: #fff;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.account__mentor-info strong {
+  display: block;
+  font-size: 14px;
+  color: #0f172a;
+}
+.account__mentor-info p {
+  font-size: 11.5px;
+  color: #10b981;
+  margin: 0;
+  font-weight: 600;
+}
+.account__mentor-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.account__mentor-textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  font-family: inherit;
+  font-size: 13px;
+  resize: vertical;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.account__mentor-textarea:focus {
+  border-color: #0066f5;
+  box-shadow: 0 0 0 3px rgba(0, 102, 245, 0.12);
+}
+.account__mentor-note {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
