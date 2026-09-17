@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import type { 
   Student, 
   Department, 
@@ -12,7 +12,7 @@ import {
 } from '../../data/facultyMockStudents';
 import './FacultyDashboard.css';
 
-type ActiveTab = 'overview' | 'at-risk' | 'stars' | 'directory';
+type ActiveTab = 'overview' | 'at-risk' | 'stars' | 'ready' | 'directory';
 
 export const FacultyDashboard: React.FC = () => {
   const [students, setStudents] = useState<Student[]>(INITIAL_STUDENTS);
@@ -46,9 +46,18 @@ export const FacultyDashboard: React.FC = () => {
     students.reduce((acc, s) => acc + s.readinessScore, 0) / totalEnrolled
   );
   const starStudents = useMemo(() => students.filter((s) => s.tier === 'star'), [students]);
+  const placementReadyStudents = useMemo(
+    () => students.filter((s) => s.tier === 'ready' || s.tier === 'star'),
+    [students]
+  );
   const atRiskStudents = useMemo(() => students.filter((s) => s.tier === 'at-risk'), [students]);
   const activeThisWeek = students.filter((s) => s.daysInactive <= 2).length;
   const activePct = Math.round((activeThisWeek / totalEnrolled) * 100);
+
+  // Sync document title to AERS Institution Dashboard
+  useEffect(() => {
+    document.title = 'AERS Institution Dashboard';
+  }, []);
 
   // Filtered Students List
   const filteredStudents = useMemo(() => {
@@ -56,6 +65,7 @@ export const FacultyDashboard: React.FC = () => {
       // Tab based restriction
       if (activeTab === 'at-risk' && s.tier !== 'at-risk') return false;
       if (activeTab === 'stars' && s.tier !== 'star') return false;
+      if (activeTab === 'ready' && s.tier !== 'ready' && s.tier !== 'star') return false;
 
       // Search query (flexible matching for USN, number, name, phone)
       if (filters.searchQuery.trim()) {
@@ -81,9 +91,15 @@ export const FacultyDashboard: React.FC = () => {
         return false;
       }
 
-      // Tier filter
-      if (filters.tier !== 'ALL' && s.tier !== filters.tier) {
-        return false;
+      // Tier filter: Placement Ready includes BOTH 'ready' (75-89%) AND 'star' (90%+) candidates!
+      if (filters.tier !== 'ALL') {
+        if (filters.tier === 'ready') {
+          if (s.tier !== 'ready' && s.tier !== 'star') {
+            return false;
+          }
+        } else if (s.tier !== filters.tier) {
+          return false;
+        }
       }
 
       // Activity filter
@@ -259,8 +275,8 @@ export const FacultyDashboard: React.FC = () => {
           <div className="portal-brand">
             <img src="/AERS_Officel_Logo.png" alt="AERS Official Logo" className="brand-logo-img" />
             <div className="brand-text">
-              <h1>AERS Placement Intelligence</h1>
-              <p>Learn • Prepare • Succeed • Faculty Portal</p>
+              <h1>AERS Institution Dashboard</h1>
+              <p>Learn • Prepare • Succeed • Institutional Portal</p>
             </div>
           </div>
           <div className="academic-badge">
@@ -308,11 +324,11 @@ export const FacultyDashboard: React.FC = () => {
           </button>
 
           <button 
-            className={`tab-btn ${activeTab === 'at-risk' ? 'active' : ''}`}
-            onClick={() => setActiveTab('at-risk')}
+            className={`tab-btn ${activeTab === 'ready' ? 'active' : ''}`}
+            onClick={() => setActiveTab('ready')}
           >
-            <span>🚨 At-Risk Defaulters</span>
-            <span className="tab-badge danger">{atRiskStudents.length}</span>
+            <span>🎯 Placement Ready</span>
+            <span className="tab-badge ready">{placementReadyStudents.length}</span>
           </button>
 
           <button 
@@ -321,6 +337,14 @@ export const FacultyDashboard: React.FC = () => {
           >
             <span>⭐ Star Performers</span>
             <span className="tab-badge star">{starStudents.length}</span>
+          </button>
+
+          <button 
+            className={`tab-btn ${activeTab === 'at-risk' ? 'active' : ''}`}
+            onClick={() => setActiveTab('at-risk')}
+          >
+            <span>🚨 At-Risk Defaulters</span>
+            <span className="tab-badge danger">{atRiskStudents.length}</span>
           </button>
 
           <button 
@@ -383,23 +407,41 @@ export const FacultyDashboard: React.FC = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="kpi-card green">
+          <div 
+            className="kpi-card green" 
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setActiveTab('ready');
+              setFilters((f) => ({ ...f, tier: 'ready' }));
+              showToast(`🎯 Showing all ${placementReadyStudents.length} Placement Ready & Star Candidates`);
+            }}
+            title="Click to view all Placement Ready & Star Candidates"
+          >
             <div className="kpi-header">
-              <span className="kpi-title">Avg. Placement Readiness</span>
+              <span className="kpi-title">Placement Ready (incl. Stars)</span>
               <div className="kpi-icon">🎯</div>
             </div>
             <div className="kpi-value-row">
-              <span className="kpi-value">{avgReadiness}%</span>
-              <span className="kpi-trend positive">↑ +4.2% this week</span>
+              <span className="kpi-value">{placementReadyStudents.length}</span>
+              <span className="kpi-trend positive">{avgReadiness}% avg score</span>
             </div>
-            <p className="kpi-subtitle">Target: 75% for Tier-1 drives</p>
+            <p className="kpi-subtitle">Includes {starStudents.length} Star Candidates (72%+ score)</p>
             <div className="kpi-bar-track">
-              <div className="kpi-bar-fill" style={{ width: `${avgReadiness}%`, background: '#10b981' }}></div>
+              <div className="kpi-bar-fill" style={{ width: `${Math.round((placementReadyStudents.length / totalEnrolled) * 100)}%`, background: '#10b981' }}></div>
             </div>
           </div>
 
           {/* Card 3 */}
-          <div className="kpi-card gold">
+          <div 
+            className="kpi-card gold" 
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setActiveTab('stars');
+              setFilters((f) => ({ ...f, tier: 'star' }));
+              showToast(`⭐ Showing all ${starStudents.length} Star Performers`);
+            }}
+            title="Click to view Star Performers"
+          >
             <div className="kpi-header">
               <span className="kpi-title">Star Talent (90%+)</span>
               <div className="kpi-icon">🌟</div>
@@ -595,11 +637,11 @@ export const FacultyDashboard: React.FC = () => {
               value={filters.tier}
               onChange={(e) => setFilters({ ...filters, tier: e.target.value as 'ALL' | ReadinessTier })}
             >
-              <option value="ALL">All Readiness Tiers</option>
-              <option value="star">⭐ Star Talent (90%+)</option>
-              <option value="ready">✅ Placement Ready (72-89%)</option>
+              <option value="ALL">All Readiness Tiers ({totalEnrolled})</option>
+              <option value="ready">✅ Placement Ready (incl. Star Candidates) ({placementReadyStudents.length})</option>
+              <option value="star">⭐ Star Talent Only (90%+) ({starStudents.length})</option>
               <option value="moderate">⚡ Needs Steady Push (50-71%)</option>
-              <option value="at-risk">🚨 Critical Defaulter (&lt;50%)</option>
+              <option value="at-risk">🚨 Critical Defaulter (&lt;50%) ({atRiskStudents.length})</option>
             </select>
 
             {/* Activity filter */}

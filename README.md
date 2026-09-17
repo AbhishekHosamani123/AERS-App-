@@ -39,6 +39,7 @@ npm run build      # production build → dist/
 | Login → OTP (simulated) | `/account/login`, `/account/otp` |
 | Settings (toggles, language, logout) | `/account/settings` |
 | Notifications (read/unread, mark-all) | `/notifications` |
+| AERS Institution Dashboard (Principal, HOD, Placement analytics) | `/dashboard` |
 
 ### Design system (extracted from the reference app)
 - Brand red `#D63941`, Inter font, white background

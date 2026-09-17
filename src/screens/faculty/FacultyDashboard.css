@@ -339,6 +339,12 @@
   color: var(--fp-danger);
 }
 
+.tab-badge.ready {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #059669;
+}
+
 .tab-badge.star {
   background: var(--fp-warn-tint);
   border-color: #f0e0c2;
