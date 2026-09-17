@@ -19,43 +19,66 @@ import { OtpScreen } from '../screens/OtpScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { NotificationsScreen } from '../screens/NotificationsScreen';
 import { LessonDetailScreen } from '../screens/LessonDetailScreen';
+import { FacultyDashboard } from '../screens/faculty/FacultyDashboard';
 
 /* --font-family token used by global.css */
 import './fonts.css';
 
+/**
+ * Mobile App Layout wrapper: Constrains only the student mobile app
+ * to the phone frame viewport on desktop, full-bleed on mobile devices.
+ */
+const StudentAppShellLayout = () => {
+  return (
+    <div className="app-viewport">
+      <AppShell />
+    </div>
+  );
+};
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <div className="app-viewport">
-      <BrowserRouter>
-        <Routes>
-          <Route element={<AppShell />}>
-            <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="/home" element={<HomeScreen />} />
-            <Route path="/search" element={<SearchResultsScreen />} />
-            <Route path="/booking/seats" element={<SeatSelectionScreen />} />
-            <Route path="/booking/passengers" element={<PassengerDetailsScreen />} />
-            <Route path="/booking/payment" element={<PaymentScreen />} />
-            <Route path="/ticket/:bookingId" element={<TicketScreen />} />
-            <Route path="/trips" element={<TripsScreen />} />
-            <Route path="/journey" element={<TripsScreen />} />
-            <Route path="/journey/level/:levelId" element={<LessonDetailScreen />} />
-            <Route path="/journey/level-1" element={<LessonDetailScreen levelId={1} />} />
-            <Route path="/journey/level-2" element={<LessonDetailScreen levelId={2} />} />
-            <Route path="/journey/level-3" element={<LessonDetailScreen levelId={3} />} />
-            <Route path="/journey/level-4" element={<LessonDetailScreen levelId={4} />} />
-            <Route path="/offers" element={<OffersScreen />} />
-            <Route path="/help" element={<HelpScreen />} />
-            <Route path="/account" element={<AccountScreen />} />
-            <Route path="/passport" element={<Navigate to="/account?passport=true" replace />} />
-            <Route path="/account/passport" element={<Navigate to="/account?passport=true" replace />} />
-            <Route path="/account/login" element={<LoginScreen />} />
-            <Route path="/account/otp" element={<OtpScreen />} />
-            <Route path="/account/settings" element={<SettingsScreen />} />
-            <Route path="/notifications" element={<NotificationsScreen />} />
-            <Route path="*" element={<Navigate to="/home" replace />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* ========================================================= */}
+        {/* COLLEGE FACULTY / PRINCIPAL / HOD WEB ANALYTICS DASHBOARD */}
+        {/* Full-width responsive web application (No mobile frame)    */}
+        {/* ========================================================= */}
+        <Route path="/dashboard" element={<FacultyDashboard />} />
+        <Route path="/faculty" element={<FacultyDashboard />} />
+        <Route path="/faculty/dashboard" element={<FacultyDashboard />} />
+        <Route path="/admin" element={<FacultyDashboard />} />
+
+        {/* ========================================================= */}
+        {/* STUDENT MOBILE APP EXPERIENCES                            */}
+        {/* ========================================================= */}
+        <Route element={<StudentAppShellLayout />}>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<HomeScreen />} />
+          <Route path="/search" element={<SearchResultsScreen />} />
+          <Route path="/booking/seats" element={<SeatSelectionScreen />} />
+          <Route path="/booking/passengers" element={<PassengerDetailsScreen />} />
+          <Route path="/booking/payment" element={<PaymentScreen />} />
+          <Route path="/ticket/:bookingId" element={<TicketScreen />} />
+          <Route path="/trips" element={<TripsScreen />} />
+          <Route path="/journey" element={<TripsScreen />} />
+          <Route path="/journey/level/:levelId" element={<LessonDetailScreen />} />
+          <Route path="/journey/level-1" element={<LessonDetailScreen levelId={1} />} />
+          <Route path="/journey/level-2" element={<LessonDetailScreen levelId={2} />} />
+          <Route path="/journey/level-3" element={<LessonDetailScreen levelId={3} />} />
+          <Route path="/journey/level-4" element={<LessonDetailScreen levelId={4} />} />
+          <Route path="/offers" element={<OffersScreen />} />
+          <Route path="/help" element={<HelpScreen />} />
+          <Route path="/account" element={<AccountScreen />} />
+          <Route path="/passport" element={<Navigate to="/account?passport=true" replace />} />
+          <Route path="/account/passport" element={<Navigate to="/account?passport=true" replace />} />
+          <Route path="/account/login" element={<LoginScreen />} />
+          <Route path="/account/otp" element={<OtpScreen />} />
+          <Route path="/account/settings" element={<SettingsScreen />} />
+          <Route path="/notifications" element={<NotificationsScreen />} />
+          <Route path="*" element={<Navigate to="/home" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </StrictMode>
 );
