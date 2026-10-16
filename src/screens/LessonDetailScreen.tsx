@@ -3,6 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Icon } from '../components/icons/Icon';
 import { sound } from '../utils/sound';
 import { MODULE_1_LESSONS, type LessonData } from '../data/module1Lessons';
+import { MODULE_2_LESSONS } from '../data/module2Lessons';
+
+const ALL_LESSONS: Record<number, LessonData> = {
+  ...MODULE_1_LESSONS,
+  ...MODULE_2_LESSONS,
+};
+import { CustomVideoPlayer } from '../components/video/CustomVideoPlayer';
 import './LessonDetailScreen.css';
 
 export type LessonStage =
@@ -30,17 +37,17 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
   const navigate = useNavigate();
   const params = useParams<{ levelId?: string }>();
 
-  // Determine active level (1, 2, 3, or 4)
+  // Determine active level (1 to 8)
   const levelId = useMemo(() => {
     if (propLevelId) return propLevelId;
     if (params.levelId) {
       const parsed = parseInt(params.levelId.replace(/\D/g, ''), 10);
-      if (!isNaN(parsed) && parsed >= 1 && parsed <= 4) return parsed;
+      if (!isNaN(parsed) && parsed >= 1 && parsed <= 8) return parsed;
     }
     return 1;
   }, [propLevelId, params.levelId]);
 
-  const lesson: LessonData = MODULE_1_LESSONS[levelId] || MODULE_1_LESSONS[1];
+  const lesson: LessonData = ALL_LESSONS[levelId] || ALL_LESSONS[1];
   const storageKey = `aers_lesson_${levelId}_state_v2`;
 
   // Saved state loader
@@ -201,6 +208,122 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
     );
   });
 
+  // Lesson 5: Resume Evidence Inventory (Module 2, Lesson 1)
+  const [l5Inventory, setL5Inventory] = useState(() => {
+    return (
+      savedState?.l5Inventory || {
+        priorityRole: 'Junior Web Developer / QA Associate',
+        altRole: 'Technical Support Specialist',
+        fullName: 'Alex Morgan',
+        email: 'alex.morgan.campus@gmail.com',
+        phone: '+91 98765 43210',
+        location: 'Bengaluru, Karnataka',
+        portfolioUrl: 'https://github.com/alexmorgan-dev',
+        degree: 'Bachelor of Computer Applications (BCA)',
+        institution: 'Dayananda Sagar College, Bengaluru',
+        gradYear: '2026',
+        cgpa: '8.4 / 10 (Verified)',
+        project1Title: 'Campus Recruitment Portal Prototype',
+        project1Role: 'Frontend Developer & Tester',
+        project1Tools: 'React, TypeScript, CSS Grid, Vite',
+        project1Actions: 'Designed responsive student registration forms, validated data inputs, and eliminated broken layouts.',
+        project1Output: 'Deployed live prototype on Vercel handling 120 mock student registrations.',
+        project2Title: 'Inventory Stock Tracker for Local Retail',
+        project2Role: 'Full Stack Contributor',
+        project2Tools: 'Python, SQLite, Flask',
+        project2Actions: 'Built automated low-stock alert script and structured relational product catalog.',
+        project2Output: 'Cut manual inventory reconciliation time by 45%.',
+        techSkills: 'React, JavaScript (ES6+), HTML5/CSS3, Python basics, SQL, Git/GitHub',
+        toolSkills: 'VS Code, Postman, Microsoft Excel, Canva, Figma (Viewer)',
+        employabilitySkills: 'Structured Communication (Seminar presentation), Analytical Debugging (Deadlock fix)',
+        practicalExp: 'Family retail store operations support (weekend inventory reconciliation and customer bill processing)',
+        truthCheck1: true,
+        truthCheck2: true,
+        truthCheck3: true,
+      }
+    );
+  });
+
+  // Lesson 6: Statement Bank & Professional Summary Builder (Module 2, Lesson 2)
+  const [l6Statements, setL6Statements] = useState(() => {
+    return (
+      savedState?.l6Statements || {
+        summaryDraft1: 'Final-year BCA student with hands-on project experience in React and JavaScript. Developed teamwork and debugging skills through campus tech portal builds; seeking entry-level Web Developer opportunity.',
+        summaryDraft2: 'Detail-oriented computer applications undergraduate with proven coursework in database systems and frontend engineering. Coordinated 4-member hackathon team; targeting software engineering internship.',
+        summaryDraft3: 'Aspiring Software QA / Frontend Engineer skilled in HTML, CSS, React, and Python. Completed 2 verified academic applications with zero production defects; eager to contribute to product reliability.',
+        selectedSummary: 1,
+        projStatement1: 'Engineered responsive React web portal for campus symposium, streamlining attendee registrations across 1,200 participants with zero server downtime.',
+        projStatement2: 'Developed Python SQLite inventory reconciliation script, reducing weekly manual stock logging time by 45% for retail business.',
+        expStatement1: 'Coordinated volunteer registration desk for 2-day technical fest, managing attendance tracking and issue resolution for 450+ delegates.',
+        skillStatement1: 'Utilised Postman and Git to test 15 REST endpoints and resolve 8 concurrency bugs during 6th-semester capstone testing cycles.',
+        verbAuditPassed: true,
+        metricsVerified: true,
+      }
+    );
+  });
+
+  // Lesson 7: Skills, Projects and Experience Draft 1 (Module 2, Lesson 3)
+  const [l7Draft, setL7Draft] = useState(() => {
+    return (
+      savedState?.l7Draft || {
+        techSkills: ['JavaScript (ES6+)', 'React 19', 'HTML5 & CSS3', 'Python Basics', 'SQL / SQLite'],
+        digitalTools: ['Git & GitHub', 'VS Code', 'Microsoft Excel (Data Sorting & Charts)', 'Postman'],
+        employabilitySkills: ['Cross-functional Collaboration', 'Analytical Problem Solving', 'Technical Documentation'],
+        languages: ['English (Professional Working)', 'Kannada (Native/Fluent)', 'Hindi (Conversational)'],
+        proj1Heading: 'Campus Recruitment & Assessment Web Portal | React, TypeScript, Vite',
+        proj1Bullets: [
+          'Designed modular responsive UI components in React, achieving sub-second page loads across mobile viewports.',
+          'Implemented client-side input validation and error states, preventing submission failures across 1,200 test cases.',
+          'Collaborated with 3 peers via Git feature branches and resolved 6 pull request merge conflicts on schedule.'
+        ],
+        proj2Heading: 'Retail Inventory Stock Management System | Python, Flask, SQLite',
+        proj2Bullets: [
+          'Engineered relational database schema tracking 250+ SKU inventory counts with automated stock threshold alerts.',
+          'Generated monthly sales analysis spreadsheets saving 10 hours of manual bookkeeping each month.'
+        ],
+        expHeading: 'Practical Experience — Family Retail Enterprise Operations | Bengaluru, India (2024–Present)',
+        expBullets: [
+          'Managed point-of-sale terminal transactions and maintained daily ledger balancing with 100% accuracy.',
+          'Assisted store owner with vendor order coordination and stock replenishment scheduling.'
+        ],
+        layoutStyle: 'Single-Column ATS Standard (Verdana / Inter, 10-11pt, 0.75-inch margins)',
+      }
+    );
+  });
+
+  // Lesson 8: Tailoring, Reviewing and Verifying My Résumé (Module 2, Lesson 4)
+  const [l8Tailor, setL8Tailor] = useState(() => {
+    return (
+      savedState?.l8Tailor || {
+        targetJobTitle: 'Associate Software Engineer / Frontend Developer',
+        targetCompany: 'TCS / Infosys Campus Recruitment',
+        jobReq1: 'Solid proficiency in JavaScript, HTML5, CSS3, and modern web frameworks (React preferred)',
+        jobReq1Evidence: 'Built 2 production-grade React web apps (Campus Portal & Inventory Tracker) hosted on GitHub.',
+        jobReq1Placement: 'Top Skills section + Project 1 primary bullets.',
+        jobReq2: 'Strong debugging abilities, unit testing awareness, and collaboration in Git version control',
+        jobReq2Evidence: 'Documented 15 manual test suites and handled 20+ Git PR merges in academic capstone project.',
+        jobReq2Placement: 'Project 1 bullet 3 + Tools section (Git, GitHub, Postman).',
+        jobReq3: 'Clear verbal and written communication with ability to explain technical decisions',
+        jobReq3Evidence: 'Delivered 6th-sem capstone seminar presentation evaluated in top 5% of department.',
+        jobReq3Placement: 'Professional Summary + Academic Achievements section.',
+        tailoredSummary: 'Final-year BCA student with verified competency in React, TypeScript, and responsive web development. Co-developed campus portal handling 1,200 student records with zero downtime; eager to contribute technical discipline and clean code as an Associate Software Engineer.',
+        auditChecklist: {
+          zeroTypos: true,
+          verifiedDates: true,
+          activeLinks: true,
+          noSensitiveData: true,
+          singleColumnAts: true,
+          noSkillBars: true,
+          actionVerbsUsed: true,
+          metricsExplainable: true,
+          reverseChronology: true,
+          interviewDefensible: true,
+        },
+        auditApproved: true,
+      }
+    );
+  });
+
   // Evidence submission state
   const [uploadedFile, setUploadedFile] = useState<UploadedFileInfo | null>(() => savedState?.uploadedFile || null);
   const [confirmCertified, setConfirmCertified] = useState(true);
@@ -222,6 +345,10 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
         l2Directions,
         l3Roles,
         l4Plan,
+        l5Inventory,
+        l6Statements,
+        l7Draft,
+        l8Tailor,
         uploadedFile,
       };
       localStorage.setItem(storageKey, JSON.stringify(payload));
@@ -240,11 +367,23 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
     l2Directions,
     l3Roles,
     l4Plan,
+    l5Inventory,
+    l6Statements,
+    l7Draft,
+    l8Tailor,
     uploadedFile,
   ]);
 
-  // Video playback simulation
+  const hasLiveVideo = levelId === 1;
+  const videoSrc = hasLiveVideo
+    ? language === 'kn'
+      ? '/videos/Module1/Lesson1/Kannada.mp4'
+      : '/videos/Module1/Lesson1/English.mp4'
+    : undefined;
+
+  // Video playback simulation for lessons without native video
   useEffect(() => {
+    if (hasLiveVideo) return;
     let timer: ReturnType<typeof setInterval>;
     if (isPlayingVideo && videoProgress < 100) {
       timer = setInterval(() => {
@@ -258,7 +397,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
       }, 300);
     }
     return () => clearInterval(timer);
-  }, [isPlayingVideo, videoProgress]);
+  }, [hasLiveVideo, isPlayingVideo, videoProgress]);
 
   // Step complete helper
   const markStepDone = (stepNum: number) => {
@@ -401,7 +540,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
 
   const handleContinueNextLevel = () => {
     sound.playTap();
-    if (levelId < 4) {
+    if (levelId < 8) {
       navigate(`/journey/level/${levelId + 1}`);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -684,33 +823,60 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
             </div>
           </div>
           <h2 className="lvl1-view-title">{lesson.title} Masterclass</h2>
-          <p className="lvl1-view-subtitle">Target Duration: {lesson.video.targetDuration} · Bilingual Captions</p>
+          <p className="lvl1-view-subtitle">
+            Duration: {hasLiveVideo ? (language === 'en' ? '3:53 · Masterclass + AERS Outro' : '6:48 · ಮಾಸ್ಟರ್‌ಕ್ಲಾಸ್ + AERS ಔಟ್ರೋ') : lesson.video.targetDuration} · {hasLiveVideo ? (isEn ? 'Watermark-Free HD' : 'ವಾಟರ್‌ಮಾರ್ಕ್-ಮುಕ್ತ ಎಚ್‌ಡಿ') : 'Bilingual Captions'}
+          </p>
         </div>
 
         {/* Video Player Card */}
         <div className="lvl1-video-player-card">
-          <div className="lvl1-video-screen">
-            <div className="lvl1-video-center-controls">
-              <button
-                className="lvl1-video-play-btn"
-                onClick={() => {
-                  sound.playTap();
-                  setIsPlayingVideo((prev) => !prev);
-                }}
-                aria-label={isPlayingVideo ? 'Pause video' : 'Play video'}
-              >
-                <span style={{ fontSize: 24, lineHeight: 1 }}>{isPlayingVideo ? '⏸' : '▶'}</span>
-              </button>
+          {hasLiveVideo && videoSrc ? (
+            <CustomVideoPlayer
+              key={videoSrc}
+              src={videoSrc}
+              title={lesson.title}
+              language={language}
+              onLanguageChange={setLanguage}
+              expectedDuration={language === 'en' ? 233 : 408}
+              initialProgress={videoProgress}
+              onProgressUpdate={(pct) => {
+                setVideoProgress(pct);
+                if (pct >= 90) {
+                  markStepDone(3);
+                }
+              }}
+              onEnded={() => {
+                setVideoProgress(100);
+                markStepDone(3);
+              }}
+              onRequirementMet={() => {
+                markStepDone(3);
+              }}
+            />
+          ) : (
+            <div className="lvl1-video-screen">
+              <div className="lvl1-video-center-controls">
+                <button
+                  className="lvl1-video-play-btn"
+                  onClick={() => {
+                    sound.playTap();
+                    setIsPlayingVideo((prev) => !prev);
+                  }}
+                  aria-label={isPlayingVideo ? 'Pause video' : 'Play video'}
+                >
+                  <span style={{ fontSize: 24, lineHeight: 1 }}>{isPlayingVideo ? '⏸' : '▶'}</span>
+                </button>
+              </div>
+              <div className="lvl1-video-subtitles-bar">
+                <span>{isPlayingVideo ? `[${language.toUpperCase()}] ` + (isEn ? lesson.notes.goldenQuoteEn : lesson.notes.goldenQuoteKn) : 'Press play to begin video masterclass'}</span>
+              </div>
             </div>
-            <div className="lvl1-video-subtitles-bar">
-              <span>{isPlayingVideo ? `[${language.toUpperCase()}] ` + (isEn ? lesson.notes.goldenQuoteEn : lesson.notes.goldenQuoteKn) : 'Press play to begin video masterclass'}</span>
-            </div>
-          </div>
+          )}
           <div className="lvl1-video-progress-bar">
             <div className="lvl1-video-progress-fill" style={{ width: `${videoProgress}%` }} />
           </div>
           <div className="lvl1-video-meta-bar">
-            <span>Progress: {videoProgress}%</span>
+            <span>Progress: {videoProgress}% {hasLiveVideo ? `(${language === 'en' ? 'English · 3:53' : 'ಕನ್ನಡ · 6:48'})` : ''}</span>
             <span>{videoProgress >= 90 ? '✓ Watch requirement fulfilled' : 'Must reach at least 90%'}</span>
           </div>
         </div>
@@ -965,7 +1131,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
             <span>✓</span> Auto-saved locally
           </div>
           <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>
-            Module 1 Competency Artifact
+            Module {levelId <= 4 ? '1 (Career Clarity)' : '2 (Résumé Readiness)'} Competency Artifact
           </span>
         </div>
 
@@ -1470,6 +1636,721 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           </div>
         )}
 
+        {/* LESSON 5 WORKSHEET: Resume Evidence Inventory */}
+        {levelId === 5 && (
+          <div className="lvl1-worksheet-fields-stack">
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">A. Target Role & Professional Profile</h3>
+              <p className="lvl1-card-body">Connect this evidence inventory with your shortlisted role from Module 1:</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '8px' }}>
+                <div>
+                  <label className="lvl1-field-label">Priority Target Role</label>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.priorityRole}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, priorityRole: e.target.value })}
+                    placeholder="e.g. Junior Web Developer"
+                  />
+                </div>
+                <div>
+                  <label className="lvl1-field-label">Alternative / Fallback Role</label>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.altRole}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, altRole: e.target.value })}
+                    placeholder="e.g. Technical Support Associate"
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '8px' }}>
+                <div>
+                  <label className="lvl1-field-label">Professional Email</label>
+                  <input
+                    type="email"
+                    className="lvl1-input"
+                    value={l5Inventory.email}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, email: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="lvl1-field-label">Mobile Number</label>
+                  <input
+                    type="tel"
+                    className="lvl1-input"
+                    value={l5Inventory.phone}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, phone: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div style={{ marginTop: '8px' }}>
+                <label className="lvl1-field-label">Portfolio / GitHub Profile Link</label>
+                <input
+                  type="url"
+                  className="lvl1-input"
+                  value={l5Inventory.portfolioUrl}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, portfolioUrl: e.target.value })}
+                />
+              </div>
+              <p className="field-hint-tip">🔒 Privacy Rule: Sensitive data (Aadhaar, religion, caste, marital status) must be excluded.</p>
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">B. Education & Academic Records</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '10px', marginTop: '8px' }}>
+                <div>
+                  <label className="lvl1-field-label">Degree & Major</label>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.degree}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, degree: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="lvl1-field-label">Graduation Year</label>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.gradYear}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, gradYear: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '10px', marginTop: '8px' }}>
+                <div>
+                  <label className="lvl1-field-label">Institution / College Name</label>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.institution}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, institution: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="lvl1-field-label">Verified CGPA / %</label>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.cgpa}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, cgpa: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">C. Core Project Evidence</h3>
+              <p className="lvl1-card-body">Document two concrete projects using Purpose → Role → Action → Tools → Output:</p>
+              
+              <div className="canvas-role-card">
+                <span className="canvas-role-badge">Project 01</span>
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  style={{ marginTop: '8px', marginBottom: '6px' }}
+                  value={l5Inventory.project1Title}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, project1Title: e.target.value })}
+                  placeholder="Project Title"
+                />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '6px' }}>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.project1Role}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, project1Role: e.target.value })}
+                    placeholder="My Role"
+                  />
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.project1Tools}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, project1Tools: e.target.value })}
+                    placeholder="Tools & Tech Stack"
+                  />
+                </div>
+                <textarea
+                  className="lvl1-textarea"
+                  rows={2}
+                  style={{ marginBottom: '6px' }}
+                  value={l5Inventory.project1Actions}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, project1Actions: e.target.value })}
+                  placeholder="Personal Actions & Implementation..."
+                />
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  value={l5Inventory.project1Output}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, project1Output: e.target.value })}
+                  placeholder="Measurable Output & Verified Evidence link/report"
+                />
+              </div>
+
+              <div className="canvas-role-card">
+                <span className="canvas-role-badge canvas-role-badge--alt">Project 02</span>
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  style={{ marginTop: '8px', marginBottom: '6px' }}
+                  value={l5Inventory.project2Title}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, project2Title: e.target.value })}
+                  placeholder="Project Title"
+                />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '6px' }}>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.project2Role}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, project2Role: e.target.value })}
+                    placeholder="My Role"
+                  />
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l5Inventory.project2Tools}
+                    onChange={(e) => setL5Inventory({ ...l5Inventory, project2Tools: e.target.value })}
+                    placeholder="Tools & Tech Stack"
+                  />
+                </div>
+                <textarea
+                  className="lvl1-textarea"
+                  rows={2}
+                  style={{ marginBottom: '6px' }}
+                  value={l5Inventory.project2Actions}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, project2Actions: e.target.value })}
+                  placeholder="Personal Actions & Implementation..."
+                />
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  value={l5Inventory.project2Output}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, project2Output: e.target.value })}
+                  placeholder="Measurable Output & Verified Evidence link"
+                />
+              </div>
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">D. Skills & Practical Experience</h3>
+              <label className="lvl1-field-label">Technical Skills (Level E - Demonstrated with Evidence)</label>
+              <input
+                type="text"
+                className="lvl1-input"
+                style={{ marginBottom: '8px' }}
+                value={l5Inventory.techSkills}
+                onChange={(e) => setL5Inventory({ ...l5Inventory, techSkills: e.target.value })}
+              />
+              <label className="lvl1-field-label">Digital Tools & Software</label>
+              <input
+                type="text"
+                className="lvl1-input"
+                style={{ marginBottom: '8px' }}
+                value={l5Inventory.toolSkills}
+                onChange={(e) => setL5Inventory({ ...l5Inventory, toolSkills: e.target.value })}
+              />
+              <label className="lvl1-field-label">Practical Experience / Non-Traditional Work Exposure</label>
+              <input
+                type="text"
+                className="lvl1-input"
+                value={l5Inventory.practicalExp}
+                onChange={(e) => setL5Inventory({ ...l5Inventory, practicalExp: e.target.value })}
+                placeholder="College event coordination, volunteering, family business, or freelancing"
+              />
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">E. 3-Check Truthfulness Declaration</h3>
+              <p className="lvl1-card-body">Confirm that every recorded entry passes the AERS verification standard:</p>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', margin: '8px 0', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={l5Inventory.truthCheck1}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, truthCheck1: e.target.checked })}
+                />
+                <span><strong>Check 1: Is it true?</strong> All qualifications, dates, and project descriptions are factually accurate.</span>
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', margin: '8px 0', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={l5Inventory.truthCheck2}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, truthCheck2: e.target.checked })}
+                />
+                <span><strong>Check 2: Can I explain it?</strong> I can walk an interviewer through my actions and decisions without notes.</span>
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', margin: '8px 0', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={l5Inventory.truthCheck3}
+                  onChange={(e) => setL5Inventory({ ...l5Inventory, truthCheck3: e.target.checked })}
+                />
+                <span><strong>Check 3: Do I have evidence?</strong> I have certificates, repository links, or verified records for every claim.</span>
+              </label>
+            </div>
+          </div>
+        )}
+
+        {/* LESSON 6 WORKSHEET: Statement Bank & Professional Summary */}
+        {levelId === 6 && (
+          <div className="lvl1-worksheet-fields-stack">
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">A. Professional Summary Options</h3>
+              <p className="lvl1-card-body">Draft 3 variations using Identity → Capability → Evidence → Target Role, then select your primary summary:</p>
+              
+              {[
+                { id: 1, label: 'Draft 1: Technical Focus', value: l6Statements.summaryDraft1, key: 'summaryDraft1' as const },
+                { id: 2, label: 'Draft 2: Teamwork & Problem Solving', value: l6Statements.summaryDraft2, key: 'summaryDraft2' as const },
+                { id: 3, label: 'Draft 3: Quality & Reliability', value: l6Statements.summaryDraft3, key: 'summaryDraft3' as const },
+              ].map((opt) => (
+                <div key={opt.id} className="canvas-role-card" style={{ borderLeft: l6Statements.selectedSummary === opt.id ? '4px solid #0066f5' : '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <span className="canvas-role-badge">{opt.label}</span>
+                    <button
+                      className={`lvl1-outline-btn ${l6Statements.selectedSummary === opt.id ? 'is-active' : ''}`}
+                      style={{ padding: '2px 10px', fontSize: '11px', height: 'auto' }}
+                      onClick={() => setL6Statements({ ...l6Statements, selectedSummary: opt.id })}
+                    >
+                      {l6Statements.selectedSummary === opt.id ? '✓ Selected Summary' : 'Select This Summary'}
+                    </button>
+                  </div>
+                  <textarea
+                    className="lvl1-textarea"
+                    rows={3}
+                    value={opt.value}
+                    onChange={(e) => setL6Statements({ ...l6Statements, [opt.key]: e.target.value })}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">B. Achievement Statement Bank</h3>
+              <p className="lvl1-card-body">Construct statements using Action Verb → Context/Task → Method/Skill → Result/Output:</p>
+              
+              <div style={{ marginBottom: '12px' }}>
+                <label className="lvl1-field-label">Project Achievement Statement 1</label>
+                <textarea
+                  className="lvl1-textarea"
+                  rows={2}
+                  value={l6Statements.projStatement1}
+                  onChange={(e) => setL6Statements({ ...l6Statements, projStatement1: e.target.value })}
+                  placeholder="e.g. Engineered responsive React portal for symposium..."
+                />
+              </div>
+
+              <div style={{ marginBottom: '12px' }}>
+                <label className="lvl1-field-label">Project Achievement Statement 2</label>
+                <textarea
+                  className="lvl1-textarea"
+                  rows={2}
+                  value={l6Statements.projStatement2}
+                  onChange={(e) => setL6Statements({ ...l6Statements, projStatement2: e.target.value })}
+                  placeholder="e.g. Developed Python SQLite inventory reconciliation script..."
+                />
+              </div>
+
+              <div style={{ marginBottom: '12px' }}>
+                <label className="lvl1-field-label">Practical Experience / Event Statement</label>
+                <textarea
+                  className="lvl1-textarea"
+                  rows={2}
+                  value={l6Statements.expStatement1}
+                  onChange={(e) => setL6Statements({ ...l6Statements, expStatement1: e.target.value })}
+                  placeholder="e.g. Coordinated volunteer registration desk for 2-day technical fest..."
+                />
+              </div>
+
+              <div>
+                <label className="lvl1-field-label">Technical Tool & Testing Statement</label>
+                <textarea
+                  className="lvl1-textarea"
+                  rows={2}
+                  value={l6Statements.skillStatement1}
+                  onChange={(e) => setL6Statements({ ...l6Statements, skillStatement1: e.target.value })}
+                  placeholder="e.g. Utilised Postman and Git to test 15 REST endpoints..."
+                />
+              </div>
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">C. Action Verbs & Cliche Filter</h3>
+              <p className="lvl1-card-body">Audit checks confirming professional tone and metric integrity:</p>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', margin: '8px 0', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={l6Statements.verbAuditPassed}
+                  onChange={(e) => setL6Statements({ ...l6Statements, verbAuditPassed: e.target.checked })}
+                />
+                <span>Zero empty buzzwords: No unsupported phrases like 'hardworking', 'enthusiastic', or 'dynamic leader'.</span>
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', margin: '8px 0', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={l6Statements.metricsVerified}
+                  onChange={(e) => setL6Statements({ ...l6Statements, metricsVerified: e.target.checked })}
+                />
+                <span>Metric Integrity: All numbers (1,200 participants, 45% time savings, 15 endpoints) are factual and verifiable.</span>
+              </label>
+            </div>
+          </div>
+        )}
+
+        {/* LESSON 7 WORKSHEET: Skills, Projects and Experience (Draft 1 Template) */}
+        {levelId === 7 && (
+          <div className="lvl1-worksheet-fields-stack">
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">A. Semantic Skills Categorisation</h3>
+              <p className="lvl1-card-body">Organise skills into standard employer categories without arbitrary percentage bars:</p>
+              
+              <div style={{ marginBottom: '8px' }}>
+                <label className="lvl1-field-label">Technical Skills (Languages, Frameworks, Databases)</label>
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  value={l7Draft.techSkills.join(', ')}
+                  onChange={(e) => setL7Draft({ ...l7Draft, techSkills: e.target.value.split(',').map((s) => s.trim()) })}
+                />
+              </div>
+              <div style={{ marginBottom: '8px' }}>
+                <label className="lvl1-field-label">Digital & Tool-Based Skills (IDEs, Version Control, Tools)</label>
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  value={l7Draft.digitalTools.join(', ')}
+                  onChange={(e) => setL7Draft({ ...l7Draft, digitalTools: e.target.value.split(',').map((s) => s.trim()) })}
+                />
+              </div>
+              <div style={{ marginBottom: '8px' }}>
+                <label className="lvl1-field-label">Employability Skills (Demonstrated with Context)</label>
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  value={l7Draft.employabilitySkills.join(', ')}
+                  onChange={(e) => setL7Draft({ ...l7Draft, employabilitySkills: e.target.value.split(',').map((s) => s.trim()) })}
+                />
+              </div>
+              <div>
+                <label className="lvl1-field-label">Language Proficiencies</label>
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  value={l7Draft.languages.join(', ')}
+                  onChange={(e) => setL7Draft({ ...l7Draft, languages: e.target.value.split(',').map((s) => s.trim()) })}
+                />
+              </div>
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">B. Project Entries (Individual Contribution Proof)</h3>
+              <div className="canvas-role-card">
+                <span className="canvas-role-badge">Project 01 Entry</span>
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  style={{ marginTop: '8px', marginBottom: '8px', fontWeight: 600 }}
+                  value={l7Draft.proj1Heading}
+                  onChange={(e) => setL7Draft({ ...l7Draft, proj1Heading: e.target.value })}
+                />
+                {l7Draft.proj1Bullets.map((bullet: string, bIdx: number) => (
+                  <textarea
+                    key={bIdx}
+                    className="lvl1-textarea"
+                    rows={2}
+                    style={{ marginBottom: '6px' }}
+                    value={bullet}
+                    onChange={(e) => {
+                      const copy = [...l7Draft.proj1Bullets];
+                      copy[bIdx] = e.target.value;
+                      setL7Draft({ ...l7Draft, proj1Bullets: copy });
+                    }}
+                  />
+                ))}
+              </div>
+
+              <div className="canvas-role-card">
+                <span className="canvas-role-badge canvas-role-badge--alt">Project 02 Entry</span>
+                <input
+                  type="text"
+                  className="lvl1-input"
+                  style={{ marginTop: '8px', marginBottom: '8px', fontWeight: 600 }}
+                  value={l7Draft.proj2Heading}
+                  onChange={(e) => setL7Draft({ ...l7Draft, proj2Heading: e.target.value })}
+                />
+                {l7Draft.proj2Bullets.map((bullet: string, bIdx: number) => (
+                  <textarea
+                    key={bIdx}
+                    className="lvl1-textarea"
+                    rows={2}
+                    style={{ marginBottom: '6px' }}
+                    value={bullet}
+                    onChange={(e) => {
+                      const copy = [...l7Draft.proj2Bullets];
+                      copy[bIdx] = e.target.value;
+                      setL7Draft({ ...l7Draft, proj2Bullets: copy });
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">C. Practical Experience Entry</h3>
+              <input
+                type="text"
+                className="lvl1-input"
+                style={{ marginBottom: '8px', fontWeight: 600 }}
+                value={l7Draft.expHeading}
+                onChange={(e) => setL7Draft({ ...l7Draft, expHeading: e.target.value })}
+              />
+              {l7Draft.expBullets.map((b: string, idx: number) => (
+                <textarea
+                  key={idx}
+                  className="lvl1-textarea"
+                  rows={2}
+                  style={{ marginBottom: '6px' }}
+                  value={b}
+                  onChange={(e) => {
+                    const copy = [...l7Draft.expBullets];
+                    copy[idx] = e.target.value;
+                    setL7Draft({ ...l7Draft, expBullets: copy });
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">D. ATS Visual Hierarchy Standard</h3>
+              <p className="lvl1-card-body">Layout specifications: Single-column standard layout, reverse-chronological order, zero graphics/icons.</p>
+              <input
+                type="text"
+                className="lvl1-input"
+                disabled
+                value={l7Draft.layoutStyle}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* LESSON 8 WORKSHEET: Tailoring, Reviewing and Verifying My Résumé */}
+        {levelId === 8 && (
+          <div className="lvl1-worksheet-fields-stack">
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">A. Job Description Analysis & Evidence Mapping</h3>
+              <p className="lvl1-card-body">Deconstruct target role requirements and align them with your verified proof:</p>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '8px', marginBottom: '12px' }}>
+                <div>
+                  <label className="lvl1-field-label">Target Role Title</label>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l8Tailor.targetJobTitle}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, targetJobTitle: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="lvl1-field-label">Target Hiring Organisation</label>
+                  <input
+                    type="text"
+                    className="lvl1-input"
+                    value={l8Tailor.targetCompany}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, targetCompany: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <table className="comparison-matrix-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: '35%' }}>Employer Requirement</th>
+                    <th style={{ width: '40%' }}>My Verified Evidence</th>
+                    <th style={{ width: '25%' }}>Résumé Placement</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <input
+                        type="text"
+                        className="lvl1-input"
+                        value={l8Tailor.jobReq1}
+                        onChange={(e) => setL8Tailor({ ...l8Tailor, jobReq1: e.target.value })}
+                      />
+                    </td>
+                    <td>
+                      <textarea
+                        className="lvl1-textarea"
+                        rows={2}
+                        value={l8Tailor.jobReq1Evidence}
+                        onChange={(e) => setL8Tailor({ ...l8Tailor, jobReq1Evidence: e.target.value })}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        className="lvl1-input"
+                        value={l8Tailor.jobReq1Placement}
+                        onChange={(e) => setL8Tailor({ ...l8Tailor, jobReq1Placement: e.target.value })}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        type="text"
+                        className="lvl1-input"
+                        value={l8Tailor.jobReq2}
+                        onChange={(e) => setL8Tailor({ ...l8Tailor, jobReq2: e.target.value })}
+                      />
+                    </td>
+                    <td>
+                      <textarea
+                        className="lvl1-textarea"
+                        rows={2}
+                        value={l8Tailor.jobReq2Evidence}
+                        onChange={(e) => setL8Tailor({ ...l8Tailor, jobReq2Evidence: e.target.value })}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        className="lvl1-input"
+                        value={l8Tailor.jobReq2Placement}
+                        onChange={(e) => setL8Tailor({ ...l8Tailor, jobReq2Placement: e.target.value })}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input
+                        type="text"
+                        className="lvl1-input"
+                        value={l8Tailor.jobReq3}
+                        onChange={(e) => setL8Tailor({ ...l8Tailor, jobReq3: e.target.value })}
+                      />
+                    </td>
+                    <td>
+                      <textarea
+                        className="lvl1-textarea"
+                        rows={2}
+                        value={l8Tailor.jobReq3Evidence}
+                        onChange={(e) => setL8Tailor({ ...l8Tailor, jobReq3Evidence: e.target.value })}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        className="lvl1-input"
+                        value={l8Tailor.jobReq3Placement}
+                        onChange={(e) => setL8Tailor({ ...l8Tailor, jobReq3Placement: e.target.value })}
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">B. Tailored Professional Summary</h3>
+              <p className="lvl1-card-body">Fine-tune your summary to emphasize requirements for this specific opening naturally:</p>
+              <textarea
+                className="lvl1-textarea"
+                rows={3}
+                value={l8Tailor.tailoredSummary}
+                onChange={(e) => setL8Tailor({ ...l8Tailor, tailoredSummary: e.target.value })}
+              />
+            </div>
+
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">C. 10-Point Quality & Defensibility Audit</h3>
+              <p className="lvl1-card-body">All 10 checks must pass before final approval and passport credentialing:</p>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.zeroTypos}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, zeroTypos: e.target.checked } })}
+                  />
+                  <span>1. Zero spelling & grammar typos</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.verifiedDates}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, verifiedDates: e.target.checked } })}
+                  />
+                  <span>2. Verified academic dates & marks</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.activeLinks}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, activeLinks: e.target.checked } })}
+                  />
+                  <span>3. Active GitHub/portfolio links</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.noSensitiveData}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, noSensitiveData: e.target.checked } })}
+                  />
+                  <span>4. No Aadhaar/marital/caste data</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.singleColumnAts}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, singleColumnAts: e.target.checked } })}
+                  />
+                  <span>5. Clean single-column ATS layout</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.noSkillBars}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, noSkillBars: e.target.checked } })}
+                  />
+                  <span>6. No arbitrary skill bars or stars</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.actionVerbsUsed}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, actionVerbsUsed: e.target.checked } })}
+                  />
+                  <span>7. Strong past-tense action verbs</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.metricsExplainable}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, metricsExplainable: e.target.checked } })}
+                  />
+                  <span>8. All numbers & metrics justifiable</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.reverseChronology}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, reverseChronology: e.target.checked } })}
+                  />
+                  <span>9. Reverse-chronological sequence</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={l8Tailor.auditChecklist.interviewDefensible}
+                    onChange={(e) => setL8Tailor({ ...l8Tailor, auditChecklist: { ...l8Tailor.auditChecklist, interviewDefensible: e.target.checked } })}
+                  />
+                  <span>10. 100% interview defensible</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Action Bar */}
         <div className="lvl1-bottom-bar">
           <button
@@ -1589,7 +2470,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
             Your {lesson.primaryEvidence} has been received and queued for evaluation by an authorized AERS reviewer.
           </p>
           <div className="lvl1-receipt-box">
-            <div>Submission ID: AERS-M1-L0{levelId}-78421</div>
+            <div>Submission ID: AERS-M{levelId <= 4 ? 1 : 2}-L0{levelId}-78421</div>
             <div>Reviewed Threshold: Rubric Score ≥ 6/10 required</div>
             <div>Estimated Review Window: 24–48 Hours</div>
           </div>
@@ -1662,11 +2543,11 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           <div className="lvl1-award-card">
             <div className="lvl1-award-star">★★★</div>
             <strong>+ {lesson.xpReward} XP Earned</strong>
-            <span>Module 01 Competency Verified</span>
+            <span>Module 0{levelId <= 4 ? 1 : 2} Competency Verified</span>
           </div>
 
           <button className="lvl1-primary-btn lvl1-continue-btn" onClick={handleContinueNextLevel}>
-            {levelId < 4 ? `Unlock & Continue to Level 0${levelId + 1} ➔` : 'Complete Module 01 & Return to Journey ➔'}
+            {levelId < 8 ? `Unlock & Continue to Level 0${levelId + 1} ➔` : 'Complete Module 02 & Return to Journey ➔'}
           </button>
         </div>
       </div>
@@ -1691,7 +2572,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           </button>
           <div className="lvl1-nav-titles">
             <span className="lvl1-nav-kicker">
-              LEVEL {lesson.numberStr} OF 24 · MODULE 01
+              LEVEL {lesson.numberStr} OF 24 · MODULE 0{levelId <= 4 ? 1 : 2}: {levelId <= 4 ? 'CAREER CLARITY' : 'RÉSUMÉ READINESS'}
             </span>
             <h1 className="lvl1-nav-title">{lesson.title}</h1>
           </div>
@@ -1700,14 +2581,46 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           </div>
         </div>
 
-        {/* Level Quick Switcher Strip (Levels 1 to 4) */}
-        <div className="lvl1-module-levels-strip" role="tablist" aria-label="Module 1 Lessons">
-          {[
-            { id: 1, label: 'Discovering Myself' },
-            { id: 2, label: 'Strengths-to-Career' },
-            { id: 3, label: 'Role Exploration' },
-            { id: 4, label: 'Career Action Plan' },
-          ].map((item) => (
+        {/* Module Switcher Pills (Module 1 vs Module 2) */}
+        <div style={{ display: 'flex', gap: '8px', padding: '6px 16px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', overflowX: 'auto' }}>
+          <button
+            className={`lvl1-outline-btn ${levelId <= 4 ? 'is-active' : ''}`}
+            style={{ fontSize: '11px', padding: '4px 10px', height: 'auto', background: levelId <= 4 ? '#0066f5' : '#ffffff', color: levelId <= 4 ? '#ffffff' : '#475569', borderColor: levelId <= 4 ? '#0066f5' : '#cbd5e1' }}
+            onClick={() => {
+              sound.playTap();
+              navigate('/journey/level/1');
+            }}
+          >
+            Module 1: Career Clarity (L01–04)
+          </button>
+          <button
+            className={`lvl1-outline-btn ${levelId >= 5 ? 'is-active' : ''}`}
+            style={{ fontSize: '11px', padding: '4px 10px', height: 'auto', background: levelId >= 5 ? '#0066f5' : '#ffffff', color: levelId >= 5 ? '#ffffff' : '#475569', borderColor: levelId >= 5 ? '#0066f5' : '#cbd5e1' }}
+            onClick={() => {
+              sound.playTap();
+              navigate('/journey/level/5');
+            }}
+          >
+            Module 2: Résumé Readiness (L05–08)
+          </button>
+        </div>
+
+        {/* Level Quick Switcher Strip */}
+        <div className="lvl1-module-levels-strip" role="tablist" aria-label="Module Lessons">
+          {(levelId <= 4
+            ? [
+                { id: 1, label: 'Discovering Myself' },
+                { id: 2, label: 'Strengths-to-Career' },
+                { id: 3, label: 'Role Exploration' },
+                { id: 4, label: 'Career Action Plan' },
+              ]
+            : [
+                { id: 5, label: 'Purpose of Résumé' },
+                { id: 6, label: 'Writing Strong Content' },
+                { id: 7, label: 'Skills & Projects' },
+                { id: 8, label: 'Tailoring & Review' },
+              ]
+          ).map((item) => (
             <button
               key={item.id}
               className={`lvl1-level-tab-chip ${levelId === item.id ? 'is-active' : ''}`}
@@ -1718,7 +2631,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
               role="tab"
               aria-selected={levelId === item.id}
             >
-              <span className="lvl1-level-tab-num">L{item.id}</span>
+              <span className="lvl1-level-tab-num">L{item.id.toString().padStart(2, '0')}</span>
               <span>{item.label}</span>
             </button>
           ))}

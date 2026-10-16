@@ -141,8 +141,8 @@ export function JourneyScreen() {
   const handleLevelClick = (level: LevelData) => {
     sound.playTap();
 
-    // Module 1 Testing: Unconditionally unlock Levels 1, 2, 3, and 4
-    if (level.id >= 1 && level.id <= 4) {
+    // Modules 1 & 2 (Levels 1 to 8): Unconditionally navigate to the complete 6-stage lesson experience
+    if (level.id >= 1 && level.id <= 8) {
       navigate(`/journey/level/${level.id}`);
       return;
     }
@@ -643,9 +643,23 @@ export function JourneyScreen() {
               </div>
             </div>
 
-            <footer className="journey-modal__foot">
+            <footer className="journey-modal__foot" style={{ display: 'flex', gap: '8px' }}>
+              {activeLevel.id <= 8 && (
+                <button
+                  type="button"
+                  className="journey-btn"
+                  style={{ background: '#f1f5f9', color: '#1e293b', border: '1px solid #cbd5e1' }}
+                  onClick={() => {
+                    setActiveLevel(null);
+                    navigate(`/journey/level/${activeLevel.id}`);
+                  }}
+                >
+                  📖 Open Full Lesson
+                </button>
+              )}
               <button
                 className="journey-btn journey-btn--primary"
+                style={{ flex: 1 }}
                 disabled={!hasAnswered}
                 onClick={handleCompleteLevel}
               >

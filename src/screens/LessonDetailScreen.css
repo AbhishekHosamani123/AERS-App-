@@ -1014,5 +1014,23 @@
   z-index: 20;
 }
 
+/* Native video player styles */
+.lvl1-video-screen--native {
+  padding: 0 !important;
+  background: #000000 !important;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.lvl1-video-media-el {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  background: #000000;
+  border-radius: 12px;
+}
+
+
 
 

@@ -67,6 +67,10 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/journey/level-2" element={<LessonDetailScreen levelId={2} />} />
           <Route path="/journey/level-3" element={<LessonDetailScreen levelId={3} />} />
           <Route path="/journey/level-4" element={<LessonDetailScreen levelId={4} />} />
+          <Route path="/journey/level-5" element={<LessonDetailScreen levelId={5} />} />
+          <Route path="/journey/level-6" element={<LessonDetailScreen levelId={6} />} />
+          <Route path="/journey/level-7" element={<LessonDetailScreen levelId={7} />} />
+          <Route path="/journey/level-8" element={<LessonDetailScreen levelId={8} />} />
           <Route path="/offers" element={<OffersScreen />} />
           <Route path="/help" element={<HelpScreen />} />
           <Route path="/account" element={<AccountScreen />} />

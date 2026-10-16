@@ -13,4 +13,13 @@ yarn-error.log*
 *.local
 account_screen_full_length.png
 journey_screen_redesign_*.png
+level5_verify.png
 
+# Large media & work artifacts (keep repo lean; videos hosted externally)
+# Top-level only — do NOT ignore src/components/video/
+# Video binaries mirrored under public/videos are not committed.
+/Video/
+/public/videos/
+scratch/
+*.mp4
+!src/**/*.mp4

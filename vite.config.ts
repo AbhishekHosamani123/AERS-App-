@@ -6,7 +6,19 @@ export default defineConfig({
   plugins: [react()],
   server: {
     watch: {
-      ignored: ['**/.edge_cdp_profile/**', '**/*.png', '**/*.jpg', '**/*.tmp', '**/mso*', '**/~*'],
+      ignored: [
+        '**/.edge_cdp_profile/**',
+        '**/*.png',
+        '**/*.jpg',
+        '**/*.tmp',
+        '**/mso*',
+        '**/~*',
+        '**/*.mp4',
+        '**/Video/**',
+        '**/*.docx',
+        '**/*.xlsx',
+        '**/*.pdf',
+      ],
     },
   },
 })
