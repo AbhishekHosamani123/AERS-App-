@@ -1,11 +1,7 @@
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from '../../data/journeyData';
 
-/**
- * Minimal journey spine — a single muted dashed line.
- * No gradients, no glows, no extra dots. The nodes do the work.
- */
 export function JourneyTrackSvg() {
-  const d = `
+  const pathD = `
     M 215,3830
     C 160,3790 95,3720 95,3610
     C 95,3550 155,3520 215,3490
@@ -42,16 +38,93 @@ export function JourneyTrackSvg() {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* One quiet spine — light, dashed, behind everything */}
+      <defs>
+        {/* Path Gradient for Active Flow */}
+        <linearGradient id="pathGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stopColor="#0066F5" />
+          <stop offset="40%" stopColor="#0284c7" />
+          <stop offset="70%" stopColor="#0ea5e9" />
+          <stop offset="100%" stopColor="#f59e0b" />
+        </linearGradient>
+
+        {/* Summit Golden Glow Filter */}
+        <radialGradient id="summitAmbientGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.35" />
+          <stop offset="60%" stopColor="#fbbf24" stopOpacity="0.12" />
+          <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      {/* Summit Halo Glow */}
+      <circle cx="215" cy="120" r="140" fill="url(#summitAmbientGlow)" />
+
+      {/* ================= 1. GLOWING UNDER-PATH TRACK ================= */}
       <path
-        d={d}
+        d={pathD}
         fill="none"
-        stroke="#e2e8f0"
-        strokeWidth="1.75"
-        strokeDasharray="7 9"
+        stroke="#ffffff"
+        strokeWidth="7"
         strokeLinecap="round"
-        opacity="0.95"
+        opacity="0.9"
       />
+      <path
+        d={pathD}
+        fill="none"
+        stroke="#bae6fd"
+        strokeWidth="5"
+        strokeLinecap="round"
+        opacity="0.75"
+      />
+
+      {/* ================= 2. MAIN ELEGANT DOTTED JOURNEY PATH ================= */}
+      <path
+        d={pathD}
+        fill="none"
+        stroke="url(#pathGradient)"
+        strokeWidth="3"
+        strokeDasharray="6 6"
+        strokeLinecap="round"
+        className="journey-active-track-line"
+      />
+
+      {/* ================= 3. SLEEK WAYPOINT BEADS ================= */}
+      {/* Module 1 Waypoints */}
+      <circle cx="155" cy="3550" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="275" cy="3430" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="335" cy="3310" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+
+      {/* Module 2 Waypoints */}
+      <circle cx="275" cy="3140" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="2970" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="95" cy="2850" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="2730" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+
+      {/* Module 3 Waypoints */}
+      <circle cx="275" cy="2560" r="3.5" fill="#0ea5e9" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="335" cy="2390" r="3.5" fill="#0ea5e9" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="275" cy="2270" r="3.5" fill="#0ea5e9" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="2150" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+
+      {/* Module 4 Waypoints */}
+      <circle cx="95" cy="1980" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="1810" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="275" cy="1690" r="3.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="335" cy="1570" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+
+      {/* Module 5 Waypoints */}
+      <circle cx="275" cy="1400" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="1230" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="95" cy="1110" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="985" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+
+      {/* Module 6 Waypoints */}
+      <circle cx="275" cy="810" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="640" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="95" cy="520" r="3.5" fill="#0066F5" stroke="#ffffff" strokeWidth="1" />
+      <circle cx="155" cy="395" r="3.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
+
+      {/* Summit Approach Waypoint */}
+      <circle cx="215" cy="225" r="4" fill="#f59e0b" stroke="#ffffff" strokeWidth="1" />
     </svg>
   );
 }

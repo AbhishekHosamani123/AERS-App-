@@ -1,16 +1,24 @@
 import { useEffect, useRef, useState, useMemo, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Logo } from '../components/brand/Logo';
-import { AERS_LEVELS, AERS_MODULES, CANVAS_WIDTH, CANVAS_HEIGHT, type LevelData } from '../data/journeyData';
+import {
+  AERS_LEVELS,
+  AERS_MODULES,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  type LevelData,
+} from '../data/journeyData';
 import { JourneyTrackSvg } from '../components/journey/JourneyTrackSvg';
 import { PodiumNode } from '../components/journey/PodiumNode';
 import { sound } from '../utils/sound';
+import journeyBgImg from '../assets/new_journey_baground.png';
+import lastBookImg from '../assets/last_book.png';
 import './JourneyScreen.css';
 
 interface ProgressState {
   completedLevels: number[];
-  levelStars: Record<number, number>;
-  currentLevel: number;
+  levelStars: Record<number, number>; // levelId -> stars (1-3)
+  currentLevel: number; // 1..20
   passportUnlocked: boolean;
   soundEnabled: boolean;
   learnerName: string;
@@ -30,13 +38,17 @@ const DEFAULT_STATE: ProgressState = {
 function loadProgress(): ProgressState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return { ...DEFAULT_STATE, ...JSON.parse(raw) };
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return { ...DEFAULT_STATE, ...parsed };
+    }
   } catch {}
   return DEFAULT_STATE;
 }
-function saveProgress(s: ProgressState) {
+
+function saveProgress(state: ProgressState) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {}
 }
 
@@ -52,24 +64,35 @@ export function JourneyScreen() {
   const [confettiActive, setConfettiActive] = useState(false);
   const [showDevMenu, setShowDevMenu] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  // UX: transient feedback when tapping a locked level
   const [unlockToast, setUnlockToast] = useState<string | null>(null);
   const [shakeNodeId, setShakeNodeId] = useState<number | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const shakeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Sync state to storage
   useEffect(() => {
     saveProgress(progress);
     sound.toggleSound(progress.soundEnabled);
   }, [progress]);
 
-  const totalStars = useMemo(() => Object.values(progress.levelStars).reduce((a, s) => a + s, 0), [progress.levelStars]);
+  // Total stars calculation
+  const totalStars = useMemo(() => {
+    return Object.values(progress.levelStars).reduce((acc, s) => acc + s, 0);
+  }, [progress.levelStars]);
+
   const progressPercent = useMemo(() => {
     const totalPossible = AERS_LEVELS.length;
     const completedCount = progress.completedLevels.length;
     return Math.min(100, Math.round((completedCount / totalPossible) * 100));
   }, [progress.completedLevels]);
 
+  /* Walk up from the level node to find the element that ACTUALLY scrolls.
+     The screen is mounted inside AppShell's wrapper div, so the height chain
+     can break and .journey-scroll may expand instead of scrolling — in that
+     case #app-scroll (or another ancestor) is the real scroller. */
   const findScrollParent = (el: HTMLElement): HTMLElement | null => {
     let node: HTMLElement | null = el.parentElement;
     while (node) {
@@ -86,15 +109,28 @@ export function JourneyScreen() {
     if (!nodeEl) return;
     const container = findScrollParent(nodeEl) ?? scrollRef.current;
     if (!container) return;
-    const nodeTopInScroller = nodeEl.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+    // Node position relative to the scroller's content (layout-safe even mid-animation)
+    const nodeTopInScroller =
+      nodeEl.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
     const targetScroll = Math.max(0, nodeTopInScroller - container.clientHeight / 2 + 20);
-    container.scrollTo({ top: targetScroll, behavior: smooth ? 'smooth' : 'auto' });
+    container.scrollTo({
+      top: targetScroll,
+      behavior: smooth ? 'smooth' : 'auto',
+    });
   };
 
+  // Initial scroll: Automatically center on the learner's CURRENT learning stage on switch
   useEffect(() => {
-    const t1 = setTimeout(() => scrollToLevel(progress.currentLevel, false), 40);
-    const t2 = setTimeout(() => scrollToLevel(progress.currentLevel, true), 220);
-    const t3 = setTimeout(() => scrollToLevel(progress.currentLevel, true), 700);
+    const t1 = setTimeout(() => {
+      scrollToLevel(progress.currentLevel, false);
+    }, 40);
+    const t2 = setTimeout(() => {
+      scrollToLevel(progress.currentLevel, true);
+    }, 220);
+    // Late retry: cover slow layout/image loading that shifts node positions
+    const t3 = setTimeout(() => {
+      scrollToLevel(progress.currentLevel, true);
+    }, 700);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -104,17 +140,22 @@ export function JourneyScreen() {
 
   const handleLevelClick = (level: LevelData) => {
     sound.playTap();
+
+    // Modules 1 & 2 (Levels 1 to 8): Unconditionally navigate to the complete 6-stage lesson experience
     if (level.id >= 1 && level.id <= 8) {
       navigate(`/journey/level/${level.id}`);
       return;
     }
+
     const isCompleted = progress.completedLevels.includes(level.id);
     const isCurrent = progress.currentLevel === level.id;
     const isLocked = !isCompleted && !isCurrent;
+
     if (isLocked) {
       sound.playLocked();
+      // UX: explain WHY the level is locked + shake the node for visible feedback
       const requiredLevel = Math.max(1, level.id - 1);
-      setUnlockToast(`Locked — Complete Level ${requiredLevel.toString().padStart(2, '0')} to unlock`);
+      setUnlockToast(`🔒 Locked — Complete Level ${requiredLevel.toString().padStart(2, '0')} to unlock`);
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
       toastTimerRef.current = setTimeout(() => setUnlockToast(null), 2400);
       setShakeNodeId(level.id);
@@ -122,6 +163,7 @@ export function JourneyScreen() {
       shakeTimerRef.current = setTimeout(() => setShakeNodeId(null), 500);
       return;
     }
+
     setActiveLevel(level);
     setSelectedOption(null);
     setHasAnswered(false);
@@ -131,26 +173,48 @@ export function JourneyScreen() {
     if (hasAnswered) return;
     setSelectedOption(idx);
     setHasAnswered(true);
+
     if (activeLevel) {
-      if (idx === activeLevel.challenge.correctIndex) sound.playStar(3);
-      else sound.playLocked();
+      if (idx === activeLevel.challenge.correctIndex) {
+        sound.playStar(3);
+      } else {
+        sound.playLocked();
+      }
     }
   };
 
   const handleCompleteLevel = () => {
     if (!activeLevel) return;
+
     const isCorrect = selectedOption === activeLevel.challenge.correctIndex;
     const earnedStars = isCorrect ? 3 : 2;
+
     sound.playLevelSuccess();
     setConfettiActive(true);
     setTimeout(() => setConfettiActive(false), 3000);
+
     setProgress((prev) => {
       const nextCompleted = Array.from(new Set([...prev.completedLevels, activeLevel.id]));
-      const nextStars = { ...prev.levelStars, [activeLevel.id]: Math.max(prev.levelStars[activeLevel.id] || 0, earnedStars) };
-      const nextLevel = Math.min(AERS_LEVELS.length, Math.max(prev.currentLevel, activeLevel.id + 1));
-      const passportUnlocked = nextCompleted.length >= AERS_LEVELS.length || activeLevel.id === AERS_LEVELS.length;
-      return { ...prev, completedLevels: nextCompleted, levelStars: nextStars, currentLevel: nextLevel, passportUnlocked: passportUnlocked || prev.passportUnlocked };
+      const nextStars = {
+        ...prev.levelStars,
+        [activeLevel.id]: Math.max(prev.levelStars[activeLevel.id] || 0, earnedStars),
+      };
+      const nextLevel = Math.min(
+        AERS_LEVELS.length,
+        Math.max(prev.currentLevel, activeLevel.id + 1)
+      );
+      const passportUnlocked =
+        nextCompleted.length >= AERS_LEVELS.length || activeLevel.id === AERS_LEVELS.length;
+
+      return {
+        ...prev,
+        completedLevels: nextCompleted,
+        levelStars: nextStars,
+        currentLevel: nextLevel,
+        passportUnlocked: passportUnlocked || prev.passportUnlocked,
+      };
     });
+
     setActiveLevel(null);
   };
 
@@ -162,17 +226,31 @@ export function JourneyScreen() {
   const unlockAllDemo = () => {
     const allIds = AERS_LEVELS.map((l) => l.id);
     const allStars: Record<number, number> = {};
-    allIds.forEach((id) => (allStars[id] = 3));
-    setProgress({ completedLevels: allIds, levelStars: allStars, currentLevel: AERS_LEVELS.length, passportUnlocked: true, soundEnabled: progress.soundEnabled, learnerName: progress.learnerName });
+    allIds.forEach((id) => {
+      allStars[id] = 3;
+    });
+    setProgress({
+      completedLevels: allIds,
+      levelStars: allStars,
+      currentLevel: AERS_LEVELS.length,
+      passportUnlocked: true,
+      soundEnabled: progress.soundEnabled,
+      learnerName: progress.learnerName,
+    });
     setShowDevMenu(false);
     sound.playGrandFanfare();
   };
+
   const resetProgressDemo = () => {
     setProgress(DEFAULT_STATE);
     setShowDevMenu(false);
     sound.playTap();
   };
-  const toggleSound = () => setProgress((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }));
+
+  const toggleSound = () => {
+    setProgress((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }));
+  };
+
   const handleSharePassport = () => {
     setCopiedLink(true);
     navigator.clipboard?.writeText(window.location.href);
@@ -181,304 +259,608 @@ export function JourneyScreen() {
 
   return (
     <div className="journey-page">
-      {/* Sticky header — quiet, useful, not loud */}
-      <header className="journey-hud" aria-label="Journey header">
-        <div className="journey-hud__top">
-          <button className="journey-hud__brand" onClick={() => navigate('/home')} aria-label="Go to Home">
-            <Logo withWordmark size={22} />
-            <span className="journey-hud__brand-sub">Journey</span>
-          </button>
+      {/* ================= STICKY HUD HEADER (Clean Theme) ================= */}
+      <header className="journey-hud" aria-label="Journey Progress Header">
+        <div className="journey-hud__top-row">
+          <div
+            className="journey-hud__brand"
+            onClick={() => navigate('/home')}
+            role="button"
+            tabIndex={0}
+            title="AERS Home"
+          >
+            <Logo withWordmark size={26} />
+            <span className="app-header__subtitle">Journey</span>
+          </div>
 
-          <div className="journey-hud__actions">
-            <span className="journey-hud__meta" aria-label={`Stars ${totalStars} of ${AERS_LEVELS.length * 3}`}>
-              <span className="journey-hud__meta-num">{totalStars}</span>
-              <span className="journey-hud__meta-sep">/</span>
-              <span className="journey-hud__meta-total">{AERS_LEVELS.length * 3}</span>
-              <span className="journey-hud__meta-label">stars</span>
-            </span>
+          <div className="journey-hud__stats">
+            {/* Stars Pill */}
+            <div className="journey-hud__pill journey-hud__pill--stars" title="Total Stars Earned">
+              <svg className="journey-hud__star-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l2.9 6.26 6.85.72-5.1 4.6 1.43 6.72L12 16.9l-6.08 3.4 1.43-6.72-5.1-4.6 6.85-.72L12 2z" />
+              </svg>
+              <span className="journey-hud__pill-val">{totalStars}</span>
+              <span className="journey-hud__pill-max">/{AERS_LEVELS.length * 3}</span>
+            </div>
 
-            <button className="journey-hud__pill journey-hud__pill--current" onClick={() => scrollToLevel(progress.currentLevel)} aria-label={`Jump to level ${progress.currentLevel}`}>
-              Level {String(progress.currentLevel).padStart(2, '0')}
+            {/* Level Pill */}
+            <button
+              className="journey-hud__pill journey-hud__pill--lvl"
+              onClick={() => scrollToLevel(progress.currentLevel)}
+              title="Jump to current active level"
+              aria-label={`Jump to current level ${progress.currentLevel}`}
+            >
+              <svg className="journey-hud__lvl-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="4.5" />
+                <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" />
+              </svg>
+              <span className="journey-hud__pill-val">Lvl {progress.currentLevel}</span>
             </button>
 
-            <button className={`journey-hud__icon ${progress.soundEnabled ? 'is-on' : ''}`} onClick={toggleSound} aria-label={progress.soundEnabled ? 'Mute' : 'Unmute'} aria-pressed={progress.soundEnabled} title={progress.soundEnabled ? 'Mute' : 'Sound on'}>
-              <span aria-hidden="true">{progress.soundEnabled ? '◐' : '○'}</span>
+            {/* Sound Toggle */}
+            <button
+              className={`journey-hud__icon-btn ${progress.soundEnabled ? 'is-active' : ''}`}
+              onClick={toggleSound}
+              aria-label="Toggle game sounds"
+              aria-pressed={progress.soundEnabled}
+              title={progress.soundEnabled ? 'Mute Audio' : 'Enable Audio'}
+            >
+              {progress.soundEnabled ? (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" stroke="none" />
+                  <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+                  <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+                </svg>
+              ) : (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" stroke="none" />
+                  <path d="m16 9 5 5M21 9l-5 5" />
+                </svg>
+              )}
             </button>
 
-            <button className="journey-hud__icon" onClick={() => setShowDevMenu((v) => !v)} aria-label="Demo options" aria-expanded={showDevMenu}>
-              <span aria-hidden="true">⋯</span>
+            {/* Dev Controls */}
+            <button
+              className="journey-hud__icon-btn"
+              onClick={() => setShowDevMenu(!showDevMenu)}
+              title="Demo Actions"
+              aria-label="Demo options"
+              aria-expanded={showDevMenu}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="3.2" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
             </button>
           </div>
         </div>
 
-        <div className="journey-hud__progress" role="progressbar" aria-valuenow={progressPercent} aria-valuemin={0} aria-valuemax={100} aria-label="Journey progress">
-          <div className="journey-hud__progress-track">
-            <div className="journey-hud__progress-fill" style={{ width: `${progressPercent}%` }} />
-          </div>
-          <span className="journey-hud__progress-label">{progressPercent}%</span>
+        {/* Progress bar with explicit completion semantics */}
+        <div className="journey-hud__progress-meta">
+          <span>Career Map Progress</span>
+          <strong>{progressPercent}% Complete</strong>
+        </div>
+        <div
+          className="journey-hud__progress-track"
+          role="progressbar"
+          aria-valuenow={progressPercent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Overall journey completion"
+        >
+          <div className="journey-hud__progress-fill" style={{ width: `${progressPercent}%` }} />
         </div>
       </header>
 
+      {/* ================= DEV / DEMO MENU MODAL ================= */}
       {showDevMenu && (
-        <div className="journey-dev-backdrop" onClick={() => setShowDevMenu(false)}>
-          <div className="journey-dev-card" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Demo controls">
-            <h3 className="journey-dev-title">Demo controls</h3>
-            <p className="journey-dev-desc">Preview the full path or reset to the start.</p>
-            <div className="journey-dev-actions">
-              <button className="journey-btn journey-btn--primary" onClick={unlockAllDemo}>Unlock all 24 levels</button>
-              <button className="journey-btn journey-btn--secondary" onClick={resetProgressDemo}>Reset to Level 01</button>
-              <button className="journey-btn journey-btn--ghost" onClick={() => setShowDevMenu(false)}>Close</button>
+        <div className="journey-devmodal-backdrop" onClick={() => setShowDevMenu(false)}>
+          <div className="journey-devmodal" onClick={(e) => e.stopPropagation()}>
+            <h3 className="journey-devmodal__title">Demo / Progression Controls</h3>
+            <p className="journey-devmodal__desc">
+              Quickly test unlocking all 24 levels or reset progression to Level 1.
+            </p>
+            <div className="journey-devmodal__actions">
+              <button className="journey-btn journey-btn--primary" onClick={unlockAllDemo}>
+                ⚡ Unlock All 24 Levels & Passport
+              </button>
+              <button className="journey-btn journey-btn--secondary" onClick={resetProgressDemo}>
+                🔄 Reset to Level 1
+              </button>
+              <button className="journey-btn journey-btn--ghost" onClick={() => setShowDevMenu(false)}>
+                Close
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Canvas — light, airy, no background image */}
+      {/* ================= MAIN SCROLLABLE MAP CONTAINER ================= */}
       <div className="journey-scroll" ref={scrollRef}>
-        <div className="journey-canvas" style={{ width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }}>
+        <div
+          className="journey-canvas"
+          style={{
+            width: `${CANVAS_WIDTH}px`,
+            height: `${CANVAS_HEIGHT}px`,
+            backgroundImage: `url(${journeyBgImg})`,
+          }}
+        >
+          {/* Background Illustration Layer */}
+          <img
+            src={journeyBgImg}
+            alt="Journey Background"
+            className="journey-canvas-bg"
+            aria-hidden="true"
+          />
+
+          {/* 1. Vector Map Clean Track & Minimalist Elements */}
           <JourneyTrackSvg />
 
-          {/* Summit — single quiet card, no trophy theatre */}
-          <button className="journey-summit" style={{ left: '215px', top: '120px' }} onClick={handlePassportClick} aria-label="Open Employability Passport">
-            <span className="journey-summit__eyebrow">Final destination</span>
-            <span className="journey-summit__title">Employability Passport</span>
-            <span className="journey-summit__sub">You did it — a brighter future awaits.</span>
-            <span className="journey-summit__cta">View credential →</span>
-            {progress.passportUnlocked && <span className="journey-summit__badge">Unlocked</span>}
-          </button>
+          {/* ================= 2. SUMMIT DESTINATION (EMPLOYABILITY PASSPORT) ================= */}
+          <div
+            className="journey-clean-summit"
+            style={{ left: '215px', top: '120px' }}
+            onClick={handlePassportClick}
+            role="button"
+            tabIndex={0}
+            title="Click to view Employability Passport"
+          >
+            <div className="journey-clean-summit__trophy">
+              <span className="journey-clean-summit__sparkle">✨</span>
+              <img
+                src={lastBookImg}
+                alt="Golden Sacred Employability Passport Book"
+                className="journey-summit-book-icon"
+                draggable={false}
+              />
+              <span className="journey-clean-summit__sparkle">✨</span>
+            </div>
 
-          {/* Module labels — thin, quiet dividers */}
+            <div className="journey-summit-card">
+              <div className="journey-summit-card__badge-row">
+                <span className="journey-summit-card__badge">🌟 FINAL DESTINATION</span>
+                {progress.passportUnlocked && (
+                  <span className="journey-summit-card__unlocked-tag">UNLOCKED</span>
+                )}
+              </div>
+              <h3 className="journey-summit-card__title">EMPLOYABILITY PASSPORT</h3>
+              <p className="journey-summit-card__quote">“You Did It! A Brighter Future Awaits”</p>
+              <span className="journey-summit-card__cta">View Credential ➔</span>
+            </div>
+          </div>
+
+          {/* ================= 3. MODULE SECTION BANNERS ================= */}
           {AERS_MODULES.map((m) => {
             const modLevels = AERS_LEVELS.filter((l) => l.moduleId === m.id);
-            const completedCount = modLevels.filter((l) => progress.completedLevels.includes(l.id)).length;
-            const done = completedCount === modLevels.length;
+            const completedCount = modLevels.filter((l) =>
+              progress.completedLevels.includes(l.id)
+            ).length;
+            const isModuleFinished = completedCount === modLevels.length;
+
             return (
-              <button
+              <div
                 key={m.id}
-                className={`journey-module ${done ? 'is-done' : ''}`}
+                className={`journey-module-pill-banner ${
+                  isModuleFinished ? 'is-module-done' : ''
+                }`}
                 style={{ left: '215px', top: `${m.pxY}px` }}
-                onClick={() => setActiveSignInfo({ title: `Module ${m.id} — ${m.name}`, subtitle: m.range, text: `Focus: ${m.name}. Complete the 4 levels in ${m.range} to earn this module.\n\nMotto: “${m.motto}”.` })}
-                aria-label={`Module ${m.id} ${m.name}`}
+                onClick={() =>
+                  setActiveSignInfo({
+                    title: `Module ${m.id} — ${m.name}`,
+                    subtitle: m.range,
+                    text: `Focus Area: ${m.name}.\nMaster core concepts, complete interactive scenario challenges, and collect all stars across ${m.range}.\n\nMotto: "${m.motto}".`,
+                  })
+                }
               >
-                <span className="journey-module__left">
-                  <span className="journey-module__kicker">Module {m.id} · {m.range}</span>
-                  <span className="journey-module__name">{m.name}</span>
-                  <span className="journey-module__motto">{m.motto}</span>
-                </span>
-                <span className="journey-module__right">{done ? 'Done' : `${completedCount}/4`}</span>
-              </button>
+                <div className="journey-mod-banner__icon-wrap">
+                  <span className="journey-mod-banner__icon">
+                    {m.icon === 'compass' && '🧭'}
+                    {m.icon === 'document' && '📄'}
+                    {m.icon === 'chat' && '💬'}
+                    {m.icon === 'target' && '🎯'}
+                    {m.icon === 'briefcase' && '💼'}
+                  </span>
+                </div>
+                <div className="journey-mod-banner__content">
+                  <div className="journey-mod-banner__head">
+                    <span className="journey-mod-banner__tag">MODULE {m.id}</span>
+                    <span className="journey-mod-banner__range">{m.range}</span>
+                  </div>
+                  <div className="journey-mod-banner__name">{m.name}</div>
+                  <div className="journey-mod-banner__motto">{m.motto}</div>
+                </div>
+                <div className="journey-mod-banner__progress-pill">
+                  {isModuleFinished ? '✓ Done' : `${completedCount}/4`}
+                </div>
+              </div>
             );
           })}
 
+          {/* ================= 4. TWENTY 3D ISOMETRIC CYLINDER PODIUM NODES ================= */}
           {AERS_LEVELS.map((lvl) => {
-            const isTesting = lvl.id >= 1 && lvl.id <= 4;
+            const isModule1Testing = lvl.id >= 1 && lvl.id <= 4;
             const isCompleted = progress.completedLevels.includes(lvl.id);
             const isCurrent = progress.currentLevel === lvl.id;
-            const status: 'completed' | 'current' | 'unlocked' | 'locked' = isCompleted ? 'completed' : isCurrent ? 'current' : isTesting ? 'unlocked' : 'locked';
-            const stars = progress.levelStars[lvl.id] || (isCompleted ? 3 : isTesting ? 3 : 0);
-            return <PodiumNode key={lvl.id} level={lvl} status={status} stars={stars} isShaking={shakeNodeId === lvl.id} onClick={() => handleLevelClick(lvl)} />;
+            const status = isCompleted
+              ? 'completed'
+              : isCurrent
+              ? 'current'
+              : isModule1Testing
+              ? 'unlocked'
+              : 'locked';
+            const stars = progress.levelStars[lvl.id] || (isCompleted ? 3 : isModule1Testing ? 3 : 0);
+
+            return (
+              <PodiumNode
+                key={lvl.id}
+                level={lvl}
+                status={status}
+                stars={stars}
+                isShaking={shakeNodeId === lvl.id}
+                onClick={() => handleLevelClick(lvl)}
+              />
+            );
           })}
 
-          <button className="journey-start" style={{ left: '215px', top: '3830px' }} onClick={() => setShowStartModal(true)} aria-label="Start journey">
-            <span className="journey-start__pill">Start journey</span>
-            <span className="journey-start__hint">Begin at Level 01</span>
-          </button>
+          {/* ================= 5. START GATE (BOTTOM) ================= */}
+          <div
+            className="journey-clean-start"
+            style={{ left: '215px', top: '3830px' }}
+            onClick={() => setShowStartModal(true)}
+            role="button"
+            tabIndex={0}
+            title="START — Let's Begin!"
+          >
+            <div className="journey-start-pill">
+              <span className="journey-start-pill__arrow">🚀</span>
+              <div className="journey-start-pill__text">
+                <span className="journey-start-pill__main">START JOURNEY</span>
+                <span className="journey-start-pill__sub">Begin at Level 01</span>
+              </div>
+            </div>
+            <p className="journey-start-motto">AERS Skills Today • A Brighter Tomorrow</p>
+          </div>
         </div>
       </div>
 
-      {/* Locked toast */}
-      {unlockToast && (
-        <div className="journey-toast" role="status" aria-live="polite">{unlockToast}</div>
-      )}
-
-      {/* Level challenge sheet */}
+      {/* ================= LEVEL CHALLENGE MODAL ================= */}
       {activeLevel && (
-        <div className="journey-sheet-backdrop" onClick={() => setActiveLevel(null)}>
-          <div className="journey-sheet" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={activeLevel.title}>
-            <div className="journey-sheet__head">
-              <div className="journey-sheet__kicker">Module {activeLevel.moduleId} · {activeLevel.moduleName}</div>
-              <button className="journey-sheet__close" onClick={() => setActiveLevel(null)} aria-label="Close">×</button>
-            </div>
-            <div className="journey-sheet__title-row">
-              <span className="journey-sheet__num">{activeLevel.numberStr}</span>
-              <div>
-                <h2 className="journey-sheet__title">{activeLevel.title}</h2>
-                <p className="journey-sheet__sub">{activeLevel.subtitle}</p>
+        <div className="journey-modal-backdrop" onClick={() => setActiveLevel(null)}>
+          <div className="journey-modal" onClick={(e) => e.stopPropagation()}>
+            <header className="journey-modal__head">
+              <div className="journey-modal__meta">
+                <span className="journey-modal__mod-tag">
+                  Module {activeLevel.moduleId}: {activeLevel.moduleName}
+                </span>
+                <button
+                  className="journey-modal__close"
+                  onClick={() => setActiveLevel(null)}
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
               </div>
-            </div>
-            <div className="journey-sheet__stars" aria-hidden="true">
-              {[1, 2, 3].map((s) => (
-                <span key={s} className={`journey-sheet__star ${(progress.levelStars[activeLevel.id] || 0) >= s ? 'is-on' : ''}`}>★</span>
-              ))}
-            </div>
+              <div className="journey-modal__title-row">
+                <div className="journey-modal__badge">{activeLevel.numberStr}</div>
+                <div>
+                  <h2 className="journey-modal__title">{activeLevel.title}</h2>
+                  <p className="journey-modal__subtitle">{activeLevel.moduleRange}</p>
+                </div>
+              </div>
 
-            <section className="journey-sheet__section">
-              <h3 className="journey-sheet__h">Learning objective</h3>
-              <p className="journey-sheet__p">{activeLevel.objective}</p>
-            </section>
-
-            <section className="journey-sheet__section">
-              <h3 className="journey-sheet__h">Core competencies</h3>
-              <div className="journey-sheet__chips">
-                {activeLevel.skills.map((sk, i) => (
-                  <span key={i} className="journey-sheet__chip">{sk}</span>
+              {/* Stars display */}
+              <div className="journey-modal__stars">
+                {[1, 2, 3].map((s) => (
+                  <span
+                    key={s}
+                    className={`journey-modal__star ${
+                      (progress.levelStars[activeLevel.id] || 0) >= s ? 'is-filled' : ''
+                    }`}
+                  >
+                    ⭐
+                  </span>
                 ))}
               </div>
-            </section>
+            </header>
 
-            <section className="journey-sheet__challenge">
-              <h3 className="journey-sheet__h">Challenge</h3>
-              <p className="journey-sheet__scenario">{activeLevel.challenge.scenario}</p>
-              <p className="journey-sheet__question">{activeLevel.challenge.question}</p>
-              <div className="journey-sheet__options">
-                {activeLevel.challenge.options.map((opt, idx) => {
-                  const isSelected = selectedOption === idx;
-                  const isCorrect = idx === activeLevel.challenge.correctIndex;
-                  let cls = 'journey-sheet__opt';
-                  if (hasAnswered) {
-                    if (isCorrect) cls += ' is-correct';
-                    else if (isSelected && !isCorrect) cls += ' is-wrong';
-                  } else if (isSelected) cls += ' is-selected';
-                  return (
-                    <button key={idx} className={cls} onClick={() => handleOptionSelect(idx)}>
-                      <span className="journey-sheet__opt-bullet">{String.fromCharCode(65 + idx)}</span>
-                      <span className="journey-sheet__opt-text">{opt}</span>
-                      {hasAnswered && isCorrect && <span className="journey-sheet__opt-mark">✓</span>}
-                      {hasAnswered && isSelected && !isCorrect && <span className="journey-sheet__opt-mark">✕</span>}
-                    </button>
-                  );
-                })}
+            <div className="journey-modal__body">
+              {/* Objective */}
+              <div className="journey-section">
+                <h4 className="journey-section__title">🎯 Learning Objective</h4>
+                <p className="journey-section__text">{activeLevel.objective}</p>
               </div>
-              {hasAnswered && (
-                <div className={`journey-sheet__explain ${selectedOption === activeLevel.challenge.correctIndex ? 'is-ok' : 'is-note'}`}>
-                  <strong>{selectedOption === activeLevel.challenge.correctIndex ? 'Correct — 3 stars' : 'Note — 2 stars'}</strong>
-                  <p>{activeLevel.challenge.explanation}</p>
-                </div>
-              )}
-            </section>
 
-            <div className="journey-sheet__foot">
+              {/* Competencies */}
+              <div className="journey-section">
+                <h4 className="journey-section__title">💡 Core Competencies</h4>
+                <div className="journey-chips">
+                  {activeLevel.skills.map((sk, i) => (
+                    <span key={i} className="journey-chip">
+                      {sk}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Interactive Scenario Challenge */}
+              <div className="journey-challenge">
+                <div className="journey-challenge__head">
+                  <span className="journey-challenge__icon">⚡</span>
+                  <h4 className="journey-challenge__title">Interactive Level Challenge</h4>
+                </div>
+                <p className="journey-challenge__scenario">{activeLevel.challenge.scenario}</p>
+                <p className="journey-challenge__question">{activeLevel.challenge.question}</p>
+
+                <div className="journey-options">
+                  {activeLevel.challenge.options.map((opt, idx) => {
+                    const isSelected = selectedOption === idx;
+                    const isCorrect = idx === activeLevel.challenge.correctIndex;
+                    let optClass = 'journey-option';
+
+                    if (hasAnswered) {
+                      if (isCorrect) optClass += ' is-correct';
+                      else if (isSelected && !isCorrect) optClass += ' is-incorrect';
+                    } else if (isSelected) {
+                      optClass += ' is-selected';
+                    }
+
+                    return (
+                      <button
+                        key={idx}
+                        className={optClass}
+                        onClick={() => handleOptionSelect(idx)}
+                      >
+                        <span className="journey-option__bullet">
+                          {String.fromCharCode(65 + idx)}
+                        </span>
+                        <span className="journey-option__text">{opt}</span>
+                        {hasAnswered && isCorrect && <span className="journey-option__icon">✓</span>}
+                        {hasAnswered && isSelected && !isCorrect && (
+                          <span className="journey-option__icon">✕</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {hasAnswered && (
+                  <div
+                    className={`journey-explanation ${
+                      selectedOption === activeLevel.challenge.correctIndex
+                        ? 'is-success'
+                        : 'is-review'
+                    }`}
+                  >
+                    <strong>
+                      {selectedOption === activeLevel.challenge.correctIndex
+                        ? '🎉 Spot On! 3 Stars Earned!'
+                        : '💡 Key Takeaway (2 Stars Earned):'}
+                    </strong>
+                    <p>{activeLevel.challenge.explanation}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <footer className="journey-modal__foot" style={{ display: 'flex', gap: '8px' }}>
               {activeLevel.id <= 8 && (
                 <button
                   type="button"
-                  className="journey-btn journey-btn--ghost"
+                  className="journey-btn"
+                  style={{ background: '#f1f5f9', color: '#1e293b', border: '1px solid #cbd5e1' }}
                   onClick={() => {
                     setActiveLevel(null);
                     navigate(`/journey/level/${activeLevel.id}`);
                   }}
                 >
-                  Open full lesson
+                  📖 Open Full Lesson
                 </button>
               )}
-              <button className="journey-btn journey-btn--primary" style={{ flex: 1 }} disabled={!hasAnswered} onClick={handleCompleteLevel}>
-                {progress.completedLevels.includes(activeLevel.id) ? 'Update & continue →' : 'Complete & continue →'}
+              <button
+                className="journey-btn journey-btn--primary"
+                style={{ flex: 1 }}
+                disabled={!hasAnswered}
+                onClick={handleCompleteLevel}
+              >
+                {progress.completedLevels.includes(activeLevel.id)
+                  ? 'Update Milestone & Continue ➔'
+                  : 'Complete Level & Advance ➔'}
               </button>
-            </div>
+            </footer>
           </div>
         </div>
       )}
 
+      {/* ================= EMPLOYABILITY PASSPORT MODAL ================= */}
       {showPassport && (
-        <div className="journey-sheet-backdrop" onClick={() => setShowPassport(false)}>
-          <div className="journey-sheet journey-sheet--passport" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Employability Passport">
-            <div className="journey-sheet__head journey-sheet__head--passport">
-              <div>
-                <div className="journey-sheet__kicker journey-sheet__kicker--light">Official credential</div>
-                <h2 className="journey-sheet__title journey-sheet__title--light">Employability Passport</h2>
-                <p className="journey-sheet__sub journey-sheet__sub--light">AERS Student Placement-Readiness Programme</p>
-              </div>
-              <button className="journey-sheet__close journey-sheet__close--light" onClick={() => setShowPassport(false)} aria-label="Close">×</button>
-            </div>
+        <div className="journey-modal-backdrop" onClick={() => setShowPassport(false)}>
+          <div className="journey-passport-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="journey-passport-gold-border">
+              <header className="journey-passport__head">
+                <img
+                  src={lastBookImg}
+                  alt="Employability Passport Book"
+                  className="journey-passport__book-crest"
+                  draggable={false}
+                />
+                <div className="journey-passport__seal-tag">OFFICIAL CREDENTIAL</div>
+                <h2 className="journey-passport__title">EMPLOYABILITY PASSPORT</h2>
+                <p className="journey-passport__quote">“You Did It! A Brighter Future Awaits”</p>
+                <p className="journey-passport__sub">AERS Student Placement-Readiness Programme</p>
+              </header>
 
-            <div className="journey-passport__student">
-              <span className="journey-passport__label">Awarded to</span>
-              <span className="journey-passport__name">{progress.learnerName}</span>
-              <span className="journey-passport__id">ID: AERS-2026-EP{String(totalStars * 137).padStart(4, '0')}</span>
-            </div>
-
-            <div className="journey-passport__grid">
-              <div className="journey-passport__stat">
-                <span className="journey-passport__stat-v">{progress.completedLevels.length}/{AERS_LEVELS.length}</span>
-                <span className="journey-passport__stat-k">Levels</span>
-              </div>
-              <div className="journey-passport__stat">
-                <span className="journey-passport__stat-v">{totalStars}/{AERS_LEVELS.length * 3}</span>
-                <span className="journey-passport__stat-k">Stars</span>
-              </div>
-              <div className="journey-passport__stat">
-                <span className="journey-passport__stat-v">100%</span>
-                <span className="journey-passport__stat-k">Readiness</span>
-              </div>
-            </div>
-
-            <h3 className="journey-sheet__h" style={{ marginTop: 14 }}>Verified competencies</h3>
-            <div className="journey-passport__mods">
-              {AERS_MODULES.map((mod) => (
-                <div key={mod.id} className="journey-passport__mod">
-                  <span>Module {mod.id} · {mod.name}</span>
-                  <span className="journey-passport__mod-check">Verified</span>
+              <div className="journey-passport__body">
+                <div className="journey-passport__student">
+                  <span className="journey-passport__student-label">Awarded To</span>
+                  <h3 className="journey-passport__student-name">{progress.learnerName}</h3>
+                  <span className="journey-passport__id">
+                    Passport ID: AERS-2026-EP{String(totalStars * 137).padStart(4, '0')}
+                  </span>
                 </div>
-              ))}
-            </div>
 
-            <div className="journey-sheet__foot" style={{ marginTop: 12 }}>
-              <button className="journey-btn journey-btn--primary" style={{ flex: 1 }} onClick={handleSharePassport}>
-                {copiedLink ? 'Link copied' : 'Copy share link'}
-              </button>
-              <button className="journey-btn journey-btn--ghost" onClick={() => setShowPassport(false)}>Close</button>
+                <div className="journey-passport__stats-grid">
+                  <div className="journey-passport__stat-card">
+                    <span className="journey-passport__stat-val">{progress.completedLevels.length}/{AERS_LEVELS.length}</span>
+                    <span className="journey-passport__stat-lbl">Levels Completed</span>
+                  </div>
+                  <div className="journey-passport__stat-card">
+                    <span className="journey-passport__stat-val">{totalStars}/{AERS_LEVELS.length * 3}</span>
+                    <span className="journey-passport__stat-lbl">Stars Earned</span>
+                  </div>
+                  <div className="journey-passport__stat-card">
+                    <span className="journey-passport__stat-val">100%</span>
+                    <span className="journey-passport__stat-lbl">Readiness Score</span>
+                  </div>
+                </div>
+
+                <h4 className="journey-passport__competencies-title">
+                  Verified Placement Competencies
+                </h4>
+                <div className="journey-passport__skills-list">
+                  {AERS_MODULES.map((mod) => (
+                    <div key={mod.id} className="journey-passport__skill-row">
+                      <div className="journey-passport__skill-info">
+                        <span className="journey-passport__skill-mod">Module {mod.id}</span>
+                        <span className="journey-passport__skill-name">{mod.name}</span>
+                      </div>
+                      <div className="journey-passport__skill-stars">⭐⭐⭐ VERIFIED</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="journey-passport__signature-row">
+                  <div className="journey-passport__sig">
+                    <div className="journey-passport__sig-line">AERS Academic Board</div>
+                    <span className="journey-passport__sig-sub">Director of Placements</span>
+                  </div>
+                  <div className="journey-passport__stamp">
+                    <span>AERS</span>
+                    <span>VERIFIED</span>
+                  </div>
+                </div>
+              </div>
+
+              <footer className="journey-passport__foot">
+                <button className="journey-btn journey-btn--gold" onClick={handleSharePassport}>
+                  {copiedLink ? '✓ Link Copied to Clipboard!' : '🔗 Share Achievement Link'}
+                </button>
+                <button
+                  className="journey-btn journey-btn--ghost"
+                  onClick={() => setShowPassport(false)}
+                >
+                  Close Passport
+                </button>
+              </footer>
             </div>
           </div>
         </div>
       )}
 
+      {/* ================= START ARCH MODAL ================= */}
       {showStartModal && (
-        <div className="journey-sheet-backdrop" onClick={() => setShowStartModal(false)}>
-          <div className="journey-sheet journey-sheet--sm" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Start">
-            <div className="journey-sheet__head">
-              <div className="journey-sheet__kicker">AERS Placement Gateway</div>
-              <button className="journey-sheet__close" onClick={() => setShowStartModal(false)} aria-label="Close">×</button>
+        <div className="journey-modal-backdrop" onClick={() => setShowStartModal(false)}>
+          <div className="journey-modal journey-modal--sm" onClick={(e) => e.stopPropagation()}>
+            <header className="journey-modal__head" style={{ background: '#0066F5' }}>
+              <div className="journey-modal__meta">
+                <span>AERS Placement Gateway</span>
+                <button className="journey-modal__close" onClick={() => setShowStartModal(false)}>
+                  ✕
+                </button>
+              </div>
+              <h2 className="journey-modal__title">START — Let’s Begin!</h2>
+              <p className="journey-modal__subtitle">Welcome to your Career Journey</p>
+            </header>
+            <div className="journey-modal__body">
+              <p>
+                Your journey starts here at <strong>Level 01 (Know Yourself)</strong> and climbs up 20
+                milestones to the summit <strong>EMPLOYABILITY PASSPORT</strong>.
+              </p>
+              <div className="journey-start-steps">
+                <div className="journey-start-step">
+                  <span className="journey-start-step__icon">1️⃣</span>
+                  <span>Tap <strong>Level 01</strong> right above this start gate to begin.</span>
+                </div>
+                <div className="journey-start-step">
+                  <span className="journey-start-step__icon">2️⃣</span>
+                  <span>Solve scenario challenges to earn up to 3 gold stars per level.</span>
+                </div>
+                <div className="journey-start-step">
+                  <span className="journey-start-step__icon">3️⃣</span>
+                  <span>Climb through all 6 modules and claim your verified Passport at the top!</span>
+                </div>
+              </div>
             </div>
-            <h2 className="journey-sheet__title">Start — your career journey</h2>
-            <p className="journey-sheet__p" style={{ marginTop: 6 }}>
-              Start at <strong>Level 01</strong> and work up to the <strong>Employability Passport</strong>. Each level has one clear challenge — complete it to move forward.
-            </p>
-            <ol className="journey-sheet__steps">
-              <li>Tap Level 01 to begin.</li>
-              <li>Answer the challenge to earn stars.</li>
-              <li>Open the full lesson when you want more depth (Levels 01–08).</li>
-            </ol>
-            <div className="journey-sheet__foot">
-              <button className="journey-btn journey-btn--primary" style={{ flex: 1 }} onClick={() => { setShowStartModal(false); navigate('/journey/level/1'); }}>
-                Start Level 01 →
+            <footer className="journey-modal__foot">
+              <button
+                className="journey-btn journey-btn--primary"
+                onClick={() => {
+                  setShowStartModal(false);
+                  navigate('/journey/level-1');
+                }}
+              >
+                Start Level 01 Now ➔
               </button>
-            </div>
+            </footer>
           </div>
         </div>
       )}
 
+      {/* ================= SIGNBOARD INFO MODAL ================= */}
       {activeSignInfo && (
-        <div className="journey-sheet-backdrop" onClick={() => setActiveSignInfo(null)}>
-          <div className="journey-sheet journey-sheet--sm" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={activeSignInfo.title}>
-            <div className="journey-sheet__head">
-              <div className="journey-sheet__kicker">{activeSignInfo.subtitle}</div>
-              <button className="journey-sheet__close" onClick={() => setActiveSignInfo(null)} aria-label="Close">×</button>
+        <div className="journey-modal-backdrop" onClick={() => setActiveSignInfo(null)}>
+          <div className="journey-modal journey-modal--sm" onClick={(e) => e.stopPropagation()}>
+            <header className="journey-modal__head" style={{ background: '#0066F5' }}>
+              <div className="journey-modal__meta">
+                <span>Module Information</span>
+                <button className="journey-modal__close" onClick={() => setActiveSignInfo(null)}>
+                  ✕
+                </button>
+              </div>
+              <h2 className="journey-modal__title">{activeSignInfo.title}</h2>
+              <p className="journey-modal__subtitle">{activeSignInfo.subtitle}</p>
+            </header>
+            <div className="journey-modal__body">
+              <p style={{ whiteSpace: 'pre-line', lineHeight: '1.6' }}>{activeSignInfo.text}</p>
             </div>
-            <h2 className="journey-sheet__title">{activeSignInfo.title}</h2>
-            <p className="journey-sheet__p" style={{ whiteSpace: 'pre-line', marginTop: 8 }}>{activeSignInfo.text}</p>
-            <div className="journey-sheet__foot">
-              <button className="journey-btn journey-btn--primary" style={{ flex: 1 }} onClick={() => setActiveSignInfo(null)}>Got it</button>
-            </div>
+            <footer className="journey-modal__foot">
+              <button
+                className="journey-btn journey-btn--primary"
+                onClick={() => setActiveSignInfo(null)}
+              >
+                Got It!
+              </button>
+            </footer>
           </div>
         </div>
       )}
 
+      {/* ================= LOCKED LEVEL FEEDBACK TOAST ================= */}
+      {unlockToast && (
+        <div className="journey-unlock-toast" role="status" aria-live="polite">
+          {unlockToast}
+        </div>
+      )}
+
+      {/* ================= CONFETTI CELEBRATION ================= */}
       {confettiActive && (
         <div className="journey-confetti" aria-hidden="true">
-          {Array.from({ length: 24 }).map((_, i) => (
-            <span
+          {Array.from({ length: 45 }).map((_, i) => (
+            <div
               key={i}
-              className="journey-confetti__dot"
-              style={{ '--x': `${8 + Math.random() * 84}%`, '--d': `${0.9 + Math.random() * 0.9}s`, '--delay': `${Math.random() * 0.25}s` } as CSSProperties}
+              className="journey-confetti__piece"
+              style={
+                {
+                  '--x': `${Math.random() * 100}%`,
+                  '--y': `${Math.random() * -20}%`,
+                  '--rot': `${Math.random() * 360}deg`,
+                  '--color': ['#FFD700', '#FF4757', '#2ED573', '#0066F5', '#FD79A8', '#FFA502'][
+                    i % 6
+                  ],
+                  '--delay': `${Math.random() * 0.4}s`,
+                  '--dur': `${1.5 + Math.random() * 1.5}s`,
+                } as CSSProperties
+              }
             />
           ))}
         </div>

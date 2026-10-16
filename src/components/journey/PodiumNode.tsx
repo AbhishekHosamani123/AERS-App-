@@ -1,4 +1,8 @@
 import type { LevelData } from '../../data/journeyData';
+import greenBookImg from '../../assets/Green_closed_book.png';
+import openBookImg from '../../assets/Open_Book.png';
+import blueBookImg from '../../assets/Blue_closed_book.png';
+import goldenBookImg from '../../assets/Golden_close_book.png';
 import './PodiumNode.css';
 
 interface PodiumNodeProps {
@@ -6,6 +10,7 @@ interface PodiumNodeProps {
   status: 'completed' | 'current' | 'unlocked' | 'locked';
   stars: number;
   onClick: () => void;
+  /** UX: briefly shake the node when the learner taps a locked level */
   isShaking?: boolean;
 }
 
@@ -13,51 +18,95 @@ export function PodiumNode({ level, status, stars, onClick, isShaking }: PodiumN
   const isLocked = status === 'locked';
   const isCurrent = status === 'current';
   const isCompleted = status === 'completed';
+  const isUnlocked = status === 'unlocked';
   const isMilestone = Boolean(level.isMilestone);
+
+  const getBookImage = () => {
+    if (isMilestone) return goldenBookImg;
+    if (isCompleted) return greenBookImg;
+    if (isCurrent || isUnlocked) return openBookImg;
+    return blueBookImg; // locked
+  };
+
+  const getBookAltText = () => {
+    if (isMilestone) return `Milestone Level ${level.numberStr} (Golden Book)`;
+    if (isCompleted) return `Completed Level ${level.numberStr} (Green Book)`;
+    if (isCurrent) return `Current Active Level ${level.numberStr} (Open Book)`;
+    if (isUnlocked) return `Unlocked Level ${level.numberStr} (Open Book)`;
+    return `Locked Level ${level.numberStr} (Blue Book)`;
+  };
 
   return (
     <div
       id={`level-node-${level.id}`}
-      className={`podium-node is-${status} ${isMilestone ? 'is-milestone' : ''} ${isShaking ? 'is-shaking' : ''}`}
+      className={`podium-node is-${status} ${isMilestone ? 'is-milestone' : ''} ${
+        isShaking ? 'is-shaking' : ''
+      }`}
       style={{ left: `${level.pxX}px`, top: `${level.pxY}px` }}
       onClick={onClick}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClick();
-        }
-      }}
-      aria-label={`Level ${level.numberStr}: ${level.title} — ${isCompleted ? 'Completed' : isCurrent ? 'Current' : isLocked ? 'Locked' : 'Available'}`}
+      aria-label={`Level ${level.numberStr}: ${level.title} - ${
+        isCompleted ? 'Completed' : isCurrent ? 'Active Level' : 'Locked'
+      }`}
     >
-      {/* Current — subtle "You are here" label */}
-      {isCurrent && <span className="podium-node__pin">Current</span>}
-
-      {/* Minimal circle node — no images, no 3D */}
-      <div className="podium-node__circle" aria-hidden="true">
-        <span className="podium-node__num">{level.numberStr}</span>
-        {isCompleted && <span className="podium-node__check">✓</span>}
-        {isLocked && <span className="podium-node__lock">🔒</span>}
-        {isMilestone && !isCompleted && !isLocked && <span className="podium-node__crown">◆</span>}
-      </div>
-
-      {/* Title — single line, quiet */}
-      <div className="podium-node__label">
-        <span className="podium-node__dot" aria-hidden="true" />
-        <span className="podium-node__title">{level.title}</span>
-      </div>
-
-      {/* Stars — muted, only when earned */}
-      {stars > 0 && (
-        <div className="podium-node__stars" aria-label={`${stars} of 3 stars`}>
-          {[1, 2, 3].map((i) => (
-            <span key={i} className={`podium-star ${i <= stars ? 'is-on' : ''}`} aria-hidden="true">
+      {/* 3 Gold Stars Floating Above */}
+      <div className="podium-node__stars" aria-hidden="true">
+        {[1, 2, 3].map((sIndex) => {
+          const hasStar = sIndex <= stars;
+          return (
+            <span
+              key={sIndex}
+              className={`podium-node__star ${hasStar ? 'is-earned' : 'is-empty'}`}
+            >
               ★
             </span>
-          ))}
+          );
+        })}
+      </div>
+
+      {/* Animated "You Are Here" Player Pin for Current Active Level */}
+      {isCurrent && (
+        <div className="podium-node__player-pin">
+          <div className="podium-player-badge">
+            <span className="podium-player-pulse" />
+            <span className="podium-player-icon">🚀</span>
+          </div>
+          <div className="podium-player-tag">YOU ARE HERE</div>
         </div>
       )}
+
+      {/* 3D Book Visual Container */}
+      <div className="podium-book-wrapper">
+        {/* Floating Level Number Pill Badge */}
+        <div className="podium-book-badge">
+          <span className="podium-book-num">{level.numberStr}</span>
+          {isCompleted && <span className="podium-book-badge-icon">✓</span>}
+          {isUnlocked && <span className="podium-book-badge-icon">⚡</span>}
+          {isLocked && <span className="podium-book-badge-icon">🔒</span>}
+          {isMilestone && <span className="podium-book-badge-icon">👑</span>}
+        </div>
+
+        {/* 3D Book Graphic */}
+        <img
+          src={getBookImage()}
+          alt={getBookAltText()}
+          className={`podium-book-img ${isCurrent || isUnlocked ? 'is-current-book' : ''}`}
+          draggable={false}
+        />
+
+        {/* Diffuse Ground Shadow */}
+        <div className="podium-ground-shadow" />
+      </div>
+
+      {/* High-Legibility Title Capsule Pill */}
+      <div className="podium-title-capsule">
+        {isCompleted && <span className="podium-status-dot is-check">✓</span>}
+        {isCurrent && <span className="podium-status-dot is-pulse" />}
+        {isUnlocked && <span className="podium-status-dot is-sparkle">⚡</span>}
+        {isLocked && <span className="podium-status-dot is-lock">🔒</span>}
+        <span className="podium-title-text">{level.title}</span>
+      </div>
     </div>
   );
 }
