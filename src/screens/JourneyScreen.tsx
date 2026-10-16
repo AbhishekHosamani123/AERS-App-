@@ -138,10 +138,18 @@ export function JourneyScreen() {
     };
   }, [progress.currentLevel]);
 
+  // VERIFY MODE: all 24 levels unlocked for content review — revert to sequential gating before final release
+  const VERIFY_UNLOCK_ALL = true;
+
   const handleLevelClick = (level: LevelData) => {
     sound.playTap();
 
-    // All 24 levels: navigate to full 6-stage lesson if unlocked/available
+    if (VERIFY_UNLOCK_ALL) {
+      navigate(`/journey/level/${level.id}`);
+      return;
+    }
+
+    // (Sequential gating — restored when VERIFY_UNLOCK_ALL is false)
     if (level.id >= 1 && level.id <= 24) {
       const isCompleted = progress.completedLevels.includes(level.id);
       const isCurrent = progress.currentLevel === level.id;
@@ -476,14 +484,16 @@ export function JourneyScreen() {
 
           {/* ================= 4. TWENTY 3D ISOMETRIC CYLINDER PODIUM NODES ================= */}
           {AERS_LEVELS.map((lvl) => {
-            const isCompleted = progress.completedLevels.includes(lvl.id);
-            const isCurrent = progress.currentLevel === lvl.id;
-            const status = isCompleted
+            const isCompleted = VERIFY_UNLOCK_ALL ? true : progress.completedLevels.includes(lvl.id);
+            const isCurrent = VERIFY_UNLOCK_ALL ? false : progress.currentLevel === lvl.id;
+            const status: 'completed' | 'current' | 'locked' = VERIFY_UNLOCK_ALL
+              ? 'completed'
+              : isCompleted
               ? 'completed'
               : isCurrent
               ? 'current'
               : 'locked';
-            const stars = progress.levelStars[lvl.id] || (isCompleted ? 3 : 0);
+            const stars = VERIFY_UNLOCK_ALL ? 3 : progress.levelStars[lvl.id] || (isCompleted ? 3 : 0);
 
             return (
               <PodiumNode
