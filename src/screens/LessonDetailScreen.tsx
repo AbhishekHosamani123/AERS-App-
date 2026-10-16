@@ -4,12 +4,21 @@ import { Icon } from '../components/icons/Icon';
 import { sound } from '../utils/sound';
 import { MODULE_1_LESSONS, type LessonData } from '../data/module1Lessons';
 import { MODULE_2_LESSONS } from '../data/module2Lessons';
+import { MODULE_3_LESSONS } from '../data/module3Lessons';
+import { MODULE_4_LESSONS } from '../data/module4Lessons';
+import { MODULE_5_LESSONS } from '../data/module5Lessons';
+import { MODULE_6_LESSONS } from '../data/module6Lessons';
+
+import { CustomVideoPlayer } from '../components/video/CustomVideoPlayer';
 
 const ALL_LESSONS: Record<number, LessonData> = {
   ...MODULE_1_LESSONS,
   ...MODULE_2_LESSONS,
+  ...MODULE_3_LESSONS,
+  ...MODULE_4_LESSONS,
+  ...MODULE_5_LESSONS,
+  ...MODULE_6_LESSONS,
 };
-import { CustomVideoPlayer } from '../components/video/CustomVideoPlayer';
 import './LessonDetailScreen.css';
 
 export type LessonStage =
@@ -37,12 +46,12 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
   const navigate = useNavigate();
   const params = useParams<{ levelId?: string }>();
 
-  // Determine active level (1 to 8)
+  // Determine active level (1 to 24)
   const levelId = useMemo(() => {
     if (propLevelId) return propLevelId;
     if (params.levelId) {
       const parsed = parseInt(params.levelId.replace(/\D/g, ''), 10);
-      if (!isNaN(parsed) && parsed >= 1 && parsed <= 8) return parsed;
+      if (!isNaN(parsed) && parsed >= 1 && parsed <= 24) return parsed;
     }
     return 1;
   }, [propLevelId, params.levelId]);
@@ -324,6 +333,9 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
     );
   });
 
+  // Generic worksheet for Levels 09-24 (framework-guided evidence)
+  const [genericWorksheet, setGenericWorksheet] = useState<Record<number, string>>(() => savedState?.genericWorksheet || {});
+
   // Evidence submission state
   const [uploadedFile, setUploadedFile] = useState<UploadedFileInfo | null>(() => savedState?.uploadedFile || null);
   const [confirmCertified, setConfirmCertified] = useState(true);
@@ -349,6 +361,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
         l6Statements,
         l7Draft,
         l8Tailor,
+        genericWorksheet,
         uploadedFile,
       };
       localStorage.setItem(storageKey, JSON.stringify(payload));
@@ -371,17 +384,20 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
     l6Statements,
     l7Draft,
     l8Tailor,
+    genericWorksheet,
     uploadedFile,
   ]);
 
-  const hasLiveVideo = levelId === 1;
-  const videoSrc = hasLiveVideo
-    ? language === 'kn'
-      ? '/videos/Module1/Lesson1/Kannada.mp4'
-      : '/videos/Module1/Lesson1/English.mp4'
-    : undefined;
+  const moduleIdForVideo = levelId <= 4 ? 1 : levelId <= 8 ? 2 : levelId <= 12 ? 3 : levelId <= 16 ? 4 : levelId <= 20 ? 5 : 6;
+  const lessonInModule = levelId <= 4 ? levelId : levelId <= 8 ? levelId - 4 : levelId <= 12 ? levelId - 8 : levelId <= 16 ? levelId - 12 : levelId <= 20 ? levelId - 16 : levelId - 20;
+  const genericVideoSrc = `/videos/Module${moduleIdForVideo}/Lesson${lessonInModule}/${language === 'kn' ? 'Kannada' : 'English'}.mp4`;
+  const [videoLoadFailed, setVideoLoadFailed] = useState(false);
+  const hasLiveVideo = !videoLoadFailed;
+  const videoSrc = hasLiveVideo ? genericVideoSrc : undefined;
 
-  // Video playback simulation for lessons without native video
+  useEffect(() => { setVideoLoadFailed(false); setVideoProgress((prev) => (prev >= 90 ? prev : 0)); }, [genericVideoSrc]);
+
+  // Video playback simulation when no real file (fallback) or while loading
   useEffect(() => {
     if (hasLiveVideo) return;
     let timer: ReturnType<typeof setInterval>;
@@ -540,7 +556,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
 
   const handleContinueNextLevel = () => {
     sound.playTap();
-    if (levelId < 8) {
+    if (levelId < 24) {
       navigate(`/journey/level/${levelId + 1}`);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -828,57 +844,69 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           </p>
         </div>
 
-        {/* Video Player Card */}
+        {/* Video Player Card — real MP4 with transcript fallback when file missing */}
         <div className="lvl1-video-player-card">
           {hasLiveVideo && videoSrc ? (
-            <CustomVideoPlayer
-              key={videoSrc}
-              src={videoSrc}
-              title={lesson.title}
-              language={language}
-              onLanguageChange={setLanguage}
-              expectedDuration={language === 'en' ? 233 : 408}
-              initialProgress={videoProgress}
-              onProgressUpdate={(pct) => {
-                setVideoProgress(pct);
-                if (pct >= 90) {
+            <>
+              <CustomVideoPlayer
+                key={videoSrc}
+                src={videoSrc}
+                title={lesson.title}
+                language={language}
+                onLanguageChange={setLanguage}
+                expectedDuration={language === 'en' ? 233 : 408}
+                initialProgress={videoProgress}
+                onError={() => setVideoLoadFailed(true)}
+                onProgressUpdate={(pct) => {
+                  setVideoProgress(pct);
+                  if (pct >= 90) {
+                    markStepDone(3);
+                  }
+                }}
+                onEnded={() => {
+                  setVideoProgress(100);
                   markStepDone(3);
-                }
-              }}
-              onEnded={() => {
-                setVideoProgress(100);
-                markStepDone(3);
-              }}
-              onRequirementMet={() => {
-                markStepDone(3);
-              }}
-            />
+                }}
+                onRequirementMet={() => {
+                  markStepDone(3);
+                }}
+              />
+              <div className="lvl1-video-progress-bar">
+                <div className="lvl1-video-progress-fill" style={{ width: `${videoProgress}%` }} />
+              </div>
+              <div className="lvl1-video-meta-bar">
+                <span>Progress: {videoProgress}% ({language === 'en' ? 'English · 3:53' : 'ಕನ್ನಡ · 6:48'})</span>
+                <span>{videoProgress >= 90 ? '✓ Watch requirement fulfilled' : 'Must reach at least 90%'}</span>
+              </div>
+            </>
           ) : (
-            <div className="lvl1-video-screen">
-              <div className="lvl1-video-center-controls">
-                <button
-                  className="lvl1-video-play-btn"
-                  onClick={() => {
-                    sound.playTap();
-                    setIsPlayingVideo((prev) => !prev);
-                  }}
-                  aria-label={isPlayingVideo ? 'Pause video' : 'Play video'}
-                >
-                  <span style={{ fontSize: 24, lineHeight: 1 }}>{isPlayingVideo ? '⏸' : '▶'}</span>
-                </button>
+            <>
+              <div className="lvl1-video-screen">
+                <div className="lvl1-video-center-controls">
+                  <button
+                    className="lvl1-video-play-btn"
+                    onClick={() => {
+                      sound.playTap();
+                      setIsPlayingVideo((prev) => !prev);
+                    }}
+                    aria-label={isPlayingVideo ? 'Pause video' : 'Play video'}
+                  >
+                    <span style={{ fontSize: 24, lineHeight: 1 }}>{isPlayingVideo ? '⏸' : '▶'}</span>
+                  </button>
+                </div>
+                <div className="lvl1-video-subtitles-bar">
+                  <span>{isPlayingVideo ? `[${language.toUpperCase()}] ` + (isEn ? lesson.notes.goldenQuoteEn : lesson.notes.goldenQuoteKn) : videoLoadFailed ? 'Video coming soon — learn from transcript below' : 'Press play to begin video masterclass'}</span>
+                </div>
               </div>
-              <div className="lvl1-video-subtitles-bar">
-                <span>{isPlayingVideo ? `[${language.toUpperCase()}] ` + (isEn ? lesson.notes.goldenQuoteEn : lesson.notes.goldenQuoteKn) : 'Press play to begin video masterclass'}</span>
+              <div className="lvl1-video-progress-bar">
+                <div className="lvl1-video-progress-fill" style={{ width: `${videoProgress}%` }} />
               </div>
-            </div>
+              <div className="lvl1-video-meta-bar">
+                <span>Progress: {videoProgress}% {videoLoadFailed ? '(transcript mode)' : ''}</span>
+                <span>{videoProgress >= 90 ? '✓ Watch requirement fulfilled' : 'Must reach at least 90%'}</span>
+              </div>
+            </>
           )}
-          <div className="lvl1-video-progress-bar">
-            <div className="lvl1-video-progress-fill" style={{ width: `${videoProgress}%` }} />
-          </div>
-          <div className="lvl1-video-meta-bar">
-            <span>Progress: {videoProgress}% {hasLiveVideo ? `(${language === 'en' ? 'English · 3:53' : 'ಕನ್ನಡ · 6:48'})` : ''}</span>
-            <span>{videoProgress >= 90 ? '✓ Watch requirement fulfilled' : 'Must reach at least 90%'}</span>
-          </div>
         </div>
 
         {/* Script Chapters */}
@@ -1131,7 +1159,10 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
             <span>✓</span> Auto-saved locally
           </div>
           <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>
-            Module {levelId <= 4 ? '1 (Career Clarity)' : '2 (Résumé Readiness)'} Competency Artifact
+            {(() => {
+              const modLabel = levelId <= 4 ? '1 (Career Clarity)' : levelId <= 8 ? '2 (Résumé Readiness)' : levelId <= 12 ? '3 (Communication Readiness)' : levelId <= 16 ? '4 (Aptitude Readiness)' : levelId <= 20 ? '5 (Workplace Readiness)' : '6 (Interview Readiness)';
+              return `Module ${modLabel} Competency Artifact`;
+            })()}
           </span>
         </div>
 
@@ -2351,6 +2382,33 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           </div>
         )}
 
+        {/* GENERIC WORKSHEET FOR LEVELS 09-24 */}
+        {levelId >= 9 && (
+          <div className="lvl1-worksheet-fields-stack">
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">Framework-Guided Evidence</h3>
+              <p className="lvl1-card-body" style={{ marginBottom: 8 }}>
+                Complete the evidence below using <code>{lesson.framework}</code>. Drafts are auto-saved.
+              </p>
+              <label className="lvl1-field-label">{lesson.primaryEvidence} — Structured Evidence Draft</label>
+              <textarea
+                className="lvl1-textarea"
+                rows={8}
+                value={genericWorksheet[levelId] || ''}
+                onChange={(e) => setGenericWorksheet({ ...genericWorksheet, [levelId]: e.target.value })}
+                placeholder={`Apply ${lesson.framework} to build your ${lesson.primaryEvidence}. Be specific, truthful, and verifiable...`}
+              />
+              <p className="field-hint-tip">Tip: Use the framework above to structure every paragraph. Reviewers verify structure ({lesson.framework.split('→')[0]?.trim()} …) before content.</p>
+            </div>
+            <div className="lvl1-card-box">
+              <h3 className="lvl1-card-subtitle">Guided Session Note</h3>
+              <p className="lvl1-card-body" style={{ fontSize: 12 }}>
+                {lesson.guidedSession.duration} guided session · Next step: {lesson.guidedSession.closingCommitmentTemplate}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Action Bar */}
         <div className="lvl1-bottom-bar">
           <button
@@ -2470,7 +2528,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
             Your {lesson.primaryEvidence} has been received and queued for evaluation by an authorized AERS reviewer.
           </p>
           <div className="lvl1-receipt-box">
-            <div>Submission ID: AERS-M{levelId <= 4 ? 1 : 2}-L0{levelId}-78421</div>
+            <div>Submission ID: AERS-M{levelId <= 4 ? 1 : levelId <= 8 ? 2 : levelId <= 12 ? 3 : levelId <= 16 ? 4 : levelId <= 20 ? 5 : 6}-L{String(levelId).padStart(2, '0')}-78421</div>
             <div>Reviewed Threshold: Rubric Score ≥ 6/10 required</div>
             <div>Estimated Review Window: 24–48 Hours</div>
           </div>
@@ -2543,11 +2601,11 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           <div className="lvl1-award-card">
             <div className="lvl1-award-star">★★★</div>
             <strong>+ {lesson.xpReward} XP Earned</strong>
-            <span>Module 0{levelId <= 4 ? 1 : 2} Competency Verified</span>
+            <span>Module 0{levelId <= 4 ? 1 : levelId <= 8 ? 2 : levelId <= 12 ? 3 : levelId <= 16 ? 4 : levelId <= 20 ? 5 : 6} Competency Verified</span>
           </div>
 
           <button className="lvl1-primary-btn lvl1-continue-btn" onClick={handleContinueNextLevel}>
-            {levelId < 8 ? `Unlock & Continue to Level 0${levelId + 1} ➔` : 'Complete Module 02 & Return to Journey ➔'}
+            {levelId < 24 ? `Unlock & Continue to Level 0${levelId + 1} ➔` : 'All 24 Levels Complete — Return to Journey ➔'}
           </button>
         </div>
       </div>
@@ -2572,7 +2630,7 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           </button>
           <div className="lvl1-nav-titles">
             <span className="lvl1-nav-kicker">
-              LEVEL {lesson.numberStr} OF 24 · MODULE 0{levelId <= 4 ? 1 : 2}: {levelId <= 4 ? 'CAREER CLARITY' : 'RÉSUMÉ READINESS'}
+              LEVEL {lesson.numberStr} OF 24 · MODULE 0{levelId <= 4 ? 1 : levelId <= 8 ? 2 : levelId <= 12 ? 3 : levelId <= 16 ? 4 : levelId <= 20 ? 5 : 6}: {(levelId <= 4 ? 'CAREER CLARITY' : levelId <= 8 ? 'RÉSUMÉ READINESS' : levelId <= 12 ? 'COMMUNICATION READINESS' : levelId <= 16 ? 'APTITUDE READINESS' : levelId <= 20 ? 'WORKPLACE READINESS' : 'INTERVIEW READINESS')}
             </span>
             <h1 className="lvl1-nav-title">{lesson.title}</h1>
           </div>
@@ -2581,60 +2639,56 @@ export function LessonDetailScreen({ levelId: propLevelId }: { levelId?: number 
           </div>
         </div>
 
-        {/* Module Switcher Pills (Module 1 vs Module 2) */}
-        <div style={{ display: 'flex', gap: '8px', padding: '6px 16px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', overflowX: 'auto' }}>
-          <button
-            className={`lvl1-outline-btn ${levelId <= 4 ? 'is-active' : ''}`}
-            style={{ fontSize: '11px', padding: '4px 10px', height: 'auto', background: levelId <= 4 ? '#0066f5' : '#ffffff', color: levelId <= 4 ? '#ffffff' : '#475569', borderColor: levelId <= 4 ? '#0066f5' : '#cbd5e1' }}
-            onClick={() => {
-              sound.playTap();
-              navigate('/journey/level/1');
-            }}
-          >
-            Module 1: Career Clarity (L01–04)
-          </button>
-          <button
-            className={`lvl1-outline-btn ${levelId >= 5 ? 'is-active' : ''}`}
-            style={{ fontSize: '11px', padding: '4px 10px', height: 'auto', background: levelId >= 5 ? '#0066f5' : '#ffffff', color: levelId >= 5 ? '#ffffff' : '#475569', borderColor: levelId >= 5 ? '#0066f5' : '#cbd5e1' }}
-            onClick={() => {
-              sound.playTap();
-              navigate('/journey/level/5');
-            }}
-          >
-            Module 2: Résumé Readiness (L05–08)
-          </button>
+        {/* Module Switcher Pills (All 6 modules) */}
+        <div style={{ display: 'flex', gap: '6px', padding: '6px 12px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', overflowX: 'auto' }}>
+          {[
+            { id: 1, label: 'M1: Career Clarity', nav: 1 },
+            { id: 2, label: 'M2: Résumé', nav: 5 },
+            { id: 3, label: 'M3: Communication', nav: 9 },
+            { id: 4, label: 'M4: Aptitude', nav: 13 },
+            { id: 5, label: 'M5: Workplace', nav: 17 },
+            { id: 6, label: 'M6: Interview', nav: 21 },
+          ].map((m) => {
+            const modNum = levelId <= 4 ? 1 : levelId <= 8 ? 2 : levelId <= 12 ? 3 : levelId <= 16 ? 4 : levelId <= 20 ? 5 : 6;
+            const active = modNum === m.id;
+            return (
+              <button
+                key={m.id}
+                className={`lvl1-outline-btn ${active ? 'is-active' : ''}`}
+                style={{ fontSize: '10px', padding: '4px 8px', height: 'auto', whiteSpace: 'nowrap', background: active ? '#0066f5' : '#ffffff', color: active ? '#ffffff' : '#475569', borderColor: active ? '#0066f5' : '#cbd5e1' }}
+                onClick={() => { sound.playTap(); navigate(`/journey/level/${m.nav}`); }}
+              >
+                {m.label} {active ? '' : `(L${String(m.nav).padStart(2, '0')})`}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Level Quick Switcher Strip */}
+        {/* Level Quick Switcher Strip — current module's 4 levels */}
         <div className="lvl1-module-levels-strip" role="tablist" aria-label="Module Lessons">
-          {(levelId <= 4
-            ? [
-                { id: 1, label: 'Discovering Myself' },
-                { id: 2, label: 'Strengths-to-Career' },
-                { id: 3, label: 'Role Exploration' },
-                { id: 4, label: 'Career Action Plan' },
-              ]
-            : [
-                { id: 5, label: 'Purpose of Résumé' },
-                { id: 6, label: 'Writing Strong Content' },
-                { id: 7, label: 'Skills & Projects' },
-                { id: 8, label: 'Tailoring & Review' },
-              ]
-          ).map((item) => (
-            <button
-              key={item.id}
-              className={`lvl1-level-tab-chip ${levelId === item.id ? 'is-active' : ''}`}
-              onClick={() => {
-                sound.playTap();
-                navigate(`/journey/level/${item.id}`);
-              }}
-              role="tab"
-              aria-selected={levelId === item.id}
-            >
-              <span className="lvl1-level-tab-num">L{item.id.toString().padStart(2, '0')}</span>
-              <span>{item.label}</span>
-            </button>
-          ))}
+          {(() => {
+            const mod = levelId <= 4 ? 1 : levelId <= 8 ? 2 : levelId <= 12 ? 3 : levelId <= 16 ? 4 : levelId <= 20 ? 5 : 6;
+            const map: Record<number, { id: number; label: string }[]> = {
+              1: [{ id: 1, label: 'Discovering Myself' }, { id: 2, label: 'Strengths-to-Career' }, { id: 3, label: 'Role Exploration' }, { id: 4, label: 'Career Action Plan' }],
+              2: [{ id: 5, label: 'Purpose of Résumé' }, { id: 6, label: 'Writing Strong Content' }, { id: 7, label: 'Skills & Projects' }, { id: 8, label: 'Tailoring & Review' }],
+              3: [{ id: 9, label: 'Professional Intro' }, { id: 10, label: 'Active Listening' }, { id: 11, label: 'Email/Chat/Call' }, { id: 12, label: 'GD & Presentation' }],
+              4: [{ id: 13, label: 'UPSV Method' }, { id: 14, label: 'Quantitative' }, { id: 15, label: 'Logical & Verbal' }, { id: 16, label: 'Strategy & Improvement' }],
+              5: [{ id: 17, label: 'Conduct' }, { id: 18, label: 'Teamwork' }, { id: 19, label: 'Ownership' }, { id: 20, label: 'Feedback & Ethics' }],
+              6: [{ id: 21, label: 'Interview Prep' }, { id: 22, label: 'HR & Behavioural' }, { id: 23, label: 'Technical & Situational' }, { id: 24, label: 'Mock & Verification' }],
+            };
+            return (map[mod] || map[1]).map((item) => (
+              <button
+                key={item.id}
+                className={`lvl1-level-tab-chip ${levelId === item.id ? 'is-active' : ''}`}
+                onClick={() => { sound.playTap(); navigate(`/journey/level/${item.id}`); }}
+                role="tab"
+                aria-selected={levelId === item.id}
+              >
+                <span className="lvl1-level-tab-num">L{item.id.toString().padStart(2, '0')}</span>
+                <span>{item.label}</span>
+              </button>
+            ));
+          })()}
         </div>
 
         {/* 6-Step Segmented Progress Bar */}

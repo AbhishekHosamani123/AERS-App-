@@ -11,6 +11,7 @@ interface CustomVideoPlayerProps {
   onProgressUpdate?: (percent: number, currentTime: number, duration: number) => void;
   onEnded?: () => void;
   onRequirementMet?: () => void;
+  onError?: () => void;
 }
 
 // YouTube style time format (e.g. "0:45 / 3:53" or "1:02:15")
@@ -37,6 +38,7 @@ export const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({
   onProgressUpdate,
   onEnded,
   onRequirementMet,
+  onError,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -477,6 +479,7 @@ export const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({
         }}
         onPause={() => setIsPlaying(false)}
         onSeeked={handleSeeked}
+        onError={() => { if (onError) onError(); }}
         onEnded={() => {
           setIsPlaying(false);
           if (onEnded) onEnded();

@@ -141,19 +141,16 @@ export function JourneyScreen() {
   const handleLevelClick = (level: LevelData) => {
     sound.playTap();
 
-    // Modules 1 & 2 (Levels 1 to 8): Unconditionally navigate to the complete 6-stage lesson experience
-    if (level.id >= 1 && level.id <= 8) {
-      navigate(`/journey/level/${level.id}`);
-      return;
-    }
-
-    const isCompleted = progress.completedLevels.includes(level.id);
-    const isCurrent = progress.currentLevel === level.id;
-    const isLocked = !isCompleted && !isCurrent;
-
-    if (isLocked) {
+    // All 24 levels: navigate to full 6-stage lesson if unlocked/available
+    if (level.id >= 1 && level.id <= 24) {
+      const isCompleted = progress.completedLevels.includes(level.id);
+      const isCurrent = progress.currentLevel === level.id;
+      const isUnlocked = isCompleted || isCurrent;
+      if (isUnlocked) {
+        navigate(`/journey/level/${level.id}`);
+        return;
+      }
       sound.playLocked();
-      // UX: explain WHY the level is locked + shake the node for visible feedback
       const requiredLevel = Math.max(1, level.id - 1);
       setUnlockToast(`🔒 Locked — Complete Level ${requiredLevel.toString().padStart(2, '0')} to unlock`);
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
@@ -479,17 +476,14 @@ export function JourneyScreen() {
 
           {/* ================= 4. TWENTY 3D ISOMETRIC CYLINDER PODIUM NODES ================= */}
           {AERS_LEVELS.map((lvl) => {
-            const isModule1Testing = lvl.id >= 1 && lvl.id <= 4;
             const isCompleted = progress.completedLevels.includes(lvl.id);
             const isCurrent = progress.currentLevel === lvl.id;
             const status = isCompleted
               ? 'completed'
               : isCurrent
               ? 'current'
-              : isModule1Testing
-              ? 'unlocked'
               : 'locked';
-            const stars = progress.levelStars[lvl.id] || (isCompleted ? 3 : isModule1Testing ? 3 : 0);
+            const stars = progress.levelStars[lvl.id] || (isCompleted ? 3 : 0);
 
             return (
               <PodiumNode
@@ -644,19 +638,17 @@ export function JourneyScreen() {
             </div>
 
             <footer className="journey-modal__foot" style={{ display: 'flex', gap: '8px' }}>
-              {activeLevel.id <= 8 && (
-                <button
-                  type="button"
-                  className="journey-btn"
-                  style={{ background: '#f1f5f9', color: '#1e293b', border: '1px solid #cbd5e1' }}
-                  onClick={() => {
-                    setActiveLevel(null);
-                    navigate(`/journey/level/${activeLevel.id}`);
-                  }}
-                >
-                  📖 Open Full Lesson
-                </button>
-              )}
+              <button
+                type="button"
+                className="journey-btn"
+                style={{ background: '#f1f5f9', color: '#1e293b', border: '1px solid #cbd5e1' }}
+                onClick={() => {
+                  setActiveLevel(null);
+                  navigate(`/journey/level/${activeLevel.id}`);
+                }}
+              >
+                📖 Open Full Lesson
+              </button>
               <button
                 className="journey-btn journey-btn--primary"
                 style={{ flex: 1 }}
